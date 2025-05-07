@@ -1,0 +1,50 @@
+---
+export interface Props {
+  type: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  date: string;
+  image: string; // URL or path
+  buttonText: string;
+  buttonLink: string; // URL for the button
+  useLightBackground?: boolean;
+}
+
+const {
+  type,
+  title,
+  subtitle,
+  description,
+  date,
+  image,
+  buttonText,
+  buttonLink,
+  useLightBackground = true,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "py-8 px-4 md:py-12 max-w-screen-lg mx-auto flex flex-col items-center gap-6 md:flex-row md:gap-8",
+    useLightBackground ? "bg-light" : "bg-light2",
+  ]}
+>
+  <div class="w-full md:w-1/2 text-center md:text-left mb-6 md:mb-0">
+    <p class="text-sm mb-2">{type}</p>
+    <h2 class="text-3xl md:text-4xl font-bold mb-2">{title}</h2>
+    <h3 class="text-xl italic mb-6">{subtitle}</h3>
+    <p class="text-base mb-8">{description}</p>
+    <a href={buttonLink} class="button-style inline-block py-3 px-8 mb-4">
+      {buttonText}
+    </a>
+    <p class="text-sm font-semibold">{date}</p>
+  </div>
+  <div class="w-full md:w-1/2">
+    <img
+      src={image}
+      alt={title}
+      class="w-full h-auto md:h-64 object-cover rounded-lg"
+    />
+  </div>
+</div>

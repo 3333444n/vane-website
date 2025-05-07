@@ -1,0 +1,79 @@
+---
+interface Service {
+  title: string;
+  imageUrl: string;
+  link: string; // Link for the card
+}
+
+export interface Props {
+  useLightBackground?: boolean;
+}
+
+const { useLightBackground = true } = Astro.props;
+
+const services: Service[] = [
+  {
+    title: "Certificaciones",
+    imageUrl:
+      "https://images.unsplash.com/photo-1576402187878-974f70c890a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c291bmQlMjBoZWFsaW5nfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60", // Placeholder
+    link: "/certificaciones",
+  },
+  {
+    title: "Talleres",
+    imageUrl:
+      "https://images.unsplash.com/photo-1591180079032-a229332cea83?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGluY2Vuc2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60", // Placeholder
+    link: "/talleres",
+  },
+  {
+    title: "Meditaciones",
+    imageUrl:
+      "https://images.unsplash.com/photo-1601758065038-909674f50307?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8bWVkaXRhdGlvbnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60", // Placeholder
+    link: "/meditaciones",
+  },
+  {
+    title: "Masterclasses",
+    imageUrl:
+      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8eW9nYSUyMGNsYXNzfGVufDB8fDB8fHww&auto=format&fit=crop&w=800&q=60", // Placeholder
+    link: "/masterclasses",
+  },
+];
+---
+
+<div
+  class:list={[
+    "container mx-auto px-4 py-8",
+    useLightBackground ? "bg-light" : "bg-light2",
+  ]}
+>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
+    {
+      services.map((service, index) => (
+        <a
+          href={service.link}
+          class="text-secondary group relative block rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 ease-in-out"
+          style={`padding-bottom: ${index === 0 || index === 3 ? "60%" : "45%"};`}
+        >
+          <div
+            class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-110"
+            style={`background-image: url('${service.imageUrl}');`}
+          />
+          <div class="absolute inset-0 bg-black bg-opacity-40 group-hover:bg-opacity-30 transition-opacity duration-300 ease-in-out" />
+          <div class="absolute inset-0 flex items-center justify-center p-4">
+            <h3 class="text-2xl sm:text-3xl md:text-4xl font-dmSerifText font-semibold text-center text-secondary">
+              {service.title}
+            </h3>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  /* You can add component-specific styles here if needed, 
+     though Tailwind utility classes are preferred for Astro projects.
+     The padding-bottom trick is used to maintain aspect ratio.
+     For the first and last items (Certificaciones and Masterclasses),
+     we use a different aspect ratio to match the image.
+  */
+</style>

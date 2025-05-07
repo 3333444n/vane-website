@@ -1,0 +1,82 @@
+---
+import TestimonialCard from "./TestimonialCard.astro";
+
+interface Testimonial {
+  quote: string;
+  authorName: string;
+  authorTitle: string;
+}
+
+interface Props {
+  testimonials?: Testimonial[]; // Made optional to allow fallback to default
+  useLightBackground?: boolean;
+}
+
+// Placeholder data as requested
+const testimonialsData: Testimonial[] = [
+  {
+    quote:
+      "Mi experiencia de coaching con Vanessa ha sido muy reconfortante. Ahora siento como mi energía y mi vida fluyen en el sentido correcto. ¡Muy recomendable!",
+    authorName: "Luis Esparza",
+    authorTitle: "Ingeniero y Consultor",
+  },
+  {
+    quote:
+      "Gracias a las sesiones con Vanessa, he podido aclarar mis metas y sentirme con más confianza para alcanzarlas. Su enfoque es muy profesional y cálido.",
+    authorName: "Sofía López",
+    authorTitle: "Emprendedora Digital",
+  },
+  {
+    quote:
+      "El proceso de coaching fue revelador. Descubrí nuevas perspectivas y herramientas que han impactado positivamente mi vida personal y profesional.",
+    authorName: "Carlos Jiménez",
+    authorTitle: "Gerente de Proyectos",
+  },
+  {
+    quote:
+      "Recomiendo ampliamente a Vanessa. Su guía ha sido fundamental en mi camino de crecimiento y autoconocimiento.",
+    authorName: "Laura Fernández",
+    authorTitle: "Artista Plástica",
+  },
+];
+
+const { testimonials = testimonialsData, useLightBackground = true } =
+  Astro.props as Props;
+---
+
+<section class:list={["py-12", useLightBackground ? "bg-light" : "bg-light2"]}>
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-10 md:mb-12">Testimonios</h2>
+    <div
+      class="flex overflow-x-auto gap-6 pb-4 px-2 md:px-0 no-scrollbar scroll-smooth"
+    >
+      {
+        testimonials.map((testimonial: Testimonial) => (
+          <TestimonialCard
+            quote={testimonial.quote}
+            authorName={testimonial.authorName}
+            authorTitle={testimonial.authorTitle}
+          />
+        ))
+      }
+    </div>
+    <div class="text-center mt-8 md:mt-10">
+      <a href="/testimonios" class="">
+        Conoce a todas las lectoras certificadas
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* For Webkit browsers */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* For IE, Edge, and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+</style>

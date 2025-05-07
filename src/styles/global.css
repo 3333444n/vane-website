@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-dark;
+  }
+}
+
+body {
+  font-family: theme('fontFamily.afacad');
+}
+
+button {
+  @apply rounded-full bg-extra text-secondary font-dmSerifText py-2 px-6 transition-colors hover:bg-opacity-90;
+}
+
+/* Updated default font and color for a tags */
+a {
+  @apply font-dmSerifText text-extra hover:underline;
+}
+
+/* Class for a tags styled as buttons */
+a.button-style {
+  @apply bg-extra text-secondary font-dmSerifText rounded-full py-2 px-6 transition-colors hover:bg-opacity-90;
+  /* Ensure no default underline for button-styled links */
+  @apply no-underline;
+}
+
+img {
+  border-radius: theme('borderRadius.md');
+}

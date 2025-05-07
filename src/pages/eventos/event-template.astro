@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImageTextSection from "../../components/ImageTextSection.astro";
+import Quote from "../../components/Quote.astro";
+import TestimonialSection from "../../components/TestimonialSection.astro";
+import EventHero from "../../components/EventHero.astro"; // Added import
+import LastCTA from "../../components/LastCTA.astro"; // Added import
+
+// Placeholder data for TestimonialSection
+const eventTestimonials = [
+  {
+    quote:
+      "Este evento cambió mi perspectiva. ¡Increíble organización y contenido!",
+    authorName: "Participante Feliz",
+    authorTitle: "Asistente al Evento",
+  },
+  {
+    quote:
+      "Una experiencia transformadora. Conocimiento valioso y ponentes excepcionales.",
+    authorName: "Otro Participante",
+    authorTitle: "Entusiasta del Desarrollo Personal",
+  },
+];
+---
+
+<BaseLayout
+  title="Plantilla de Evento | Vanessa Ramirez"
+  description="Detalles y testimonios de nuestros eventos transformadores."
+>
+  <!-- Added EventHero component -->
+  <EventHero
+    type="Tipo de Evento"
+    title="Título del Evento"
+    subtitle="Subtítulo inspirador del evento"
+    description="Descripción detallada del evento que captura la esencia y el propósito."
+    date="Fecha del Evento"
+    image="/images/img-placeholder.jpg"
+    buttonText="Inscríbete Ahora"
+    buttonLink="#"
+  />
+  <main class="py-12">
+    <Quote quote="Frase inspiradora relacionada con el evento o el tema." />
+    <ImageTextSection
+      imageUrl="/images/img-placeholder.jpg"
+      heading="Título de Sección 1"
+      content="<p>Contenido de la sección 1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+      reverseOrder={true}
+      useLightBackground={false}
+    />
+    <ImageTextSection
+      imageUrl="/images/img-placeholder.jpg"
+      heading="Título de Sección 2"
+      content="<p>Contenido de la sección 2. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
+      reverseOrder={false}
+      useLightBackground={false}
+    />
+    <Quote quote="Otra frase impactante o reflexiva sobre la transformación." />
+    <ImageTextSection
+      imageUrl="/images/img-placeholder.jpg"
+      heading="Título de Sección 3"
+      content="<p>Contenido de la sección 3. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>"
+      reverseOrder={false}
+      useLightBackground={true}
+    />
+    <TestimonialSection testimonials={eventTestimonials} />
+    <ImageTextSection
+      imageUrl="/images/img-placeholder.jpg"
+      heading="Título de Sección 4"
+      content="<p>Contenido de la sección 4. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>"
+      reverseOrder={false}
+      useLightBackground={false}
+    />
+    <LastCTA
+      cta="¿Estás lista para transformar tu vida?"
+      buttonText="Inscríbime"
+      buttonLink="#"
+      date="02 de Abril de 2025"
+    />
+  </main>
+</BaseLayout>

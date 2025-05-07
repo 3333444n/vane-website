@@ -1,0 +1,32 @@
+---
+interface Props {
+  quote: string;
+  authorName: string;
+  authorTitle: string;
+  useLightBackground?: boolean;
+}
+
+const {
+  quote,
+  authorName,
+  authorTitle,
+  useLightBackground = false,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "p-6 rounded-lg shadow-md h-full flex flex-col justify-between w-full md:w-80 lg:w-96 flex-shrink-0",
+    useLightBackground ? "bg-light" : "bg-light2",
+  ]}
+>
+  <div>
+    <p class="italic mb-4 text-sm md:text-base">"{quote}"</p>
+  </div>
+  <div class="mt-4 text-right">
+    <strong class="block font-semibold text-sm md:text-base"
+      >{authorName}</strong
+    >
+    <p class="text-xs md:text-sm">{authorTitle}</p>
+  </div>
+</div>

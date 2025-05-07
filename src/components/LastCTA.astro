@@ -1,0 +1,21 @@
+---
+// Define props
+const { cta, buttonText, buttonLink, date } = Astro.props;
+---
+
+<div
+  class="text-center py-32 max-w-sm mx-auto px-4 sm:max-w-screen-md flex flex-col items-center gap-6"
+>
+  <h2 class="text-3xl sm:text-5xl font-bold">
+    {cta}
+  </h2>
+  <a
+    href={buttonLink}
+    class="button-style inline-block py-3 px-8 w-full sm:w-auto"
+  >
+    {buttonText}
+  </a>
+  <p class="text-sm sm:text-base font-semibold">
+    {date}
+  </p>
+</div>

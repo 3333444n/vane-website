@@ -1,0 +1,48 @@
+---
+interface Props {
+  imageUrl: string;
+  heading: string;
+  content: string | HTMLElement[]; // Allows for HTML content
+  reverseOrder?: boolean;
+  useLightBackground?: boolean;
+}
+
+const {
+  imageUrl,
+  heading,
+  content,
+  reverseOrder = false,
+  useLightBackground = false,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "flex",
+    "flex-col",
+    "md:flex-row",
+    reverseOrder && "md:flex-row-reverse",
+    "items-center",
+    "py-12",
+    useLightBackground ? "bg-light" : "bg-light2",
+  ]}
+>
+  <div class="w-full md:w-1/2 mb-8 md:mb-0 px-20">
+    <img
+      src={imageUrl}
+      alt={heading}
+      class="rounded-lg shadow-lg w-full h-auto object-cover"
+    />
+  </div>
+  <div
+    class:list={[
+      "w-full",
+      "md:w-1/2",
+      reverseOrder ? "md:pr-8" : "md:pl-8",
+      "px-20",
+    ]}
+  >
+    <h2 class="text-3xl font-bold mb-4 font-serif">{heading}</h2>
+    <div class="prose lg:prose-lg max-w-none" set:html={content} />
+  </div>
+</div>

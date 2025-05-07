@@ -1,16 +1,81 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ServiceCardGrid from "../components/ServiceCardGrid.astro";
+import ImageTextSection from "../components/ImageTextSection.astro";
+import Quote from "../components/Quote.astro";
+import TestimonialSection from "../components/TestimonialSection.astro";
 
+const placeholderData = {
+  imageUrl: "/images/img-placeholder.jpg",
+  heading: "Acerca de mí",
+  content: `
+    <p>Namasté</p> <br>
+    <p>Es hermoso coincidir en esta vida contigo y juntos vibrar en armonía y plenitud.</p> <br>
+    <p>Inicié este maravilloso camino espiritual hace 10 años en busca de una sanación y reencuentro conmigo misma en donde tuve la oportunidad de conocer a grandes maestros de vida que me enseñaron a creer en mí y a confiar en la magia de los nuevos comienzos.</p> <br>
+    <p>Mi alma me guío a reconocer mi luz a través de mi sombra, a despertar mi intuición y mi magia interna, magia que hay en cada uno de nosotros para crear nuestra mejor versión.</p> <br>
+    <p>Me encanta mi misión de vida y a través de ella inspirar a los demás a conectar con su verdadera esencia, a abrazar ese lado mágico que nos vincula con el amor, la abundancia, el bienestar y los ciclos del Universo para sanar en armonía.</p> <br>
+    <p>Le agradezco a los ángeles por estar en mi vida, por iluminar mi camino y llevarme de la mano con amor y dulzura.</p> <br>
+    <p>Creo firmemente que el amor es la sanación y la respuesta para todo.</p>
+  `,
+  reverseOrder: false,
+};
+
+// Added placeholder testimonials for the index page
+const indexTestimonialsData = [
+  {
+    quote:
+      "Contenta con mi lectura de Registros Akáshicos, Vanessa es una persona muy profesional y amorosa. Me sentí muy cómoda y en confianza durante la sesión. ¡Gracias!",
+    authorName: "Ana Pérez",
+    authorTitle: "Diseñadora Gráfica",
+  },
+  {
+    quote:
+      "La sesión de coaching holístico con Vanessa superó mis expectativas. Me brindó herramientas muy valiosas para mi día a día. ¡Totalmente recomendada!",
+    authorName: "Marcela Díaz",
+    authorTitle: "Terapeuta Holística",
+  },
+  {
+    quote:
+      "Desde que inicié las lecturas con Vanessa, mi perspectiva sobre muchos aspectos de mi vida ha cambiado para bien. Es una guía excepcional.",
+    authorName: "Javier Rojas",
+    authorTitle: "Músico",
+  },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Vanessa Ramirez | Lectura de Registros Akáshicos"
+  description="Conocimiento, inspiración y guía para tu camino"
+>
+  <main>
+    <section class="relative h-screen w-full">
+      <!-- Background image with overlay -->
+      <div class="inset-0">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+      </div>
+
+      <!-- Overlay text -->
+      <div
+        class="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center"
+      >
+        <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">
+          Lectura de Registros Akáshicos
+        </h1>
+        <p class="text-xl md:text-2xl mb-6">
+          Un espacio de encuentro para conocimiento, inspiración y guía en tu
+          camino
+        </p>
+        <a href="#" class="button-style !py-3 transition duration-300"
+          >Reserva tu lectura</a
+        >
+      </div>
+    </section>
+
+    <ServiceCardGrid />
+    <ImageTextSection {...placeholderData} />
+    <Quote
+      quote="Abre las puertas de tu vida a la riqueza infinita del Universo"
+    />
+    <TestimonialSection testimonials={indexTestimonialsData} />
+  </main>
+</BaseLayout>

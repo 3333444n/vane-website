@@ -1,0 +1,210 @@
+---
+// Navigation component
+export interface Props {
+  useLightBackground?: boolean;
+}
+const { useLightBackground = false } = Astro.props;
+
+const navLinks = [
+  { href: "/acerca-de-mi/", text: "Acerca de mí" },
+  { href: "/eventos/event-template", text: "Eventos Próximos" }, // Assuming event-template is a placeholder for a general events page
+  { href: "/lectoras-certificadas/", text: "Lectoras Certificadas" },
+];
+
+const socialLinks = [
+  {
+    href: "https://instagram.com/vanessa.ramirez.official", // Placeholder URL
+    icon: "/images/logo-instagram.svg",
+    alt: "Instagram",
+  },
+  {
+    href: "https://tiktok.com/@vanessa.ramirez.official", // Placeholder URL
+    icon: "/images/logo-tiktok.svg",
+    alt: "TikTok",
+  },
+  {
+    href: "https://facebook.com/vanessa.ramirez.official", // Placeholder URL
+    icon: "/images/logo-facebook.svg",
+    alt: "Facebook",
+  },
+];
+---
+
+<nav
+  class:list={[
+    "fixed top-0 left-0 right-0 z-50",
+    "flex justify-between items-center py-4 px-6 md:px-8 lg:px-12", // Adjusted padding for different screen sizes
+    useLightBackground ? "bg-light" : "bg-light2",
+    "text-primary", // Default text color, assuming brand.0 is primary
+  ]}
+  id="main-nav"
+>
+  {/* Desktop Navigation - hidden on small screens */}
+  <div class="hidden md:flex flex-1 items-center">
+    <a href="/" class="text-xl font-bold font-dmSerifText"> Vanessa Ramirez </a>
+  </div>
+  <ul class="hidden md:flex list-none m-0 p-0 gap-6 items-center">
+    {
+      navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class="no-underline transition-colors hover:text-accent font-afacad"
+          >
+            {link.text}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="hidden md:flex items-center gap-4 flex-1 justify-end">
+    {
+      socialLinks.map((social) => (
+        <a
+          href={social.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:opacity-75"
+        >
+          <img src={social.icon} alt={social.alt} class="h-6 w-6" />
+        </a>
+      ))
+    }
+    <a
+      href="/soy-estudiante/"
+      class="button-style !px-4 bg-primary text-white hover:bg-primary-dark font-afacad"
+    >
+      Soy estudiante
+    </a>
+  </div>
+
+  {/* Mobile Header - visible only on small screens */}
+  <div class="md:hidden flex justify-between items-center w-full">
+    <button
+      id="hamburger-button"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      class="p-2 -ml-2"
+    >
+      <img
+        src="/images/menu-outline.svg"
+        alt="Menú"
+        class="h-8 w-8 text-primary"
+      />
+    </button>
+    <a href="/" class="text-2xl font-bold font-dmSerifText text-primary">VR</a>
+    <a href="/soy-estudiante/" class="p-2 -mr-2">
+      <img
+        src="/images/person-circle-outline.svg"
+        alt="Perfil de estudiante"
+        class="h-8 w-8 text-primary"
+      />
+    </a>
+  </div>
+</nav>
+
+{
+  /* Mobile Menu Overlay - hidden by default, shown on small screens when active */
+}
+<div
+  id="mobile-menu"
+  class:list={[
+    "fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out",
+    "md:hidden bg-brand-90", // brand.90 for the light cream/off-white
+    "flex flex-col items-center justify-between pt-20 p-6", // pt-20 to account for fixed header
+    "translate-y-full", // Start off-screen (bottom)
+  ]}
+  aria-hidden="true"
+>
+  <button
+    id="close-menu-button"
+    aria-label="Cerrar menú"
+    class="absolute top-6 right-6 p-2"
+  >
+    <img
+      src="/images/close-outline.svg"
+      alt="Cerrar"
+      class="h-10 w-10 text-primary"
+    />
+  </button>
+
+  <div class="flex flex-col items-center text-center w-full">
+    <ul class="list-none m-0 p-0 space-y-6">
+      {
+        navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="text-2xl font-afacad text-primary no-underline hover:text-accent"
+            >
+              {link.text}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <hr class="border-t border-primary/30 my-8 w-3/4" />
+
+    <div class="flex gap-8 mb-8">
+      {
+        socialLinks.map((social) => (
+          <a
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:opacity-75"
+          >
+            <img
+              src={social.icon}
+              alt={social.alt}
+              class="h-8 w-8 text-primary"
+            />
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <img
+      src="/images/logo-vanessa-ramirez.png"
+      alt="Vanessa Ramirez Logo"
+      class="h-10 object-contain"
+    />
+  </div>
+</div>
+
+<script>
+  const hamburgerButton = document.getElementById("hamburger-button");
+  const closeMenuButton = document.getElementById("close-menu-button");
+  const mobileMenu = document.getElementById("mobile-menu");
+  // const mainNav = document.getElementById('main-nav'); // mainNav is not used in the script yet
+  let isMenuOpen = false;
+
+  function toggleMenu() {
+    if (!mobileMenu || !hamburgerButton) return; // Guard clause
+
+    isMenuOpen = !isMenuOpen;
+    mobileMenu.classList.toggle("translate-y-full"); // Slides from bottom
+    mobileMenu.classList.toggle("translate-y-0");
+    mobileMenu.setAttribute("aria-hidden", String(!isMenuOpen));
+    hamburgerButton.setAttribute("aria-expanded", String(isMenuOpen));
+
+    // Optional: Prevent body scroll when menu is open
+    // document.body.style.overflow = isMenuOpen ? 'hidden' : '';
+  }
+
+  if (hamburgerButton && mobileMenu && closeMenuButton) {
+    hamburgerButton.addEventListener("click", toggleMenu);
+    closeMenuButton.addEventListener("click", toggleMenu);
+
+    // Close menu if clicking outside of it (optional, can be complex with fixed header)
+    // document.addEventListener('click', (event) => {
+    //   if (isMenuOpen && mobileMenu && hamburgerButton && !mobileMenu.contains(event.target) && !hamburgerButton.contains(event.target) /* && !mainNav.contains(event.target) */) {
+    //     toggleMenu();
+    //   }
+    // });
+  }
+</script>
