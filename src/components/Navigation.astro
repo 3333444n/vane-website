@@ -7,7 +7,7 @@ const { useLightBackground = false } = Astro.props;
 
 const navLinks = [
   { href: "/acerca-de-mi/", text: "Acerca de mí" },
-  { href: "/eventos/event-template", text: "Eventos Próximos" }, // Assuming event-template is a placeholder for a general events page
+  { href: "/eventos/event-template", text: "Eventos Próximos" },
   { href: "/lectoras-certificadas/", text: "Lectoras Certificadas" },
 ];
 
@@ -41,7 +41,13 @@ const socialLinks = [
 >
   {/* Desktop Navigation - hidden on small screens */}
   <div class="hidden md:flex flex-1 items-center">
-    <a href="/" class="text-xl font-bold font-dmSerifText"> Vanessa Ramirez </a>
+    <a href="/" class="block">
+      <img
+        src="/images/logo-vanessa-ramirez.png"
+        alt="Vanessa Ramirez Logo"
+        class="h-8 object-contain"
+      />
+    </a>
   </div>
   <ul class="hidden md:flex list-none m-0 p-0 gap-6 items-center">
     {
@@ -49,7 +55,7 @@ const socialLinks = [
         <li>
           <a
             href={link.href}
-            class="no-underline transition-colors hover:text-accent font-afacad"
+            class="no-underline transition-colors hover:text-accent font-dmSerifText"
           >
             {link.text}
           </a>
@@ -85,7 +91,7 @@ const socialLinks = [
       aria-label="Abrir menú"
       aria-expanded="false"
       aria-controls="mobile-menu"
-      class="p-2 -ml-2"
+      class="p-2 -ml-2 bg-transparent"
     >
       <img
         src="/images/menu-outline.svg"
@@ -112,7 +118,7 @@ const socialLinks = [
   class:list={[
     "fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out",
     "md:hidden bg-brand-90", // brand.90 for the light cream/off-white
-    "flex flex-col items-center justify-between pt-20 p-6", // pt-20 to account for fixed header
+    "flex flex-col items-center justify-between px-6 pb-6 pt-64", // Clears 4rem header (pt-16), preserves px-6 and pb-6
     "translate-y-full", // Start off-screen (bottom)
   ]}
   aria-hidden="true"
@@ -120,7 +126,7 @@ const socialLinks = [
   <button
     id="close-menu-button"
     aria-label="Cerrar menú"
-    class="absolute top-6 right-6 p-2"
+    class="absolute top-18 left-1/2 -translate-x-1/2 p-2 z-10 bg-brand-90"
   >
     <img
       src="/images/close-outline.svg"
@@ -129,14 +135,16 @@ const socialLinks = [
     />
   </button>
 
-  <div class="flex flex-col items-center text-center w-full">
+  <div class="flex flex-col items-center text-center w-full mt-20">
+    {/* Added mt-20 for spacing below close button */}
+    {/* Added Title */}
     <ul class="list-none m-0 p-0 space-y-6">
       {
         navLinks.map((link) => (
           <li>
             <a
               href={link.href}
-              class="text-2xl font-afacad text-primary no-underline hover:text-accent"
+              class="text-2xl font-dmSerifText text-primary no-underline hover:text-accent"
             >
               {link.text}
             </a>
@@ -171,7 +179,7 @@ const socialLinks = [
     <img
       src="/images/logo-vanessa-ramirez.png"
       alt="Vanessa Ramirez Logo"
-      class="h-10 object-contain"
+      class="h-8 object-contain"
     />
   </div>
 </div>

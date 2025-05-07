@@ -5,43 +5,23 @@ interface Props {
 }
 
 const { quote, useLightBackground = true } = Astro.props;
+
+// NOTE: Ensure 'DM Serif Display' is configured in your tailwind.config.js
+// For example, in theme.extend.fontFamily:
+// fontFamily: {
+//   dmSerif: ['"DM Serif Display"', 'serif'],
+// }
 ---
 
 <div
   class:list={[
-    "quote-container",
-    useLightBackground ? "bg-light" : "bg-light2",
+    "text-center py-24 px-4 w-full", // Increased top and bottom padding
+    useLightBackground ? "bg-light" : "bg-light2", // Conditional background
   ]}
 >
-  <p class="quote-text">{quote}</p>
+  <p
+    class="font-dmSerifText italic text-xl sm:text-2xl md:text-5xl leading-relaxed text-extra m-0"
+  >
+    {quote}
+  </p>
 </div>
-
-<style>
-  .quote-container {
-    text-align: center;
-    padding: 2rem 1rem; /* Add some padding around the quote */
-    margin: 2rem auto; /* Center block and add margin */
-    max-width: 600px; /* Constrain width for better readability */
-  }
-  .quote-text {
-    font-family: Georgia, serif;
-    font-style: italic;
-    font-size: 3rem; /* Adjust size as needed, this is a starting point */
-    line-height: 1.6;
-    color: #a15c7f;
-    margin: 0; /* Remove default paragraph margin */
-  }
-
-  /* Responsive font size */
-  @media (max-width: 768px) {
-    .quote-text {
-      font-size: 1.5rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .quote-text {
-      font-size: 1.25rem;
-    }
-  }
-</style>
