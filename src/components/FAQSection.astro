@@ -1,0 +1,71 @@
+---
+import Question from "./Question.astro";
+
+// Define component props
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  title: string;
+  faqs: FAQItem[];
+  isAlternateBg: boolean; // Parent section's starting background type
+}
+
+const { title, faqs, isAlternateBg } = Astro.props;
+---
+
+<div class="py-12 max-w-screen-md mx-auto px-4">
+  <h2 class="text-3xl font-bold text-primary mb-8 text-center">{title}</h2>
+  <div
+    class:list={[
+      "faq-list rounded-lg overflow-hidden p-8",
+      { "bg-light": isAlternateBg, "bg-light2": !isAlternateBg },
+    ]}
+  >
+    {
+      faqs.map((faq: FAQItem, index: number) => (
+        <Question
+          question={faq.question}
+          answer={faq.answer}
+          isAlternateBg={isAlternateBg}
+        />
+        // The first item respects the parent's isAlternateBg, subsequent items alternate from that.
+      ))
+    }
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    const allFaqLists = document.querySelectorAll(".faq-list");
+
+    allFaqLists.forEach((faqList) => {
+      faqList.addEventListener("click", function (event) {
+        const button = event.target.closest(".question-button");
+
+        if (!button || !faqList.contains(button)) {
+          return; // Click was not on a button in this list or its descendant
+        }
+
+        const questionItem = button.closest(".question-item");
+        if (!questionItem) {
+          return;
+        }
+
+        const answerContent = questionItem.querySelector(".answer-content");
+        const icon = button.querySelector(".chevron-icon");
+
+        if (answerContent && icon) {
+          answerContent.classList.toggle("hidden");
+          icon.classList.toggle("rotate-180");
+        } else {
+          if (!answerContent)
+            console.error("Answer content not found for button:", button);
+          if (!icon) console.error("Icon not found for button:", button);
+        }
+      });
+    });
+  });
+</script>

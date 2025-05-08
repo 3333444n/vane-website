@@ -1,0 +1,43 @@
+---
+import FAQSection from "./FAQSection.astro";
+import type { FAQItem } from "./FAQSection.astro"; // Import type for faqs array
+
+export interface Props {
+  textTitle: string;
+  text: string;
+  faqTitle: string;
+  faqs: FAQItem[];
+  isAlternateBg: boolean;
+  reverseDirection?: boolean; // Optional, defaults to false
+}
+
+const {
+  textTitle,
+  text,
+  faqTitle,
+  faqs,
+  isAlternateBg = false,
+  reverseDirection = false,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    "py-16 px-4 max-w-screen-xl mx-auto flex flex-col md:flex-row gap-8 md:gap-12",
+    { "bg-light": !isAlternateBg, "bg-white": isAlternateBg }, // Example background classes
+    { "md:flex-row-reverse": reverseDirection },
+  ]}
+>
+  <!-- Text Block Column -->
+  <div class="text-block md:w-1/2">
+    <h2 class="text-3xl font-bold text-primary mb-6">{textTitle}</h2>
+    <div class="prose lg:prose-xl text-gray-700" set:html={text}>
+      {/* The HTML content from the text prop will be injected here */}
+    </div>
+  </div>
+
+  <!-- FAQ Section Column -->
+  <div class="faq-block md:w-1/2">
+    <FAQSection title={faqTitle} faqs={faqs} isAlternateBg={false} />
+  </div>
+</div>

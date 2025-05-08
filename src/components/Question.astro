@@ -1,0 +1,33 @@
+---
+// Define component props
+export interface Props {
+  question: string;
+  answer: string;
+  isAlternateBg: boolean;
+}
+
+const { question, answer, isAlternateBg } = Astro.props;
+---
+
+<div
+  class:list={[
+    "question-item",
+    { "bg-light": isAlternateBg, "bg-light2": !isAlternateBg },
+  ]}
+>
+  <button
+    class="w-full py-3 px-4 text-left text-primary font-semibold border-b border-gray-200 focus:outline-none question-button"
+  >
+    <div class="flex items-center justify-between">
+      <p>{question}</p>
+      <img
+        src="/images/chevron-down.svg"
+        alt="chevron"
+        class="chevron-icon transition-transform duration-300 h-6 w-6"
+      />
+    </div>
+  </button>
+  <div class="answer-content hidden px-6 py-4 text-gray-700">
+    <p>{answer}</p>
+  </div>
+</div>

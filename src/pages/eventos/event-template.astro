@@ -5,6 +5,7 @@ import Quote from "../../components/Quote.astro";
 import TestimonialSection from "../../components/TestimonialSection.astro";
 import EventHero from "../../components/EventHero.astro"; // Added import
 import LastCTA from "../../components/LastCTA.astro"; // Added import
+import TextFAQSection from "../../components/TextFAQSection.astro"; // Import the new component
 
 // Placeholder data for TestimonialSection
 const eventTestimonials = [
@@ -34,6 +35,55 @@ const eventTestimonials = [
     quote: "Un tercer testimonio de ejemplo.",
     authorName: "Participante Ejemplo 3",
     authorTitle: "Asistente Ejemplo",
+  },
+];
+
+const certificationText = `
+  <h3 class="text-xl font-semibold text-secondary mb-3">¿Cómo aprenderas?</h3>
+  <p class="mb-4">Las clases son en línea, 100% en vivo, e incluyen prácticas, herramientas y enseñanzas de los caminos de transformación y exploración de nuestro Ser para abrir las puertas de nuestra vida a la abundancia infinita del Universo.</p>
+  <h3 class="text-xl font-semibold text-secondary mb-3">¿Qué incluye?</h3>
+  <ul class="list-disc list-inside space-y-1 mb-4">
+    <li>Manual en formato PDF.</li>
+    <li>Certificado.</li>
+    <li>Aula zoom en vivo y acceso a la grabación.</li>
+    <li>Ocho clases: 06, 13, 20 y 27 de marzo, 03, 10, 17 y 24 de abril de 2025.</li>
+    <li>Horario de las clases: 19:00 a 21:00 hrs (Hora CDMX)</li>
+    <li>Nivel 1: Aprende a acceder a tus propios Registros Akáshicos y establece un canal de comunicación claro con tu Ser Interno.</li>
+    <li>Nivel 2: Aprende a acceder a los Registros Akáshicos de otras personas y realiza una valiosa contribución para la elevación de la conciencia por medio de terapias.</li>
+    <li>Audios de meditación, prácticas, soporte y contención para dudas.</li>
+  </ul>
+`;
+
+const certificationFAQs = [
+  {
+    question: "¿Las clases son en vivo o grabadas?",
+    answer:
+      "Las clases son 100% en vivo para asegurar una experiencia interactiva. Además, todas las sesiones se graban y tendrás acceso ilimitado a ellas.",
+  },
+  {
+    question: "¿Qué necesito para participar?",
+    answer:
+      "Solo necesitas una conexión estable a internet, un dispositivo (computadora, tablet o smartphone), la aplicación Zoom instalada y muchas ganas de aprender.",
+  },
+  {
+    question: "¿Recibiré material de apoyo?",
+    answer:
+      "Sí, se te proporcionará un manual completo en formato PDF con toda la teoría y prácticas, además de audios de meditación y ejercicios.",
+  },
+  {
+    question: "¿Qué pasa si falto a una clase?",
+    answer:
+      "No te preocupes. Todas las clases son grabadas y podrás acceder a la grabación al día siguiente para ponerte al día a tu propio ritmo.",
+  },
+  {
+    question: "¿Obtendré un certificado al finalizar?",
+    answer:
+      "Sí, al completar satisfactoriamente todos los módulos de la certificación recibirás un certificado digital.",
+  },
+  {
+    question: "¿Hay requisitos previos para inscribirme?",
+    answer:
+      "No se requieren conocimientos previos, solo una mente abierta y el deseo de profundizar en tu crecimiento personal y espiritual.",
   },
 ];
 ---
@@ -70,12 +120,13 @@ const eventTestimonials = [
       useLightBackground={false}
     />
     <Quote quote="Otra frase impactante o reflexiva sobre la transformación." />
-    <ImageTextSection
-      imageUrl="/images/img-placeholder.jpg"
-      heading="Título de Sección 3"
-      content="<p>Contenido de la sección 3. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>"
-      reverseOrder={false}
-      useLightBackground={true}
+    <TextFAQSection
+      textTitle="Acerca de la certificación"
+      text={certificationText}
+      faqTitle="Preguntas Frecuentes"
+      faqs={certificationFAQs}
+      isAlternateBg={true}
+      reverseDirection={false}
     />
     <TestimonialSection testimonials={eventTestimonials} />
     <ImageTextSection
