@@ -1,0 +1,56 @@
+---
+interface Props {
+  type: string;
+  title: string;
+  subtitle: string;
+  date: string;
+  image: string;
+  buttonText: string;
+  buttonLink: string;
+  buttonColor?: string;
+}
+
+const {
+  type,
+  title,
+  subtitle,
+  date,
+  image,
+  buttonText,
+  buttonLink,
+  buttonColor = "bg-primary", // Default button color
+} = Astro.props;
+---
+
+<div
+  class="relative w-full bg-cover bg-center"
+  style={`background-image: url('${image}');`}
+>
+  <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+  <div
+    class="relative z-10 flex flex-col items-center justify-center text-center text-white py-20 px-4 md:py-32 lg:py-40"
+  >
+    {type && <p class="text-sm sm:text-base mb-2">{type}</p>}
+    {
+      title && (
+        <h1 class="text-4xl sm:text-5xl font-bold font-dmSerifText italic mb-4">
+          {title}
+        </h1>
+      )
+    }
+    {subtitle && <p class="text-lg sm:text-xl italic mb-3">{subtitle}</p>}
+    {date && <p class="text-md sm:text-lg mb-8">{date}</p>}
+    {
+      buttonText && buttonLink && (
+        <a href={buttonLink} class={`btn-primary ${buttonColor}`}>
+          {buttonText}
+        </a>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  /* Ensure font-dmSerifText is loaded if it's a custom font.
+     If it's part of a Tailwind theme, this might not be necessary. */
+</style>

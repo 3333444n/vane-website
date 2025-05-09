@@ -2,12 +2,17 @@
 import type { CollectionEntry } from "astro:content";
 
 interface Props {
-  event: CollectionEntry<"events">;
-  useLightBackground?: boolean;
+  event: {
+    date: string;
+    title: string;
+    imageUrl: string;
+    linkUrl: string;
+  };
+  size: "small" | "large" | "featured";
 }
 
-const { event, useLightBackground = true } = Astro.props;
-const { title, date, location, description, image } = event.data;
+const { event, size } = Astro.props;
+const { title, date, imageUrl, linkUrl } = event;
 
 // Format the date
 const formattedDate = new Date(date).toLocaleDateString("en-US", {
@@ -15,36 +20,44 @@ const formattedDate = new Date(date).toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",
 });
+
+let sizeClasses = "";
+let titleSizeClasses = "text-lg";
+let dateSizeClasses = "text-sm";
+
+switch (size) {
+  case "small":
+    sizeClasses = "h-40 min-h-[160px]";
+    break;
+  case "large":
+    sizeClasses = "h-60 min-h-[240px] md:col-span-2";
+    titleSizeClasses = "text-lg md:text-xl";
+    dateSizeClasses = "text-sm md:text-base";
+    break;
+  case "featured":
+    sizeClasses =
+      "h-72 min-h-[288px] md:col-span-full md:h-96 lg:col-span-2 lg:row-span-2";
+    titleSizeClasses = "text-xl md:text-2xl";
+    dateSizeClasses = "text-base md:text-lg";
+    break;
+}
 ---
 
-<div
-  class:list={[
-    "border border-gray-200 rounded-lg shadow hover:shadow-md transition-shadow duration-300 overflow-hidden mb-4",
-    useLightBackground ? "bg-light" : "bg-light2",
-  ]}
+<a
+  href={linkUrl}
+  class={`block rounded-lg overflow-hidden shadow-md ${sizeClasses}`}
 >
-  {
-    image && (
-      <div class="h-48 overflow-hidden">
-        <img src={image} alt={title} class="w-full h-full object-cover" />
+  <div
+    class="relative bg-cover bg-center h-full"
+    style={{ backgroundImage: `url('${imageUrl}')` }}
+  >
+    <div class="absolute inset-0 bg-black/40">
+      <div class="flex flex-col justify-end p-4 h-full">
+        <h2 class={`text-white font-semibold mb-2 ${titleSizeClasses}`}>
+          {title}
+        </h2>
+        <p class={`text-white ${dateSizeClasses}`}>{date}</p>
       </div>
-    )
-  }
-  <div class="p-6">
-    <h2 class="text-2xl font-bold mb-2">{title}</h2>
-    <div class="flex flex-col md:flex-row md:justify-between mb-4">
-      <p class="mb-1 md:mb-0">
-        <span class="font-medium">Date:</span>
-        {formattedDate}
-      </p>
-      <p>
-        <span class="font-medium">Location:</span>
-        {location}
-      </p>
     </div>
-    <p class="mb-4">{description}</p>
-    <a href={`/events/${event.id}`} class="button-style !px-4">
-      View Details
-    </a>
   </div>
-</div>
+</a>

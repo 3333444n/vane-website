@@ -1,22 +1,72 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ImageTextSection from "../components/ImageTextSection.astro";
+import Quote from "../components/Quote.astro";
+import TestimonialSection from "../components/TestimonialSection.astro";
 ---
 
 <BaseLayout title="About Me" description="Learn more about me.">
-  <h1>About Me</h1>
-  <div class="about-content">
-    <p>
-      Hello! I'm a passionate professional with expertise in my field. I have
-      several years of experience working on various projects and initiatives.
-    </p>
-    <p>
-      My background includes education in relevant subjects and continuous
-      learning to stay updated with the latest developments in my industry.
-    </p>
-    <p>
-      When I'm not working, I enjoy hobbies such as reading, hiking, and
-      exploring new technologies. I'm always open to connecting with like-minded
-      individuals and discussing potential collaborations.
-    </p>
-  </div>
+  <ImageTextSection
+    imageUrl="/public/images/img-placeholder.jpg"
+    heading="My Journey"
+    content="A brief overview of my professional journey and what drives me. I am dedicated to creating impactful solutions and continuously expanding my skillset."
+    useLightBackground={true}
+  />
+  <ImageTextSection
+    imageUrl="/public/images/img-placeholder.jpg"
+    heading="My Approach"
+    content="I believe in a collaborative and client-focused approach. Understanding your needs is paramount to delivering results that exceed expectations."
+    useLightBackground={false}
+    reverseOrder={true}
+  />
+  <Quote
+    quote="The best way to predict the future is to create it."
+    useLightBackground={true}
+  />
+  <TestimonialSection
+    testimonials={[
+      {
+        quote:
+          "Vanessa is a true professional, delivering outstanding results every time.",
+        authorName: "John Doe",
+        authorTitle: "Tech Solutions Inc.",
+      },
+      {
+        quote: "Working with Vanessa was a game-changer for our project.",
+        authorName: "Jane Smith",
+        authorTitle: "Innovatech Ltd.",
+      },
+      {
+        quote: "Her expertise and dedication are unmatched.",
+        authorName: "Carlos Rivera",
+        authorTitle: "Creative Designs Co.",
+      },
+      {
+        quote: "I highly recommend Vanessa for any challenging endeavor.",
+        authorName: "Aisha Khan",
+        authorTitle: "Global Dynamics",
+      },
+      {
+        quote: "Professional, insightful, and incredibly talented.",
+        authorName: "Michael Brown",
+        authorTitle: "NextGen Corp.",
+      },
+      {
+        quote: "Vanessa transformed our vision into reality.",
+        authorName: "Sophia Lee",
+        authorTitle: "Visionary Apps",
+      },
+      {
+        quote: "A pleasure to work with, and the results speak for themselves.",
+        authorName: "David Wilson",
+        authorTitle: "Synergy Group",
+      },
+      {
+        quote: "Exceptional skills and a fantastic collaborator.",
+        authorName: "Maria Garcia",
+        authorTitle: "Peak Performance LLC",
+      },
+    ]}
+    useLightBackground={true}
+  />
 </BaseLayout>

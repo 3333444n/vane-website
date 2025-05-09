@@ -1,0 +1,232 @@
+---
+import HeroImage from "./HeroImage.astro"; // Import HeroImage
+
+// Define the interface for a single slide (data coming from index.astro)
+export interface SlideData {
+  imageUrl: string;
+  secondaryText?: string;
+  mainText: string;
+  tertiaryText?: string;
+  dateText?: string;
+  buttonText?: string;
+  buttonLink?: string;
+}
+
+// Define the interface for the component's props
+export interface Props {
+  slides: SlideData[];
+  auxiliaryLinkText?: string;
+  auxiliaryLink?: string;
+  useStoneBackground?: boolean;
+}
+
+const {
+  slides,
+  auxiliaryLinkText,
+  auxiliaryLink,
+  useStoneBackground = true,
+} = Astro.props as Props;
+---
+
+<!-- Import Swiper CSS -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+<section
+  class:list={[
+    "relative h-[80vh] w-full flex flex-col justify-center items-center p-16",
+    useStoneBackground ? "bg-light" : "bg-light2",
+  ]}
+>
+  <!-- Swiper container -->
+  <div
+    class="swiper-container relative w-full h-full shadow-lg rounded-lg overflow-hidden"
+  >
+    <div class="swiper-wrapper">
+      {
+        slides &&
+          slides.map((slide) => (
+            <div class="swiper-slide text-center text-lg flex justify-center items-center">
+              <HeroImage
+                image={slide.imageUrl}
+                type={slide.secondaryText ?? ""}
+                title={slide.mainText}
+                subtitle={slide.tertiaryText ?? ""}
+                date={slide.dateText ?? ""}
+                buttonText={slide.buttonText ?? ""}
+                buttonLink={slide.buttonLink ?? ""}
+                buttonColor="bg-[#C06C84] hover:bg-[#b15f76]"
+              />
+            </div>
+          ))
+      }
+    </div>
+    <!-- Add Pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- Add Navigation -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+
+  {
+    auxiliaryLinkText && auxiliaryLink && (
+      <div class="absolute bottom-8 right-8 z-20">
+        <a
+          href={auxiliaryLink}
+          class="text-xs sm:text-sm font-medium text-stone-700 hover:text-stone-900 hover:underline transition duration-300 ease-in-out"
+        >
+          {auxiliaryLinkText}
+        </a>
+      </div>
+    )
+  }
+</section>
+
+<!-- Swiper JS -->
+<script
+  id="swiper-cdn-script"
+  src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+  console.log("HeroSection SCRIPT TAG PROCESSED - Log 1");
+
+  declare global {
+    interface Window {
+      Swiper: any;
+    }
+  }
+
+  let swiperInitialized = false;
+
+  function initializeSwiper() {
+    if (swiperInitialized) {
+      console.log("Swiper already initialized. Skipping.");
+      return;
+    }
+    console.log("Attempting to initialize Swiper...");
+    if (typeof window.Swiper !== "undefined") {
+      console.log("Swiper library found. Initializing...");
+      const swiper = new window.Swiper(".swiper-container", {
+        loop: true,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+        autoplay: {
+          delay: 5000,
+          disableOnInteraction: false,
+        },
+        on: {
+          init: function () {
+            console.log("Swiper event: init fired successfully!");
+            swiperInitialized = true;
+          },
+          slideChange: function () {
+            console.log("Swiper event: slideChange fired");
+          },
+        },
+      });
+    } else {
+      console.error("Swiper library NOT FOUND when trying to initialize.");
+    }
+  }
+
+  try {
+    console.log("HeroSection SCRIPT TAG - Before getElementById - Log 2");
+    const swiperScriptTag = document.getElementById("swiper-cdn-script");
+    console.log("HeroSection SCRIPT TAG - After getElementById - Log 3");
+
+    if (typeof window.Swiper !== "undefined") {
+      console.log(
+        "Swiper already available on window. Initializing directly. - Log 4A"
+      );
+      initializeSwiper();
+    } else if (swiperScriptTag) {
+      console.log(
+        "HeroSection SCRIPT TAG - swiperScriptTag found, Swiper not yet on window. Adding load listener. - Log 4B"
+      );
+      swiperScriptTag.addEventListener("load", () => {
+        console.log("Swiper CDN SCRIPT has LOADED via event listener. - Log 5");
+        initializeSwiper();
+      });
+      swiperScriptTag.addEventListener("error", () => {
+        console.error("Swiper CDN SCRIPT FAILED to load. - Log 6");
+      });
+    } else {
+      console.error(
+        "HeroSection SCRIPT TAG - swiperScriptTag NOT found AND Swiper not on window. - Log 4C"
+      );
+    }
+
+    console.log(
+      "HeroSection SCRIPT TAG - Before astro:page-load listener - Log 7"
+    );
+    document.addEventListener("astro:page-load", () => {
+      console.log(
+        "astro:page-load event fired. Attempting Swiper init (may be redundant). - Log 8"
+      );
+      initializeSwiper();
+    });
+    console.log(
+      "HeroSection SCRIPT TAG - After astro:page-load listener - Log 9"
+    );
+  } catch (e) {
+    console.error("HeroSection SCRIPT TAG - ERROR in script block:", e);
+  }
+</script>
+
+<style is:global>
+  /* 
+    Styles for Swiper UI elements and ensuring HeroImage fills the slide.
+    These are harder to do with Tailwind alone on external library elements.
+  */
+
+  /* Ensures HeroImage component takes full width/height of the swiper-slide */
+  .swiper-slide > div {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Custom Swiper navigation button styles */
+  .swiper-button-prev,
+  .swiper-button-next {
+    --swiper-navigation-color: #ffffff;
+    --swiper-navigation-size: 22px;
+    background-color: transparent;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    transition: background-color 0.3s ease;
+  }
+  .swiper-button-next {
+    /* Move a bit away from the right edge */
+    right: 20px !important;
+  }
+  .swiper-button-prev {
+    /* Move a bit away from the left edge */
+    left: 20px !important;
+  }
+  .swiper-button-prev:hover,
+  .swiper-button-next:hover {
+    background-color: transparent;
+  }
+
+  /* Custom Swiper pagination bullet styles */
+  .swiper-pagination-bullet {
+    --swiper-pagination-bullet-inactive-color: rgba(255, 255, 255, 0.7);
+    --swiper-pagination-bullet-inactive-opacity: 1;
+    --swiper-pagination-bullet-size: 10px;
+    --swiper-pagination-bullet-horizontal-gap: 6px;
+    transition:
+      background-color 0.3s ease,
+      transform 0.3s ease;
+  }
+  .swiper-pagination-bullet-active {
+    --swiper-pagination-color: #c06c84;
+    transform: scale(1.2);
+  }
+</style>
