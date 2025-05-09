@@ -14,19 +14,19 @@ const sortedEvents = allEvents.sort((a, b) => {
 
 const placeholderEventsFeatured = [
   {
-    title: "Featured Event 1",
-    date: "2024-08-01",
+    title: "Certificación de Barras de Access",
+    date: "2025-05-17",
     imageUrl: "/images/img-placeholder.jpg",
     linkUrl: "/eventos/event-template",
   },
   {
-    title: "Featured Event 2",
+    title: "Lectura de Oráculo Angelical",
     date: "2024-08-05",
     imageUrl: "/images/img-placeholder.jpg",
     linkUrl: "/eventos/event-template",
   },
   {
-    title: "Featured Event 3",
+    title: "Lectura de Registros Akáshicos",
     date: "2024-08-10",
     imageUrl: "/images/img-placeholder.jpg",
     linkUrl: "/eventos/event-template",
@@ -94,30 +94,27 @@ const placeholderEventsSmall = [
 ];
 ---
 
-<BaseLayout
-  title="Latest Events"
-  description="Explore our upcoming and past events"
->
+<BaseLayout title="Eventos" description="Explora nuestros eventos">
   <div class="mx-auto">
     <EventGridSection
-      title="Featured Events"
+      title="Certificaciones"
       events={placeholderEventsFeatured}
       defaultCardSize="featured"
       useLightBackground={false}
     />
     <EventGridSection
-      title="Upcoming Large Events"
+      title="Talleres"
       events={placeholderEventsLarge}
       defaultCardSize="large"
       useLightBackground={true}
     />
     <EventGridSection
-      title="More Events"
+      title="Masterclasses"
       events={placeholderEventsSmall}
       defaultCardSize="small"
     />
     <EventGridSection
-      title="Past Events"
+      title="Meditaciones"
       events={placeholderEventsSmall.slice(0, 3)}
       defaultCardSize="small"
     />

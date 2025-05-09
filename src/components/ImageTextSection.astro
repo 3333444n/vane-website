@@ -24,10 +24,11 @@ const {
     reverseOrder && "md:flex-row-reverse",
     "items-center",
     "py-12",
+    "px-4 md:px-20",
     useLightBackground ? "bg-light" : "bg-light2",
   ]}
 >
-  <div class="w-full md:w-1/2 mb-8 md:mb-0 px-20">
+  <div class="w-full md:w-1/2 mb-8 md:mb-0">
     <img
       src={imageUrl}
       alt={heading}
@@ -35,12 +36,7 @@ const {
     />
   </div>
   <div
-    class:list={[
-      "w-full",
-      "md:w-1/2",
-      reverseOrder ? "md:pr-8" : "md:pl-8",
-      "px-20",
-    ]}
+    class:list={["w-full", "md:w-1/2", reverseOrder ? "md:pr-8" : "md:pl-8"]}
   >
     <h2 class="text-3xl font-bold mb-4 font-serif">{heading}</h2>
     <div class="prose lg:prose-lg max-w-none" set:html={content} />
