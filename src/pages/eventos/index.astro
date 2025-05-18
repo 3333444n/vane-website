@@ -2,15 +2,27 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import EventCard from "../../components/EventCard.astro";
 import EventGridSection from "../../components/EventGridSection.astro";
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 // Fetch all events
-const allEvents = await getCollection("events");
+const allEvents = await getCollection("courses");
 
-// Sort events by date (latest first)
-const sortedEvents = allEvents.sort((a, b) => {
-  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
-});
+// Filter courses for "Próximos Eventos" (those with 'orden_proximos')
+const proximosEventosNotion = allEvents
+  .filter(
+    (event: CollectionEntry<"courses">) =>
+      typeof event.data.orden_proximos === "number"
+  )
+  .sort(
+    (a: CollectionEntry<"courses">, b: CollectionEntry<"courses">) =>
+      (a.data.orden_proximos || 0) - (b.data.orden_proximos || 0)
+  )
+  .map((event: CollectionEntry<"courses">) => ({
+    title: event.data.nombre_del_curso,
+    date: event.data.hero_fecha || "", // Ensure date is a string, handle null
+    imageUrl: event.data.hero_img_main || "/images/img-placeholder.jpg", // Fallback image
+    linkUrl: `/eventos/${event.id.split("/").pop()?.split(".")[0]}`, // Derive slug from id
+  }));
 
 const placeholderEventsFeatured = [
   {
@@ -97,24 +109,24 @@ const placeholderEventsSmall = [
 <BaseLayout title="Eventos" description="Explora nuestros eventos">
   <div class="mx-auto">
     <EventGridSection
-      title="Certificaciones"
-      events={placeholderEventsFeatured}
+      title="Próximos Eventos"
+      events={proximosEventosNotion}
       defaultCardSize="featured"
       useLightBackground={false}
     />
     <EventGridSection
-      title="Talleres"
+      title="Certificaciones"
       events={placeholderEventsLarge}
       defaultCardSize="large"
       useLightBackground={true}
     />
     <EventGridSection
-      title="Masterclasses"
+      title="Talleres"
       events={placeholderEventsSmall}
       defaultCardSize="small"
     />
     <EventGridSection
-      title="Meditaciones"
+      title="Eventos Gratuitos"
       events={placeholderEventsSmall.slice(0, 3)}
       defaultCardSize="small"
     />
