@@ -1,10 +1,10 @@
 {
-  "nombre_del_curso": "Curso Sin Título",
+  "nombre_del_curso": "Curso de prueba 3",
   "publicar": true,
   "categoria": "masterclass",
   "orden_homepage": 3,
   "orden_proximos": 3,
-  "hero_fecha": null,
+  "hero_fecha": "2025-06-21",
   "hero_tipo": "Certificacion",
   "hero_slogan": "",
   "hero_descripcion": "Esta va a ser la descripción de la certificación",

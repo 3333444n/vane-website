@@ -181,7 +181,7 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
       const section2Img2NotionUrl = getUrl(props.img2);
 
       const courseDataItem: CourseData = {
-        nombre_del_curso: getPlainText(props['Nombre del Curso']?.title || props['nombre_del_curso']?.title) || 'Curso Sin Título',
+        nombre_del_curso: getPlainText(props['titulo']?.title) || 'Curso Sin Título',
         publicar: props.Publicar?.checkbox || false,
         categoria: getSelectName(props.categoria),
         isAvailable: getSelectName(props.isAvailable), // Assuming isAvailable is a select in Notion

@@ -5,6 +5,26 @@ import ImageTextSection from "../components/ImageTextSection.astro";
 import Quote from "../components/Quote.astro";
 import TestimonialSection from "../components/TestimonialSection.astro";
 import HeroSection from "../components/HeroSection.astro";
+import { getCollection } from "astro:content";
+
+// Fetch and process courses for the HeroSection
+const allCourses = await getCollection("courses");
+const heroCourses = allCourses
+  .filter((course) => typeof course.data.orden_homepage === "number")
+  .sort(
+    (a, b) =>
+      (a.data.orden_homepage ?? Infinity) - (b.data.orden_homepage ?? Infinity)
+  );
+
+const heroSlidesDataFromNotion = heroCourses.map((course) => ({
+  imageUrl: course.data.hero_img_main ?? "/images/img-placeholder.jpg", // Fallback image
+  secondaryText: course.data.hero_tipo,
+  mainText: course.data.nombre_del_curso,
+  tertiaryText: course.data.hero_slogan,
+  dateText: course.data.hero_fecha ?? undefined, // Ensure undefined if null
+  buttonText: course.data.hero_buttonText || "Más Información", // Use || for fallback with empty string
+  buttonLink: course.id ? `/eventos/${course.id}` : "/eventos/event-template", // Use course.id as the slug
+}));
 
 const placeholderData = {
   imageUrl: "/images/holistica-82.jpg",
@@ -98,7 +118,9 @@ const heroSlidesData = [
 >
   <main>
     <HeroSection
-      slides={heroSlidesData}
+      slides={heroSlidesDataFromNotion.length > 0
+        ? heroSlidesDataFromNotion
+        : heroSlidesData}
       auxiliaryLinkText="Ver todos los eventos"
       auxiliaryLink="/eventos"
       useStoneBackground={false}
