@@ -1,0 +1,222 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ImageTextSection from "../../components/ImageTextSection.astro";
+import Quote from "../../components/Quote.astro";
+import TestimonialSection from "../../components/TestimonialSection.astro";
+import EventHero from "../../components/EventHero.astro";
+import LastCTA from "../../components/LastCTA.astro";
+import TextFAQSection from "../../components/TextFAQSection.astro";
+
+export async function getStaticPaths() {
+  const courses = await getCollection("courses");
+  return courses.map((course) => ({
+    params: { slug: course.id },
+    props: { course: course.data },
+  }));
+}
+
+const { course } = Astro.props;
+
+// Placeholder data for TestimonialSection - remains static for now
+const eventTestimonials = [
+  {
+    quote:
+      "Este evento cambió mi perspectiva. ¡Increíble organización y contenido!",
+    authorName: "Participante Feliz",
+    authorTitle: "Asistente al Evento",
+  },
+  {
+    quote:
+      "Una experiencia transformadora. Conocimiento valioso y ponentes excepcionales.",
+    authorName: "Otro Participante",
+    authorTitle: "Entusiasta del Desarrollo Personal",
+  },
+  {
+    quote:
+      "Vanessa es una guía excepcional. Su sabiduría y calidez transformaron mi manera de ver la vida.",
+    authorName: "Laura G.",
+    authorTitle: "Participante Satisfecha",
+  },
+  {
+    quote:
+      "Nunca imaginé el poder que tenía dentro hasta que tomé este curso. ¡Gracias por tanto!",
+    authorName: "Carlos S.",
+    authorTitle: "Estudiante Agradecido",
+  },
+  {
+    quote:
+      "Cada sesión fue una revelación. Aprendí herramientas que uso todos los días para mantenerme en paz.",
+    authorName: "Sofia M.",
+    authorTitle: "Asistente Constante",
+  },
+  {
+    quote:
+      "Recomiendo ampliamente los talleres de Vanessa. Son una inversión en tu bienestar y crecimiento espiritual.",
+    authorName: "Javier R.",
+    authorTitle: "Promotor del Bienestar",
+  },
+  {
+    quote:
+      "La energía del grupo y la guía de Vanessa crearon un espacio seguro para sanar y conectar.",
+    authorName: "Ana P.",
+    authorTitle: "Parte de la Comunidad",
+  },
+  {
+    quote:
+      "Este camino me ha traído una claridad y una paz interior que no sabía que eran posibles.",
+    authorName: "Miguel A.",
+    authorTitle: "Explorador Espiritual",
+  },
+  {
+    quote:
+      "Si buscas una transformación real y profunda, este es el lugar. Vanessa te acompaña con amor y profesionalismo.",
+    authorName: "Elena V.",
+    authorTitle: "Testimonio Real",
+  },
+  {
+    quote:
+      "Descubrí dones en mí que desconocía. Ha sido un viaje de autodescubrimiento maravilloso.",
+    authorName: "Ricardo T.",
+    authorTitle: "Alma Despierta",
+  },
+  {
+    quote:
+      "Las enseñanzas son prácticas y fáciles de integrar en la vida diaria. He visto cambios muy positivos.",
+    authorName: "Fernanda L.",
+    authorTitle: "Practicante Dedicada",
+  },
+  {
+    quote:
+      "Más que un curso, es una experiencia que te cambia la vida. Eternamente agradecida.",
+    authorName: "David C.",
+    authorTitle: "Transformado y Feliz",
+  },
+];
+
+// Placeholder data for FAQs - remains static for now
+const certificationFAQs = [
+  {
+    question: "¿Las clases son en vivo o grabadas?",
+    answer:
+      "Las clases son 100% en vivo para asegurar una experiencia interactiva. Además, todas las sesiones se graban y tendrás acceso ilimitado a ellas.",
+  },
+  {
+    question: "¿Qué necesito para participar?",
+    answer:
+      "Solo necesitas una conexión estable a internet, un dispositivo (computadora, tablet o smartphone), la aplicación Zoom instalada y muchas ganas de aprender.",
+  },
+  {
+    question: "¿Recibiré material de apoyo?",
+    answer:
+      "Sí, se te proporcionará un manual completo en formato PDF con toda la teoría y prácticas, además de audios de meditación y ejercicios.",
+  },
+  {
+    question: "¿Qué pasa si falto a una clase?",
+    answer:
+      "No te preocupes. Todas las clases son grabadas y podrás acceder a la grabación al día siguiente para ponerte al día a tu propio ritmo.",
+  },
+  {
+    question: "¿Obtendré un certificado al finalizar?",
+    answer:
+      "Sí, al completar satisfactoriamente todos los módulos de la certificación recibirás un certificado digital.",
+  },
+  {
+    question: "¿Hay requisitos previos para inscribirme?",
+    answer:
+      "No se requieren conocimientos previos, solo una mente abierta y el deseo de profundizar en tu crecimiento personal y espiritual.",
+  },
+  {
+    question: "¿Puedo tomar los cursos desde cualquier país?",
+    answer:
+      "¡Absolutamente! Al ser en línea, puedes unirte desde cualquier parte del mundo. Solo considera la zona horaria para las clases en vivo.",
+  },
+];
+---
+
+<BaseLayout
+  title={`${course.nombre_del_curso} | Vanessa Ramirez`}
+  description={course.hero_descripcion ||
+    "Detalles de nuestros eventos transformadores."}
+>
+  <EventHero
+    type={course.hero_tipo}
+    title={course.nombre_del_curso}
+    subtitle={course.hero_slogan}
+    description={course.hero_descripcion}
+    date={course.hero_fecha || ""}
+    image={course.hero_img_main || "/images/img-placeholder.jpg"}
+    buttonText={course.hero_buttonText || "Inscríbete Ahora"}
+    buttonLink={course.hero_buttonLink || "#"}
+  />
+  <main class="py-12">
+    {course.section1_quote1 && <Quote quote={course.section1_quote1} />}
+
+    {
+      course.section1_titulo1 && (
+        <ImageTextSection
+          imageUrl={course.section1_img1 || "/images/img-placeholder.jpg"}
+          heading={course.section1_titulo1}
+          content={course.section1_texto1}
+          reverseOrder={true}
+          useLightBackground={false}
+        />
+      )
+    }
+
+    {
+      course.section2_titulo2 && (
+        <ImageTextSection
+          imageUrl={course.section2_img2 || "/images/img-placeholder.jpg"}
+          heading={course.section2_titulo2}
+          content={course.section2_texto2}
+          reverseOrder={false}
+          useLightBackground={false}
+        />
+      )
+    }
+
+    {course.section2_quote2 && <Quote quote={course.section2_quote2} />}
+
+    {
+      course.section3FAQ_titulo3 && course.section3FAQ_acerca_del_curso && (
+        <TextFAQSection
+          textTitle={course.section3FAQ_titulo3}
+          text={course.section3FAQ_acerca_del_curso}
+          faqTitle="Preguntas Frecuentes"
+          faqs={certificationFAQs}
+          isAlternateBg={true}
+          reverseDirection={false}
+        />
+      )
+    }
+
+    <TestimonialSection testimonials={eventTestimonials} />
+    {/* Remains static for now */}
+
+    <ImageTextSection
+      imageUrl="/public/images/holistica-82.jpg"
+      heading="Acerca de mí"
+      content={`
+    <p>Namasté</p> <br>
+    <p>Es hermoso coincidir en esta vida contigo y juntos vibrar en armonía y plenitud.</p> <br>
+    <p>Inicié este maravilloso camino espiritual hace 10 años en busca de una sanación y reencuentro conmigo misma en donde tuve la oportunidad de conocer a grandes maestros de vida que me enseñaron a creer en mí y a confiar en la magia de los nuevos comienzos.</p> <br>
+    <p>Mi alma me guío a reconocer mi luz a través de mi sombra, a despertar mi intuición y mi magia interna, magia que hay en cada uno de nosotros para crear nuestra mejor versión.</p> <br>
+    <p>Me encanta mi misión de vida y a través de ella inspirar a los demás a conectar con su verdadera esencia, a abrazar ese lado mágico que nos vincula con el amor, la abundancia, el bienestar y los ciclos del Universo para sanar en armonía.</p> <br>
+    <p>Le agradezco a los ángeles por estar en mi vida, por iluminar mi camino y llevarme de la mano con amor y dulzura.</p> <br>
+    <p>Creo firmemente que el amor es la sanación y la respuesta para todo.</p>
+  `}
+      reverseOrder={false}
+      useLightBackground={true}
+    />
+
+    {/* Section 4 has been removed as it's not in CourseData */}
+
+    <LastCTA
+      cta={course.cta_cta}
+      buttonText={course.cta_button}
+      buttonLink={course.cta_btn_link || "#"}
+      date={course.cta_date || ""}
+    />
+  </main>
+</BaseLayout>
