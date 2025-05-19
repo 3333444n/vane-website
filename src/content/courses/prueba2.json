@@ -2,6 +2,7 @@
   "nombre_del_curso": "Curso de prueba 2",
   "publicar": true,
   "categoria": "certificacion",
+  "isAvailable": "yes",
   "orden_homepage": 2,
   "orden_proximos": 2,
   "hero_fecha": "2025-06-07",

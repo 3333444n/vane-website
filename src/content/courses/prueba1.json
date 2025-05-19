@@ -1,7 +1,7 @@
 {
   "nombre_del_curso": "Curso de prueba 1",
   "publicar": true,
-  "categoria": "meditacion",
+  "categoria": "taller",
   "isAvailable": "yes",
   "orden_homepage": 1,
   "orden_proximos": 1,

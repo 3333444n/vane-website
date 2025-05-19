@@ -1,7 +1,8 @@
 {
   "nombre_del_curso": "Curso de prueba 3",
   "publicar": true,
-  "categoria": "masterclass",
+  "categoria": "gratis",
+  "isAvailable": "yes",
   "orden_homepage": 3,
   "orden_proximos": 3,
   "hero_fecha": "2025-06-21",
