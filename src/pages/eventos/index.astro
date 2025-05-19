@@ -24,6 +24,45 @@ const proximosEventosNotion = allEvents
     linkUrl: `/eventos/${event.id.split("/").pop()?.split(".")[0]}`, // Derive slug from id
   }));
 
+// Filter courses for "Certificaciones"
+const certificacionesEvents = allEvents
+  .filter(
+    (event: CollectionEntry<"courses">) =>
+      event.data.categoria === "certificacion"
+  )
+  .map((event: CollectionEntry<"courses">) => ({
+    title: event.data.nombre_del_curso,
+    date: event.data.hero_fecha || "",
+    imageUrl: event.data.hero_img_main || "/images/img-placeholder.jpg",
+    linkUrl: `/eventos/${event.id.split("/").pop()?.split(".")[0]}`,
+  }));
+
+// Filter courses for "Talleres"
+const talleresSourceEvents = allEvents.filter(
+  (event: CollectionEntry<"courses">) => event.data.categoria === "taller"
+);
+
+const talleresEvents = talleresSourceEvents.map(
+  (event: CollectionEntry<"courses">) => ({
+    title: event.data.nombre_del_curso,
+    date: event.data.hero_fecha || "",
+    imageUrl: event.data.hero_img_main || "/images/img-placeholder.jpg",
+    linkUrl: `/eventos/${event.id.split("/").pop()?.split(".")[0]}`,
+  })
+);
+
+// Filter courses for "Eventos Gratuitos"
+const gratuitosEvents = allEvents
+  .filter(
+    (event: CollectionEntry<"courses">) => event.data.categoria === "gratis"
+  )
+  .map((event: CollectionEntry<"courses">) => ({
+    title: event.data.nombre_del_curso,
+    date: event.data.hero_fecha || "",
+    imageUrl: event.data.hero_img_main || "/images/img-placeholder.jpg",
+    linkUrl: `/eventos/${event.id.split("/").pop()?.split(".")[0]}`,
+  }));
+
 const placeholderEventsFeatured = [
   {
     title: "Certificación de Barras de Access",
@@ -116,18 +155,18 @@ const placeholderEventsSmall = [
     />
     <EventGridSection
       title="Certificaciones"
-      events={placeholderEventsLarge}
+      events={certificacionesEvents}
       defaultCardSize="large"
       useLightBackground={true}
     />
     <EventGridSection
       title="Talleres"
-      events={placeholderEventsSmall}
+      events={talleresEvents}
       defaultCardSize="small"
     />
     <EventGridSection
       title="Eventos Gratuitos"
-      events={placeholderEventsSmall.slice(0, 3)}
+      events={gratuitosEvents}
       defaultCardSize="small"
     />
   </div>
