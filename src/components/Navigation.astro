@@ -41,7 +41,7 @@ const socialLinks = [
   id="main-nav"
 >
   {/* Desktop Navigation - hidden on small screens */}
-  <div class="hidden md:flex flex-1 items-center">
+  <div class="hidden lg:flex flex-1 items-center">
     <a href="/" class="block">
       <img
         src="/images/logo-vanessa-ramirez.png"
@@ -50,7 +50,7 @@ const socialLinks = [
       />
     </a>
   </div>
-  <ul class="hidden md:flex list-none m-0 p-0 gap-6 items-center">
+  <ul class="hidden lg:flex list-none m-0 p-0 gap-6 items-center">
     {
       navLinks.map((link) => (
         <li>
@@ -64,7 +64,7 @@ const socialLinks = [
       ))
     }
   </ul>
-  <div class="hidden md:flex items-center gap-4 flex-1 justify-end">
+  <div class="hidden lg:flex items-center gap-4 flex-1 justify-end">
     {
       socialLinks.map((social) => (
         <a
@@ -86,18 +86,19 @@ const socialLinks = [
   </div>
 
   {/* Mobile Header - visible only on small screens */}
-  <div class="md:hidden flex justify-between items-center w-full">
+  <div class="lg:hidden flex justify-between items-center w-full">
     <button
       id="hamburger-button"
       aria-label="Abrir menú"
       aria-expanded="false"
       aria-controls="mobile-menu"
-      class="p-2 -ml-2 bg-transparent"
+      class="p-2 -ml-2 bg-transparent text-primary"
     >
       <img
+        id="hamburger-icon-img"
         src="/images/menu-outline.svg"
         alt="Menú"
-        class="h-8 w-8 text-primary"
+        class="h-8 w-8"
       />
     </button>
     <a href="/" class="text-2xl font-bold font-dmSerifText text-primary">VR</a>
@@ -118,26 +119,13 @@ const socialLinks = [
   id="mobile-menu"
   class:list={[
     "fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out",
-    "md:hidden bg-brand-90", // brand.90 for the light cream/off-white
-    "flex flex-col items-center justify-between px-6 pb-6 pt-64", // Clears 4rem header (pt-16), preserves px-6 and pb-6
+    "lg:hidden bg-brand-90", // brand.90 for the light cream/off-white
+    "flex flex-col items-center justify-between px-6 pt-80", // Adjusted pt-28 to pt-36
     "translate-y-full", // Start off-screen (bottom)
   ]}
   aria-hidden="true"
 >
-  <button
-    id="close-menu-button"
-    aria-label="Cerrar menú"
-    class="absolute top-18 left-1/2 -translate-x-1/2 p-2 z-10 bg-brand-90"
-  >
-    <img
-      src="/images/close-outline.svg"
-      alt="Cerrar"
-      class="h-10 w-10 text-primary"
-    />
-  </button>
-
-  <div class="flex flex-col items-center text-center w-full mt-20">
-    {/* Added mt-20 for spacing below close button */}
+  <div class="flex flex-col items-center text-center w-full">
     {/* Added Title */}
     <ul class="list-none m-0 p-0 space-y-6">
       {
@@ -176,7 +164,7 @@ const socialLinks = [
     </div>
   </div>
 
-  <div class="mb-4">
+  <div class="mb-20">
     <img
       src="/images/logo-vanessa-ramirez.png"
       alt="Vanessa Ramirez Logo"
@@ -187,33 +175,36 @@ const socialLinks = [
 
 <script>
   const hamburgerButton = document.getElementById("hamburger-button");
-  const closeMenuButton = document.getElementById("close-menu-button");
   const mobileMenu = document.getElementById("mobile-menu");
-  // const mainNav = document.getElementById('main-nav'); // mainNav is not used in the script yet
+  const hamburgerIconImg = document.getElementById(
+    "hamburger-icon-img"
+  ) as HTMLImageElement;
   let isMenuOpen = false;
 
   function toggleMenu() {
-    if (!mobileMenu || !hamburgerButton) return; // Guard clause
+    if (!mobileMenu || !hamburgerButton || !hamburgerIconImg) return;
 
     isMenuOpen = !isMenuOpen;
-    mobileMenu.classList.toggle("translate-y-full"); // Slides from bottom
+    mobileMenu.classList.toggle("translate-y-full");
     mobileMenu.classList.toggle("translate-y-0");
     mobileMenu.setAttribute("aria-hidden", String(!isMenuOpen));
     hamburgerButton.setAttribute("aria-expanded", String(isMenuOpen));
+
+    if (isMenuOpen) {
+      hamburgerIconImg.src = "/images/close-outline.svg";
+      hamburgerIconImg.alt = "Cerrar";
+      hamburgerButton.setAttribute("aria-label", "Cerrar menú");
+    } else {
+      hamburgerIconImg.src = "/images/menu-outline.svg";
+      hamburgerIconImg.alt = "Menú";
+      hamburgerButton.setAttribute("aria-label", "Abrir menú");
+    }
 
     // Optional: Prevent body scroll when menu is open
     // document.body.style.overflow = isMenuOpen ? 'hidden' : '';
   }
 
-  if (hamburgerButton && mobileMenu && closeMenuButton) {
+  if (hamburgerButton && mobileMenu) {
     hamburgerButton.addEventListener("click", toggleMenu);
-    closeMenuButton.addEventListener("click", toggleMenu);
-
-    // Close menu if clicking outside of it (optional, can be complex with fixed header)
-    // document.addEventListener('click', (event) => {
-    //   if (isMenuOpen && mobileMenu && hamburgerButton && !mobileMenu.contains(event.target) && !hamburgerButton.contains(event.target) /* && !mainNav.contains(event.target) */) {
-    //     toggleMenu();
-    //   }
-    // });
   }
 </script>
