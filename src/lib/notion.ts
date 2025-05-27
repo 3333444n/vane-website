@@ -189,7 +189,7 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         orden_proximos: getNumber(props['orden-proximos']),
         hero_fecha: getDate(props.fecha),
         hero_tipo: getPlainText(props.tipo?.rich_text),
-        hero_slogan: getPlainText(props.slogan?.rich_text),
+        hero_slogan: getPlainText(props.subtitulo?.rich_text),
         hero_descripcion: getPlainText(props.descripcion?.rich_text),
         hero_img_main: heroImgMainNotionUrl 
           ? await downloadImageAndGetLocalPath(heroImgMainNotionUrl, slugValue, 'hero_img_main') 
@@ -263,7 +263,5 @@ export async function fetchAndSaveCoursesAsJson() {
   console.log('Finished fetching and saving Notion courses as JSON.');
 }
 
-// Optional: To allow this script to be run directly (e.g., node dist/notion.js or ts-node src/lib/notion.ts)
-// if (require.main === module) {
-//   fetchAndSaveCoursesAsJson().catch(console.error);
-// }
+// Optional: To allow this script to be run directly
+fetchAndSaveCoursesAsJson().catch(console.error);
