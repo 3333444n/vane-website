@@ -1,0 +1,310 @@
+---
+export interface Lectora {
+  id: string;
+  nombre: string;
+  ciudad: string;
+  pais: string;
+  certificaciones: string[];
+  correo: string;
+  telefono: string;
+}
+export interface Props {
+  lectorasData: Lectora[];
+}
+const { lectorasData } = Astro.props;
+---
+
+<div
+  class="filter-menu p-4 bg-brand-100 rounded-lg shadow-md border border-gray-200"
+>
+  <h2 class="text-xl font-bold text-brand-0 mb-5 text-center">
+    Filtra tu búsqueda
+  </h2>
+
+  <div class="filter-section mb-4">
+    <button
+      class="filter-section-toggle flex justify-between items-center w-full text-left py-2 px-1 rounded hover:bg-brand-90 transition-colors duration-150"
+    >
+      <h3 class="text-md font-semibold text-brand-0">Ubicación</h3>
+      <svg
+        class="w-5 h-5 transform transition-transform duration-200 text-brand-50"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </button>
+    <div
+      id="ubicacion-filters-content"
+      class="mt-2 pl-3 space-y-1 max-h-60 overflow-y-auto hidden"
+    >
+      <!-- Dynamic content for ubicacion -->
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <button
+      class="filter-section-toggle flex justify-between items-center w-full text-left py-2 px-1 rounded hover:bg-brand-90 transition-colors duration-150"
+    >
+      <h3 class="text-md font-semibold text-brand-0">Certificación</h3>
+      <svg
+        class="w-5 h-5 transform transition-transform duration-200 text-brand-50"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </button>
+    <div
+      id="certificacion-filters-content"
+      class="mt-2 pl-3 space-y-1 max-h-48 overflow-y-auto hidden"
+    >
+      <!-- Dynamic content for certificacion -->
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ lectorasData }}>
+  /**
+   * @typedef {object} LectoraType
+   * @property {string} id
+   * @property {string} nombre
+   * @property {string} ciudad
+   * @property {string} pais
+   * @property {string[]} certificaciones
+   * @property {string} correo
+   * @property {string} telefono
+   */
+
+  /** @type {LectoraType[]} */
+  const allLectoras = lectorasData;
+
+  const selectedFilters = {
+    selectedPaises: [],
+    selectedCiudades: [],
+    selectedCertificaciones: [],
+  };
+
+  /** @param {LectoraType[]} lectoras */
+  function getFilterOptions(lectoras) {
+    const paises = new Map();
+    const certificacionesMap = new Map();
+
+    if (!lectoras) return { paises, certificaciones: certificacionesMap };
+
+    lectoras.forEach((lectora) => {
+      if (lectora.pais) {
+        if (!paises.has(lectora.pais)) {
+          paises.set(lectora.pais, { count: 0, cities: new Map() });
+        }
+        const paisData = paises.get(lectora.pais);
+        if (paisData) {
+          paisData.count++;
+          if (lectora.ciudad) {
+            if (!paisData.cities.has(lectora.ciudad)) {
+              paisData.cities.set(lectora.ciudad, 0);
+            }
+            const cityCount = paisData.cities.get(lectora.ciudad);
+            if (typeof cityCount === "number") {
+              paisData.cities.set(lectora.ciudad, cityCount + 1);
+            }
+          }
+        }
+      }
+
+      if (lectora.certificaciones) {
+        lectora.certificaciones.forEach((cert) => {
+          if (cert) {
+            certificacionesMap.set(
+              cert,
+              (certificacionesMap.get(cert) || 0) + 1
+            );
+          }
+        });
+      }
+    });
+    return { paises, certificaciones: certificacionesMap };
+  }
+
+  function renderFilters() {
+    const ubicacionFiltersContent = document.getElementById(
+      "ubicacion-filters-content"
+    );
+    const certificacionFiltersContent = document.getElementById(
+      "certificacion-filters-content"
+    );
+
+    if (!ubicacionFiltersContent || !certificacionFiltersContent) return;
+
+    const { paises, certificaciones } = getFilterOptions(allLectoras);
+
+    ubicacionFiltersContent.innerHTML = "";
+    Array.from(paises.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .forEach(([pais, data]) => {
+        const paisId = `pais-${pais.replace(/\s+/g, "-")}`;
+        const paisElement = document.createElement("div");
+        paisElement.className = "py-1";
+
+        const paisCheckboxDiv = document.createElement("div");
+        paisCheckboxDiv.className = "flex items-center";
+        paisCheckboxDiv.innerHTML = `
+        <input type="checkbox" id="${paisId}" name="pais" value="${pais}" class="mr-2 h-4 w-4 rounded border-gray-300 text-brand-50 focus:ring-brand-50 focus:ring-offset-0 cursor-pointer">
+        <label for="${paisId}" class="font-medium text-sm text-brand-0 select-none cursor-pointer">${pais} (${data.count})</label>
+      `;
+        paisElement.appendChild(paisCheckboxDiv);
+
+        if (data.cities.size > 0) {
+          const citiesContainer = document.createElement("div");
+          citiesContainer.className =
+            "ml-6 mt-1 space-y-1 border-l border-gray-200 pl-3";
+          Array.from(data.cities.entries())
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .forEach(([ciudad, count]) => {
+              const ciudadId = `ciudad-${pais.replace(/\s+/g, "-")}-${ciudad.replace(/\s+/g, "-")}`;
+              const cityDiv = document.createElement("div");
+              cityDiv.className = "flex items-center";
+              cityDiv.innerHTML = `
+            <input type="checkbox" id="${ciudadId}" name="ciudad" value="${ciudad}" data-pais="${pais}" class="mr-2 h-4 w-4 rounded border-gray-300 text-brand-50 focus:ring-brand-50 focus:ring-offset-0 cursor-pointer">
+            <label for="${ciudadId}" class="text-sm text-brand-25 select-none cursor-pointer">${ciudad} (${count})</label>
+          `;
+              citiesContainer.appendChild(cityDiv);
+            });
+          paisElement.appendChild(citiesContainer);
+        }
+        ubicacionFiltersContent.appendChild(paisElement);
+      });
+
+    certificacionFiltersContent.innerHTML = "";
+    Array.from(certificaciones.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .forEach(([cert, count]) => {
+        const certId = `cert-${cert.replace(/\s+/g, "-")}`;
+        const certDiv = document.createElement("div");
+        certDiv.className = "flex items-center py-1";
+        certDiv.innerHTML = `
+        <input type="checkbox" id="${certId}" name="certificacion" value="${cert}" class="mr-2 h-4 w-4 rounded border-gray-300 text-brand-50 focus:ring-brand-50 focus:ring-offset-0 cursor-pointer">
+        <label for="${certId}" class="text-sm text-brand-25 select-none cursor-pointer">${cert} (${count})</label>
+      `;
+        certificacionFiltersContent.appendChild(certDiv);
+      });
+
+    addFilterCheckboxListeners();
+  }
+
+  function updateSelectedFiltersAndDispatch() {
+    selectedFilters.selectedPaises = Array.from(
+      document.querySelectorAll('input[name="pais"]:checked')
+    ).map((el) => el.value);
+    selectedFilters.selectedCiudades = Array.from(
+      document.querySelectorAll('input[name="ciudad"]:checked')
+    ).map((el) => el.value);
+    selectedFilters.selectedCertificaciones = Array.from(
+      document.querySelectorAll('input[name="certificacion"]:checked')
+    ).map((el) => el.value);
+
+    const event = new CustomEvent("filtersChanged", {
+      detail: { ...selectedFilters },
+    });
+
+    // Try to dispatch on the wrapper element that the main page is listening to
+    const filterMenuWrapper = document.getElementById(
+      "filter-menu-component-wrapper"
+    );
+    const filterMenuElement = document.querySelector(".filter-menu");
+
+    if (filterMenuWrapper) {
+      filterMenuWrapper.dispatchEvent(event);
+    } else if (filterMenuElement) {
+      filterMenuElement.dispatchEvent(event);
+    }
+  }
+
+  function addFilterCheckboxListeners() {
+    document
+      .querySelectorAll(
+        '#ubicacion-filters-content input[type="checkbox"], #certificacion-filters-content input[type="checkbox"]'
+      )
+      .forEach((checkbox) => {
+        checkbox.addEventListener("change", (e) => {
+          const targetCheckbox = e.target;
+          if (targetCheckbox instanceof HTMLInputElement) {
+            if (targetCheckbox.name === "pais") {
+              const paisValue = targetCheckbox.value;
+              const isChecked = targetCheckbox.checked;
+              document
+                .querySelectorAll(
+                  `input[name="ciudad"][data-pais="${paisValue}"]`
+                )
+                .forEach((cityCheckboxEl) => {
+                  if (cityCheckboxEl instanceof HTMLInputElement) {
+                    cityCheckboxEl.checked = isChecked;
+                  }
+                });
+            } else if (
+              targetCheckbox.name === "ciudad" &&
+              targetCheckbox.checked
+            ) {
+              const paisValue = targetCheckbox.dataset.pais;
+              if (paisValue) {
+                const paisCheckbox = document.getElementById(
+                  `pais-${paisValue.replace(/\s+/g, "-")}`
+                );
+                if (
+                  paisCheckbox instanceof HTMLInputElement &&
+                  !paisCheckbox.checked
+                ) {
+                  paisCheckbox.checked = true;
+                }
+              }
+            }
+            updateSelectedFiltersAndDispatch();
+          }
+        });
+      });
+  }
+
+  function setupFilterSectionToggles() {
+    const toggleButtons = document.querySelectorAll(".filter-section-toggle");
+
+    // Render filters when setting up toggles
+    renderFilters();
+
+    toggleButtons.forEach((button) => {
+      const contentDiv = button.nextElementSibling;
+      const iconSvg = button.querySelector("svg");
+
+      // Ensure both the content area and icon SVG are found
+      if (!(contentDiv instanceof HTMLElement) || !iconSvg) {
+        return; // Skip this button if essential elements are missing
+      }
+
+      // Default state: content hidden, icon pointing downwards (not rotated)
+      contentDiv.classList.add("hidden");
+      iconSvg.classList.remove("rotate-180");
+
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // Toggle visibility using CSS classes
+        contentDiv.classList.toggle("hidden");
+        iconSvg.classList.toggle("rotate-180");
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    // Always set up the toggle functionality first
+    setupFilterSectionToggles();
+  });
+</script>

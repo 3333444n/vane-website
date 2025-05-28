@@ -31,3 +31,10 @@ a.button-style {
 img {
   border-radius: theme('borderRadius.md');
 }
+
+/* Ensure filter dropdown rotation works correctly */
+@layer utilities {
+  .filter-section-toggle svg.rotate-180 {
+    transform: rotate(180deg) !important;
+  }
+}

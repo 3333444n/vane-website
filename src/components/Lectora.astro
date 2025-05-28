@@ -1,0 +1,112 @@
+---
+export interface Props {
+  id: string;
+  nombre: string;
+  ciudad: string;
+  pais: string;
+  certificaciones: string[];
+  correo: string;
+  telefono: string;
+}
+const { id, nombre, ciudad, pais, certificaciones, correo, telefono } =
+  Astro.props;
+const primaryCertification =
+  certificaciones.length > 0 ? certificaciones[0] : "Certificada";
+---
+
+<div class="lectora-card-container w-72 h-96">
+  <!-- Front of Card -->
+  <div
+    class="card-face front w-full h-full bg-brand-90 p-6 rounded-xl shadow-lg flex flex-col justify-between"
+  >
+    <div>
+      <p class="text-xs text-brand-25 mb-1">
+        Lectora de {primaryCertification}
+      </p>
+      <h3 class="text-2xl font-semibold text-brand-0 my-3 leading-tight">
+        {nombre}
+      </h3>
+      <p class="text-sm text-gray-600">{ciudad}, {pais}</p>
+    </div>
+    <button
+      class="ver-info-btn mt-4 text-sm text-brand-50 underline hover:text-brand-0 font-medium self-center py-2"
+      >Ver información</button
+    >
+  </div>
+
+  <!-- Back of Card -->
+  <div
+    class="card-face back w-full h-full bg-brand-75 p-6 rounded-xl shadow-lg flex-col items-center justify-center hidden"
+  >
+    <h4 class="text-xl font-semibold text-brand-0 mb-4">{nombre}</h4>
+    <div class="text-sm text-left space-y-2">
+      <p>
+        <span class="font-medium text-brand-0">Correo:</span><br />
+        <a
+          href={`mailto:${correo}`}
+          class="text-brand-50 hover:underline break-all">{correo}</a
+        >
+      </p>
+      <p>
+        <span class="font-medium text-brand-0">Teléfono:</span><br />
+        <a href={`tel:${telefono}`} class="text-brand-50 hover:underline"
+          >{telefono}</a
+        >
+      </p>
+    </div>
+    <button
+      class="volver-btn mt-6 text-sm text-brand-50 underline hover:text-brand-0 font-medium self-center py-2"
+      >Volver</button
+    >
+  </div>
+</div>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const cardContainers = document.querySelectorAll(".lectora-card-container");
+
+    cardContainers.forEach((element) => {
+      const container = element as HTMLElement;
+
+      // Check if listeners are already attached to prevent duplicates on HMR or client-side navigation
+      if (container.dataset.listenersAttached === "true") {
+        return;
+      }
+      container.dataset.listenersAttached = "true";
+
+      const frontCard = container.querySelector(".front");
+      const backCard = container.querySelector(".back");
+      const verInfoBtn = container.querySelector(".ver-info-btn");
+      const volverBtn = container.querySelector(".volver-btn");
+
+      const toggleCard = (event: MouseEvent) => {
+        event.stopPropagation();
+        if (frontCard && backCard) {
+          frontCard.classList.toggle("hidden");
+          backCard.classList.toggle("hidden");
+          backCard.classList.toggle("flex");
+        }
+      };
+
+      if (verInfoBtn) {
+        verInfoBtn.addEventListener("click", toggleCard as EventListener);
+      }
+      if (volverBtn) {
+        volverBtn.addEventListener("click", toggleCard as EventListener);
+      }
+    });
+  });
+
+  // Fallback for DOMContentLoaded in case astro:page-load doesn't fire
+  document.addEventListener("DOMContentLoaded", () => {
+    if (
+      !document.querySelector(
+        '.lectora-card-container[data-listeners-attached="true"]'
+      )
+    ) {
+      // Trigger the same logic
+      const event = new Event("astro:page-load");
+      document.dispatchEvent(event);
+    }
+  });
+</script>
