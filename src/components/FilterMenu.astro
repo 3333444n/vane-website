@@ -304,4 +304,9 @@ const { lectorasData } = Astro.props;
     // Always set up the toggle functionality first
     setupFilterSectionToggles();
   });
+
+  // Fallback for DOMContentLoaded in case astro:page-load doesn't fire
+  document.addEventListener("DOMContentLoaded", () => {
+    setupFilterSectionToggles();
+  });
 </script>

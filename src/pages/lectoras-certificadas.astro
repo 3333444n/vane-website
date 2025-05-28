@@ -111,13 +111,6 @@ const pageTitle = "Lectoras Certificadas";
           id="lectoras-grid"
           class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 xl:grid-cols-4 xl:gap-8"
         >
-          {
-            lectorasData.map((lectora) => (
-              <div class="lectora-wrapper" data-id={lectora.id}>
-                <Lectora {...lectora} />
-              </div>
-            ))
-          }
         </div>
 
         <div
@@ -173,6 +166,16 @@ const pageTitle = "Lectoras Certificadas";
 </style>
 
 <script define:vars={{ serverLectorasData: lectorasData }}>
+  // Utility to remove accents/diacritics for accent-insensitive search
+  function normalizeString(str) {
+    return str
+      ? str
+          .normalize("NFD")
+          .replace(/\p{Diacritic}/gu, "")
+          .toLowerCase()
+      : "";
+  }
+
   const allLectoras = serverLectorasData;
   let filteredLectoras = [...allLectoras];
   let currentPage = 1;
@@ -205,11 +208,11 @@ const pageTitle = "Lectoras Certificadas";
 
     // 1. Filter by searchTerm
     if (currentSearchTerm) {
-      const lowerSearchTerm = currentSearchTerm.toLowerCase();
+      const normalizedSearchTerm = normalizeString(currentSearchTerm);
       result = result.filter((lectora) => {
-        const searchableText =
-          `${lectora.nombre} ${lectora.ciudad} ${lectora.pais} ${lectora.certificaciones.join(" ")}`.toLowerCase();
-        return searchableText.includes(lowerSearchTerm);
+        const searchableText = `${lectora.nombre} ${lectora.ciudad} ${lectora.pais} ${lectora.certificaciones.join(" ")}`;
+        const normalizedSearchableText = normalizeString(searchableText);
+        return normalizedSearchableText.includes(normalizedSearchTerm);
       });
     }
 
@@ -241,66 +244,107 @@ const pageTitle = "Lectoras Certificadas";
       );
     }
 
+    // 3. Sort alphabetically by nombre (case- and accent-insensitive)
+    result.sort((a, b) => {
+      const nameA = normalizeString(a.nombre);
+      const nameB = normalizeString(b.nombre);
+      if (nameA < nameB) return -1;
+      if (nameA > nameB) return 1;
+      return 0;
+    });
+
     filteredLectoras = result;
     currentPage = 1;
     renderLectoras();
   }
 
+  // Helper to generate Lectora card HTML (matching Lectora.astro)
+  function renderLectoraCard(lectora) {
+    const primaryCertification =
+      lectora.certificaciones && lectora.certificaciones.length > 0
+        ? lectora.certificaciones[0]
+        : "Certificada";
+    return `
+      <div class="lectora-card-container w-40 h-40 sm:w-48 sm:h-48 xl:w-56 xl:h-56 flex flex-col justify-between items-center text-center" data-id="${lectora.id}">
+        <!-- Front of Card -->
+        <div class="card-face front w-full h-full bg-brand-90 p-3 sm:p-4 xl:p-5 rounded-xl shadow-lg flex flex-col justify-between">
+          <div>
+            <p class="text-[0.6rem] sm:text-xs text-brand-25 mb-1">
+              Lectora de ${primaryCertification}
+            </p>
+            <h3 class="text-base sm:text-lg xl:text-xl font-semibold text-brand-0 my-1 sm:my-2 leading-tight">
+              ${lectora.nombre}
+            </h3>
+            <p class="text-xs sm:text-sm text-gray-600">${lectora.ciudad}, ${lectora.pais}</p>
+          </div>
+          <button class="ver-info-btn mt-2 sm:mt-3 text-xs sm:text-sm text-brand-50 underline hover:text-brand-0 font-medium self-center py-1 sm:py-2">Ver información</button>
+        </div>
+        <!-- Back of Card -->
+        <div class="card-face back w-full h-full bg-brand-75 p-3 sm:p-4 xl:p-5 rounded-xl shadow-lg flex-col items-center justify-center hidden">
+          <h4 class="text-lg sm:text-xl font-semibold text-brand-0 mb-2 sm:mb-3">
+            ${lectora.nombre}
+          </h4>
+          <div class="text-xs sm:text-sm text-left space-y-1 sm:space-y-2">
+            <p>
+              <span class="font-medium text-brand-0">Correo:</span><br />
+              <a href="mailto:${lectora.correo}" class="text-brand-50 hover:underline break-all">${lectora.correo}</a>
+            </p>
+            <p>
+              <span class="font-medium text-brand-0">Teléfono:</span><br />
+              <a href="tel:${lectora.telefono}" class="text-brand-50 hover:underline">${lectora.telefono}</a>
+            </p>
+          </div>
+          <button class="volver-btn mt-3 sm:mt-4 text-xs sm:text-sm text-brand-50 underline hover:text-brand-0 font-medium self-center py-1 sm:py-2">Volver</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Attach flip event listeners to all lectoras cards
+  function attachLectoraCardListeners() {
+    const cardContainers = document.querySelectorAll(".lectora-card-container");
+    cardContainers.forEach((container) => {
+      // Prevent duplicate listeners
+      if (container.dataset.listenersAttached === "true") return;
+      container.dataset.listenersAttached = "true";
+      const frontCard = container.querySelector(".front");
+      const backCard = container.querySelector(".back");
+      const verInfoBtn = container.querySelector(".ver-info-btn");
+      const volverBtn = container.querySelector(".volver-btn");
+      const toggleCard = (event) => {
+        event.stopPropagation();
+        if (frontCard && backCard) {
+          frontCard.classList.toggle("hidden");
+          backCard.classList.toggle("hidden");
+          backCard.classList.toggle("flex");
+        }
+      };
+      if (verInfoBtn) verInfoBtn.addEventListener("click", toggleCard);
+      if (volverBtn) volverBtn.addEventListener("click", toggleCard);
+    });
+  }
+
   function renderLectoras() {
     if (!lectorasGrid || !noResultsMessage) return;
-
+    lectorasGrid.innerHTML = "";
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const paginatedIds = filteredLectoras
-      .slice(startIndex, endIndex)
-      .map((l) => l.id);
-
-    const allCardWrappers = lectorasGrid.querySelectorAll(".lectora-wrapper");
-    let visibleCount = 0;
-    allCardWrappers.forEach((wrapper) => {
-      const cardId = wrapper.dataset.id;
-      if (paginatedIds.includes(cardId)) {
-        wrapper.style.display = "";
-        visibleCount++;
-      } else {
-        wrapper.style.display = "none";
-      }
-    });
-
-    if (visibleCount === 0 && filteredLectoras.length === 0) {
-      // Check if any filters resulted in zero matches
-      noResultsMessage.style.display = "block";
-      lectorasGrid.style.display = "none"; // Hide grid if no results at all
-    } else if (visibleCount === 0 && filteredLectoras.length > 0) {
-      // No results on THIS page, but there are results in other pages
-      noResultsMessage.style.display = "none"; // No general no-results message
-      lectorasGrid.innerHTML =
-        '<p class="text-center col-span-full text-gray-500 py-8">No hay más lectoras en esta página.</p>'; // Specific message for empty page
-      lectorasGrid.style.display = "grid"; // Ensure grid is visible for this message
-    } else {
-      noResultsMessage.style.display = "none";
-      lectorasGrid.style.display = "grid"; // Ensure grid is visible if there are cards
-      // If lectorasGrid.innerHTML was changed for "No hay más lectoras", it needs to be repopulated or this logic needs to be smarter.
-      // The show/hide wrappers approach avoids changing innerHTML of the grid itself.
-      // Let's refine: if visibleCount is 0 but filteredLectoras.length > 0, it implies an empty page of results.
-      // The `noResultsMessage` is for a global "no results for your query".
-      // An empty page due to pagination does not mean "no results" globally.
-    }
-
-    // Refined no-results logic:
+    const pageLectoras = filteredLectoras.slice(startIndex, endIndex);
     if (filteredLectoras.length === 0) {
       noResultsMessage.style.display = "block";
       lectorasGrid.style.display = "none";
+      return;
     } else {
       noResultsMessage.style.display = "none";
       lectorasGrid.style.display = "grid";
-      // If paginatedIds is empty (current page has no items, but other pages might)
-      if (paginatedIds.length === 0) {
-        // Optionally show a message like "No items on this page" in the grid area or near pagination
-        // For now, an empty grid on a page is acceptable if pagination implies other pages exist.
-      }
     }
-
+    if (pageLectoras.length === 0) {
+      lectorasGrid.innerHTML =
+        '<p class="text-center col-span-full text-gray-500 py-8">No hay más lectoras en esta página.</p>';
+      return;
+    }
+    lectorasGrid.innerHTML = pageLectoras.map(renderLectoraCard).join("");
+    attachLectoraCardListeners(); // Attach flip listeners after rendering
     renderPagination();
   }
 
