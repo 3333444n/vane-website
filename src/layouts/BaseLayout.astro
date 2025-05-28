@@ -8,12 +8,16 @@ interface Props {
   title?: string;
   description?: string;
   isCourseUnavailable?: boolean;
+  hideNavigation?: boolean;
+  hideFooter?: boolean;
 }
 
 const {
   title = "Your Website Title",
   description = "Your website description",
   isCourseUnavailable = false,
+  hideNavigation = false,
+  hideFooter = false,
 } = Astro.props;
 ---
 
@@ -32,12 +36,16 @@ const {
     />
   </head>
   <body>
-    <header>
-      <Navigation />
-    </header>
-    <main class="pt-16">
+    {
+      !hideNavigation && (
+        <header>
+          <Navigation />
+        </header>
+      )
+    }
+    <main class:list={[{ "pt-16": !hideNavigation }]}>
       <slot />
     </main>
-    {isCourseUnavailable ? <FooterCourse /> : <Footer />}
+    {!hideFooter && (isCourseUnavailable ? <FooterCourse /> : <Footer />)}
   </body>
 </html>

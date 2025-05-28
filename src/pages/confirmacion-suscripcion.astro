@@ -1,0 +1,86 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="¡Inscripción Confirmada! | Vanessa Ramirez"
+  description="Confirmación de suscripción al newsletter de Vanessa Ramirez"
+  hideNavigation={true}
+  hideFooter={true}
+>
+  <main
+    class="min-h-screen bg-light2 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+  >
+    <div
+      class="max-w-md w-full space-y-8 bg-light p-8 md:p-12 shadow-xl rounded-lg text-center"
+    >
+      <!-- Success Icon -->
+      <div>
+        <div
+          class="w-20 h-20 mx-auto bg-extra rounded-full flex items-center justify-center mb-6"
+        >
+          <svg
+            class="w-10 h-10 text-secondary"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Main Heading -->
+      <h1
+        class="text-3xl md:text-4xl font-dmSerifText text-primary mb-4 leading-tight"
+      >
+        ¡Inscripción Confirmada!
+      </h1>
+
+      <!-- Confirmation Message -->
+      <p
+        class="text-base md:text-lg text-dark mb-6 font-afacad leading-relaxed"
+      >
+        Gracias por unirte a nuestro círculo de luz. Tu alma ha sido bienvenida
+        con amor.
+      </p>
+
+      <p
+        class="text-base md:text-lg text-dark mb-8 font-afacad leading-relaxed"
+      >
+        Serás de las primeras personas en conocer nuestros próximos eventos,
+        talleres y sorpresas que hemos preparado para nutrir tu camino
+        espiritual.
+      </p>
+
+      <p class="text-sm text-dark opacity-80 mb-8">
+        Revisa tu correo (y la carpeta de spam, por si acaso) para no perderte
+        ninguna de nuestras novedades.
+      </p>
+
+      <!-- Call to Action Button -->
+      <div class="mt-6">
+        <a
+          href="/"
+          class="btn-primary text-center w-full max-w-xs mx-auto inline-block mb-4"
+        >
+          Regresar al inicio
+        </a>
+        <a
+          href="/eventos"
+          class="font-dmSerifText text-extra hover:underline text-sm"
+        >
+          Explora nuestros próximos eventos
+        </a>
+      </div>
+
+      <p class="mt-8 text-xs text-dark opacity-70">
+        Con gratitud,<br />Vanessa Ramirez
+      </p>
+    </div>
+  </main>
+</BaseLayout>
