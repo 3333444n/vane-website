@@ -18,6 +18,10 @@ export async function getStaticPaths() {
 
 const { course } = Astro.props;
 
+// Determine if the course is unavailable.
+// Assuming 'no' means unavailable, and anything else (e.g., 'yes', undefined) means available.
+const isCourseUnavailable = course.isAvailable === "no";
+
 // Placeholder data for TestimonialSection - remains static for now
 const eventTestimonials = [
   {
@@ -138,16 +142,21 @@ const certificationFAQs = [
   title={`${course.nombre_del_curso} | Vanessa Ramirez`}
   description={course.hero_descripcion ||
     "Detalles de nuestros eventos transformadores."}
+  isCourseUnavailable={isCourseUnavailable}
 >
   <EventHero
     type={course.hero_tipo}
     title={course.nombre_del_curso}
     subtitle={course.hero_slogan}
     description={course.hero_descripcion}
-    date={course.hero_fecha || ""}
+    date={!isCourseUnavailable ? course.hero_fecha || "" : undefined}
     image={course.hero_img_main || "/images/img-placeholder.jpg"}
-    buttonText={course.hero_buttonText || "Inscríbete Ahora"}
-    buttonLink={course.hero_buttonLink || "#"}
+    buttonText={!isCourseUnavailable
+      ? course.hero_buttonText || "Inscríbete Ahora"
+      : undefined}
+    buttonLink={!isCourseUnavailable
+      ? course.hero_buttonLink || "#"
+      : undefined}
   />
   <main class="py-12">
     {course.section1_quote1 && <Quote quote={course.section1_quote1} />}
@@ -214,9 +223,10 @@ const certificationFAQs = [
 
     <LastCTA
       cta={course.cta_cta}
-      buttonText={course.cta_button}
-      buttonLink={course.cta_btn_link || "#"}
-      date={course.cta_date || ""}
+      buttonText={!isCourseUnavailable ? course.cta_button : undefined}
+      buttonLink={!isCourseUnavailable ? course.cta_btn_link || "#" : undefined}
+      date={!isCourseUnavailable ? course.cta_date || "" : undefined}
+      isCourseUnavailableProp={isCourseUnavailable}
     />
   </main>
 </BaseLayout>

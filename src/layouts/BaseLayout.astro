@@ -1,16 +1,19 @@
 ---
 import Navigation from "../components/Navigation.astro";
 import Footer from "../components/Footer.astro";
+import FooterCourse from "../components/FooterCourse.astro";
 import "../styles/global.css";
 
 interface Props {
   title?: string;
   description?: string;
+  isCourseUnavailable?: boolean;
 }
 
 const {
   title = "Your Website Title",
   description = "Your website description",
+  isCourseUnavailable = false,
 } = Astro.props;
 ---
 
@@ -35,6 +38,6 @@ const {
     <main class="pt-16">
       <slot />
     </main>
-    <Footer />
+    {isCourseUnavailable ? <FooterCourse /> : <Footer />}
   </body>
 </html>

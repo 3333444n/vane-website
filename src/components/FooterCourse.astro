@@ -12,14 +12,10 @@ const { useLightBackground = false } = Astro.props;
   <div class="max-w-screen-xl mx-auto">
     <!-- Newsletter Section -->
     <div class="mb-10 text-center">
-      <h2 class="text-3xl font-semibold mb-2">Suscríbete a mi newsletter</h2>
-      <p class="mb-6">
-        Te enterarás de nuevos cursos, descuentos y recursos espirituales
-      </p>
       <div id="mc_embed_shell">
         <div id="mc_embed_signup">
           <form
-            action="https://vanessaramirezcoach.us1.list-manage.com/subscribe/post?u=329af73e2dd3294c80644eced&id=a793476c38&f_id=007703e5f0"
+            action="https://vanessaramirezcoach.us1.list-manage.com/subscribe/post?u=329af73e2dd3294c80644eced&id=a793476c38&f_id=007603e5f0"
             method="post"
             id="mc-embedded-subscribe-form"
             name="mc-embedded-subscribe-form"
@@ -28,9 +24,9 @@ const { useLightBackground = false } = Astro.props;
             novalidate=""
           >
             <div id="mc_embed_signup_scroll" class="space-y-4">
-              {
-                /* The h2 from the original user-provided HTML is moved above mc_embed_shell */
-              }
+              <h2 class="text-3xl font-semibold mb-2">
+                Escribe tu correo para avisarte cuando el curso esté disponible
+              </h2>
               <div class="indicates-required hidden">
                 <span class="asterisk">*</span> indicates required
               </div>
@@ -43,8 +39,8 @@ const { useLightBackground = false } = Astro.props;
                   name="EMAIL"
                   class="required email w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
                   id="mce-EMAIL"
-                  value=""
                   required=""
+                  value=""
                   placeholder="Correo Electrónico *"
                 />
               </div>
@@ -69,6 +65,24 @@ const { useLightBackground = false } = Astro.props;
                   value=""
                   placeholder="Apellido"
                 />
+              </div>
+              <div class="mc-field-group">
+                <label for="mce-MMERGE7" class="hidden"
+                  >Curso que me interesa
+                </label>
+                <select
+                  name="MMERGE7"
+                  class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                  id="mce-MMERGE7"
+                >
+                  <option value="" disabled selected
+                    >Curso que me interesa</option
+                  >
+                  <option value="Registros Akashikos"
+                    >Registros Akashikos</option
+                  >
+                  <option value="Lectura Angelical">Lectura Angelical</option>
+                </select>
               </div>
               <div id="mce-responses" class="clear">
                 <div
@@ -101,7 +115,7 @@ const { useLightBackground = false } = Astro.props;
                   name="subscribe"
                   id="mc-embedded-subscribe"
                   class="button btn-primary w-full !p-3 mt-4"
-                  value="Suscribirme"
+                  value="Subscribe"
                 />
               </div>
             </div>

@@ -1,21 +1,40 @@
 ---
-// Define props
-const { cta, buttonText, buttonLink, date } = Astro.props;
+export interface Props {
+  cta: string;
+  buttonText?: string; // Made optional
+  buttonLink?: string; // Made optional
+  date?: string; // Made optional
+  isCourseUnavailableProp?: boolean; // New prop for text size
+}
+
+const {
+  cta,
+  buttonText,
+  buttonLink,
+  date,
+  isCourseUnavailableProp = false,
+} = Astro.props;
+
+const titleSizeClass = isCourseUnavailableProp
+  ? "text-3xl sm:text-5xl"
+  : "text-5xl sm:text-7xl";
 ---
 
 <div
   class="text-center py-32 max-w-sm mx-auto px-4 sm:max-w-screen-md flex flex-col items-center gap-6"
 >
-  <h2 class="text-5xl sm:text-7xl font-bold font-dmSerifText italic">
+  <h2 class={`font-bold font-dmSerifText italic ${titleSizeClass}`}>
     {cta}
   </h2>
-  <a
-    href={buttonLink}
-    class="button-style inline-block py-3 px-8 w-full sm:w-auto"
-  >
-    {buttonText}
-  </a>
-  <p class="text-sm sm:text-base font-semibold">
-    {date}
-  </p>
+  {
+    buttonText && buttonLink && (
+      <a
+        href={buttonLink}
+        class="button-style inline-block py-3 px-8 w-full sm:w-auto"
+      >
+        {buttonText}
+      </a>
+    )
+  }
+  {date && <p class="text-sm sm:text-base font-semibold">{date}</p>}
 </div>

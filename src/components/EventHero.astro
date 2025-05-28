@@ -4,10 +4,10 @@ export interface Props {
   title: string;
   subtitle: string;
   description: string;
-  date: string;
+  date?: string;
   image: string; // URL or path
-  buttonText: string;
-  buttonLink: string; // URL for the button
+  buttonText?: string;
+  buttonLink?: string;
   useLightBackground?: boolean;
 }
 
@@ -37,10 +37,14 @@ const {
     </h2>
     <h3 class="text-xl italic mb-6">{subtitle}</h3>
     <p class="text-base mb-8" set:html={description} />
-    <a href={buttonLink} class="button-style inline-block py-3 px-8 mb-4">
-      {buttonText}
-    </a>
-    <p class="text-sm font-semibold">{date}</p>
+    {
+      buttonText && buttonLink && (
+        <a href={buttonLink} class="button-style inline-block py-3 px-8 mb-4">
+          {buttonText}
+        </a>
+      )
+    }
+    {date && <p class="text-sm font-semibold">{date}</p>}
   </div>
   <div class="w-full md:w-1/2">
     <img
