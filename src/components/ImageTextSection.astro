@@ -28,7 +28,16 @@ const {
     useLightBackground ? "bg-light" : "bg-light2",
   ]}
 >
-  <div class="w-full md:w-1/2 mb-8 md:mb-0">
+  <div
+    class:list={[
+      "w-full",
+      "md:w-1/2",
+      "mb-8",
+      "md:mb-0",
+      "intersect:motion-preset-blur-up",
+      "motion-delay-200",
+    ]}
+  >
     <img
       src={imageUrl}
       alt={heading}
@@ -36,7 +45,13 @@ const {
     />
   </div>
   <div
-    class:list={["w-full", "md:w-1/2", reverseOrder ? "md:pr-8" : "md:pl-8"]}
+    class:list={[
+      "w-full",
+      "md:w-1/2",
+      reverseOrder ? "md:pr-8" : "md:pl-8",
+      "intersect:motion-preset-blur-up",
+      "motion-delay-400",
+    ]}
   >
     <h2 class="text-3xl font-bold mb-4 font-serif">{heading}</h2>
     <div class="prose lg:prose-lg max-w-none" set:html={content} />

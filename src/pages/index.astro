@@ -116,7 +116,7 @@ const heroSlidesData = [
   title="Vanessa Ramirez | Lectura de Registros Akáshicos"
   description="Conocimiento, inspiración y guía para tu camino"
 >
-  <main>
+  <main class="intersect:motion-preset-fade">
     <HeroSection
       slides={heroSlidesDataFromNotion.length > 0
         ? heroSlidesDataFromNotion
@@ -126,11 +126,17 @@ const heroSlidesData = [
       useStoneBackground={false}
     />
 
-    <ServiceCardGrid />
-    <ImageTextSection {...placeholderData} />
+    <div class="intersect-once intersect:motion-preset-slide-up">
+      <ServiceCardGrid />
+    </div>
+    <div class="intersect:motion-preset-slide-up motion-delay-10000">
+      <ImageTextSection {...placeholderData} />
+    </div>
     <Quote
       quote="Abre las puertas de tu vida a la riqueza infinita del Universo"
     />
-    <TestimonialSection testimonials={indexTestimonialsData} />
+    <div class="intersect:motion-preset-slide-up motion-delay-10000">
+      <TestimonialSection testimonials={indexTestimonialsData} />
+    </div>
   </main>
 </BaseLayout>

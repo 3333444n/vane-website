@@ -48,5 +48,37 @@ const {
       <slot />
     </main>
     {!hideFooter && (isCourseUnavailable ? <FooterCourse /> : <Footer />)}
+    <script>
+      console.log(
+        "BaseLayout.astro SCRIPT TAG EXECUTED (dynamic import test)."
+      );
+
+      // document.addEventListener("astro:page-load", () => {
+      //   console.log(
+      //     "Astro:page-load event fired! Attempting dynamic import..."
+      //   );
+      import("tailwindcss-intersect")
+        .then(({ Observer }) => {
+          console.log(
+            "tailwindcss-intersect dynamically imported. Observer:",
+            Observer
+          );
+          if (Observer && typeof Observer.start === "function") {
+            Observer.start();
+            console.log("tailwindcss-intersect Observer.start() called.");
+          } else {
+            console.error(
+              "Observer or Observer.start is not available after dynamic import."
+            );
+          }
+        })
+        .catch((err) => {
+          console.error(
+            "Error during dynamic import of tailwindcss-intersect:",
+            err
+          );
+        });
+      // });
+    </script>
   </body>
 </html>
