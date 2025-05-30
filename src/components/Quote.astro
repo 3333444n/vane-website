@@ -15,7 +15,7 @@ const { quote, useLightBackground = true } = Astro.props;
 
 <div
   class:list={[
-    "text-center py-12 md:py-24 px-8 w-full", // Increased top and bottom padding
+    "text-center py-12 md:py-24 px-8 w-full intersect:motion-preset-fade motion-delay-200", // Increased top and bottom padding
     useLightBackground ? "bg-light" : "bg-light2", // Conditional background
   ]}
 >

@@ -26,11 +26,13 @@ const {
 
 <div
   class:list={[
-    "py-8 my-8 px-4 md:py-12 max-w-screen-lg mx-auto flex flex-col items-center gap-6 md:flex-row md:gap-8",
+    "py-8 my-8 px-4 md:py-12 max-w-screen-lg mx-auto flex flex-col items-stretch gap-6 md:flex-row md:gap-8 md:items-stretch",
     useLightBackground ? "bg-light" : "bg-light2",
   ]}
 >
-  <div class="w-full md:w-1/2 text-center md:text-left mb-6 md:mb-0">
+  <div
+    class="w-full motion-preset-fade motion-delay-200 md:w-1/2 text-center md:text-left mb-6 md:mb-0 flex flex-col"
+  >
     <p class="text-sm mb-2">{type}</p>
     <h2 class="text-6xl md:text-7xl font-bold mb-2 font-dmSerifText italic">
       {title}
@@ -39,18 +41,21 @@ const {
     <p class="text-base mb-8" set:html={description} />
     {
       buttonText && buttonLink && (
-        <a href={buttonLink} class="button-style inline-block py-3 px-8 mb-4">
+        <a
+          href={buttonLink}
+          class="button-style inline-block py-3 px-8 mb-4 text-center"
+        >
           {buttonText}
         </a>
       )
     }
     {date && <p class="text-sm font-semibold">{date}</p>}
   </div>
-  <div class="w-full md:w-1/2">
+  <div class="w-full md:w-1/2 flex motion-preset-fade motion-delay-300">
     <img
       src={image}
       alt={title}
-      class="w-full h-auto md:h-100 object-cover rounded-lg"
+      class="w-full h-full object-cover rounded-lg flex-1"
     />
   </div>
 </div>
