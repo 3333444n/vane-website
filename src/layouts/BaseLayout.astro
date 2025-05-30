@@ -39,7 +39,7 @@ const {
   <body>
     {
       !hideNavigation && (
-        <header class="motion-preset-slide-down">
+        <header>
           <Navigation />
         </header>
       )
@@ -49,10 +49,6 @@ const {
     </main>
     {!hideFooter && (isCourseUnavailable ? <FooterCourse /> : <Footer />)}
     <script>
-      console.log(
-        "BaseLayout.astro SCRIPT TAG EXECUTED (dynamic import test)."
-      );
-
       // document.addEventListener("astro:page-load", () => {
       //   console.log(
       //     "Astro:page-load event fired! Attempting dynamic import..."

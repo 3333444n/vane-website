@@ -22,6 +22,47 @@ const getPlainText = (richTextArray: any[]): string => {
   return richTextArray.map((item) => item.plain_text).join('');
 };
 
+// New function to convert rich text to HTML
+const getRichTextAsHtml = (richTextArray: any[]): string => {
+  if (!richTextArray || !Array.isArray(richTextArray)) return '';
+  return richTextArray.map((item) => {
+    if (item.type !== 'text' || !item.text || !item.text.content) {
+      return '';
+    }
+    let content = item.text.content;
+    // Escape HTML special characters
+    content = content.replace(/&/g, '&amp;')
+                     .replace(/</g, '&lt;')
+                     .replace(/>/g, '&gt;')
+                     .replace(/"/g, '&quot;')
+                     .replace(/'/g, '&#039;');
+
+    if (item.annotations) {
+      if (item.annotations.bold) {
+        content = `<h2>${content}</h2>`;
+      }
+      if (item.annotations.italic) {
+        content = `<em>${content}</em>`;
+      }
+      if (item.annotations.strikethrough) {
+        content = `<s>${content}</s>`;
+      }
+      if (item.annotations.underline) {
+        content = `<u>${content}</u>`;
+      }
+      if (item.annotations.code) {
+        content = `<code>${content}</code>`;
+      }
+      // Note: Notion's color annotation might need specific handling
+      // if (item.annotations.color && item.annotations.color !== 'default') {
+      //   content = `<span style="color: ${item.annotations.color}">${content}</span>`;
+      // }
+    }
+    // Handle line breaks within the text content
+    return content.replace(/\n/g, '<br>');
+  }).join('');
+};
+
 const getUrl = (property: any): string | null => {
   if (!property) return null;
   if (property.type === 'files' && property.files && property.files.length > 0) {
@@ -190,14 +231,14 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         hero_fecha: getDate(props.fecha),
         hero_tipo: getPlainText(props.tipo?.rich_text),
         hero_slogan: getPlainText(props.subtitulo?.rich_text),
-        hero_descripcion: getPlainText(props.descripcion?.rich_text),
+        hero_descripcion: getRichTextAsHtml(props.descripcion?.rich_text),
         hero_img_main: heroImgMainNotionUrl 
           ? await downloadImageAndGetLocalPath(heroImgMainNotionUrl, slugValue, 'hero_img_main') 
           : null,
         hero_buttonText: getPlainText(props.hero_buttonText?.rich_text),
         hero_buttonLink: getUrl(props.hero_buttonLink),
         section1_titulo1: getPlainText(props.titulo1?.rich_text),
-        section1_texto1: getPlainText(props.texto1?.rich_text),
+        section1_texto1: getRichTextAsHtml(props.texto1?.rich_text),
         section1_img1: section1Img1NotionUrl 
           ? await downloadImageAndGetLocalPath(section1Img1NotionUrl, slugValue, 'section1_img1') 
           : null,
@@ -205,7 +246,7 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         section1_quote1_autor_nombre: getPlainText(props.quote1_autor_nombre?.rich_text),
         section1_quote1_autor_titulo: getPlainText(props.quote1_autor_titulo?.rich_text),
         section2_titulo2: getPlainText(props.titulo2?.rich_text),
-        section2_texto2: getPlainText(props.texto2?.rich_text),
+        section2_texto2: getRichTextAsHtml(props.texto2?.rich_text),
         section2_img2: section2Img2NotionUrl 
           ? await downloadImageAndGetLocalPath(section2Img2NotionUrl, slugValue, 'section2_img2') 
           : null,
@@ -213,7 +254,7 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         section2_quote2_autor_nombre: getPlainText(props.quote2_autor_nombre?.rich_text),
         section2_quote2_autor_titulo: getPlainText(props.quote2_autor_titulo?.rich_text),
         section3FAQ_titulo3: getPlainText(props.titulo3?.rich_text),
-        section3FAQ_acerca_del_curso: getPlainText(props['acerca-del-curso']?.rich_text),
+        section3FAQ_acerca_del_curso: getRichTextAsHtml(props['acerca-del-curso']?.rich_text),
         cta_cta: getPlainText(props.cta?.rich_text),
         cta_button: getPlainText(props.button?.rich_text),
         cta_btn_link: getUrl(props['btn-link']),

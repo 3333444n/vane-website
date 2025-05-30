@@ -25,9 +25,47 @@ export default {
         afacad: ["Afacad", 'sans-serif'],
         dmSerifText: ["DM Serif Text", 'serif'],
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.dark'),
+            fontFamily: theme('fontFamily.afacad').join(', '),
+            p: {
+              fontSize: theme('fontSize.base'),
+              lineHeight: theme('lineHeight.relaxed'),
+            },
+            a: {
+              color: theme('colors.extra'),
+              '&:hover': {
+                color: theme('colors.extra'),
+              },
+            },
+            h1: {
+              color: theme('colors.dark'),
+              fontFamily: theme('fontFamily.dmSerifText').join(', '),
+            },
+            h2: {
+              color: theme('colors.dark'),
+              fontFamily: theme('fontFamily.dmSerifText').join(', '),
+            },
+            h3: {
+              color: theme('colors.dark'),
+              fontFamily: theme('fontFamily.dmSerifText').join(', '),
+            },
+            h4: {
+              color: theme('colors.dark'),
+              fontFamily: theme('fontFamily.dmSerifText').join(', '),
+            },
+            strong: {
+              color: theme('colors.dark'),
+            },
+          },
+        },
+      }),
     },
   },
   plugins: [
+    require('@tailwindcss/typography'),
     require('tailwindcss-motion'),
     require('tailwindcss-intersect')
   ],
