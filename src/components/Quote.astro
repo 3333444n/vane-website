@@ -2,9 +2,10 @@
 interface Props {
   quote: string;
   useLightBackground?: boolean;
+  class?: string;
 }
 
-const { quote, useLightBackground = true } = Astro.props;
+const { quote, useLightBackground = true, class: className } = Astro.props;
 
 // NOTE: Ensure 'DM Serif Display' is configured in your tailwind.config.js
 // For example, in theme.extend.fontFamily:
@@ -17,6 +18,7 @@ const { quote, useLightBackground = true } = Astro.props;
   class:list={[
     "text-center py-12 md:py-24 px-8 w-full intersect:motion-preset-fade motion-delay-200", // Increased top and bottom padding
     useLightBackground ? "bg-light" : "bg-light2", // Conditional background
+    className, // Apply the passed class
   ]}
 >
   <p

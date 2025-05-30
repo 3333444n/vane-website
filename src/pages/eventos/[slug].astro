@@ -158,8 +158,12 @@ const certificationFAQs = [
       ? course.hero_buttonLink || "#"
       : undefined}
   />
-  <main class="py-12">
-    {course.section1_quote1 && <Quote quote={course.section1_quote1} />}
+  <main class="py-6">
+    {
+      course.section1_quote1 && (
+        <Quote quote={course.section1_quote1} class="pt-2 md:pt-2" />
+      )
+    }
 
     {
       course.section1_titulo1 && (
