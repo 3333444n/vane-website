@@ -253,7 +253,9 @@ const { items, id }: Props = Astro.props;
               });
 
               if (mostVisibleEntry !== null) {
-                const targetElement = mostVisibleEntry.target as HTMLElement;
+                const currentEntry: IntersectionObserverEntry =
+                  mostVisibleEntry;
+                const targetElement = currentEntry.target as HTMLElement;
                 const index = parseInt(
                   targetElement.getAttribute("data-index") || "0",
                   10

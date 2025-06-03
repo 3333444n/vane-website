@@ -108,14 +108,12 @@ export interface CourseData {
   hero_buttonText?: string;
   hero_buttonLink?: string | null;
   // Section 1
-  section1_titulo1: string;
   section1_texto1: string;
   section1_img1: string | null;
   section1_quote1: string;
   section1_quote1_autor_nombre?: string;
   section1_quote1_autor_titulo?: string;
   // Section 2
-  section2_titulo2: string;
   section2_texto2: string;
   section2_img2: string | null;
   section2_quote2: string;
@@ -237,7 +235,6 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
           : null,
         hero_buttonText: getPlainText(props.hero_buttonText?.rich_text),
         hero_buttonLink: getUrl(props.hero_buttonLink),
-        section1_titulo1: getPlainText(props.titulo1?.rich_text),
         section1_texto1: getRichTextAsHtml(props.texto1?.rich_text),
         section1_img1: section1Img1NotionUrl 
           ? await downloadImageAndGetLocalPath(section1Img1NotionUrl, slugValue, 'section1_img1') 
@@ -245,7 +242,6 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         section1_quote1: getPlainText(props.quote1?.rich_text),
         section1_quote1_autor_nombre: getPlainText(props.quote1_autor_nombre?.rich_text),
         section1_quote1_autor_titulo: getPlainText(props.quote1_autor_titulo?.rich_text),
-        section2_titulo2: getPlainText(props.titulo2?.rich_text),
         section2_texto2: getRichTextAsHtml(props.texto2?.rich_text),
         section2_img2: section2Img2NotionUrl 
           ? await downloadImageAndGetLocalPath(section2Img2NotionUrl, slugValue, 'section2_img2') 

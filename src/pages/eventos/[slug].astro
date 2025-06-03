@@ -166,10 +166,10 @@ const certificationFAQs = [
     }
 
     {
-      course.section1_titulo1 && (
+      course.section1_texto1 && (
         <ImageTextSection
           imageUrl={course.section1_img1 || "/images/img-placeholder.jpg"}
-          content={`<h2>${course.section1_titulo1}</h2>${course.section1_texto1}`}
+          content={course.section1_texto1}
           reverseOrder={true}
           useLightBackground={false}
         />
@@ -177,10 +177,10 @@ const certificationFAQs = [
     }
 
     {
-      course.section2_titulo2 && (
+      course.section2_texto2 && (
         <ImageTextSection
           imageUrl={course.section2_img2 || "/images/img-placeholder.jpg"}
-          content={`<h2>${course.section2_titulo2}</h2>${course.section2_texto2}`}
+          content={course.section2_texto2}
           reverseOrder={false}
           useLightBackground={false}
         />
