@@ -5,7 +5,6 @@
 export interface Item {
   imageSrc: string; // Path to image or external URL. For Astro's <Image>, these would typically be imported assets.
   content: string; // HTML content for the text section
-  title: string; // Title for the text section
 }
 
 export interface Props {
@@ -16,31 +15,29 @@ export interface Props {
 const { items, id }: Props = Astro.props;
 ---
 
-<div id={id || undefined} class="relative vr-image-text-scroll">
-  <!-- Mobile Layout: Stacked (hidden on large screens and up) -->
-  <div class="lg:hidden">
+<div id={id || undefined} class="relative vr-image-text-scroll lg:px-40">
+  <!-- Mobile Layout: Horizontal Scroll (hidden on large screens and up) -->
+  <div
+    class="lg:hidden flex overflow-x-auto space-x-4 p-4 snap-x snap-mandatory hide-scrollbar"
+  >
     {
       items.map((item: Item, index: number) => (
-        <div class="mb-12 p-4">
-          <div class="w-full mb-4">
+        <div class="flex-shrink-0 w-11/12 snap-center bg-white rounded-lg overflow-hidden">
+          <div class="w-full">
             <img
               src={item.imageSrc}
-              alt={item.title || `Image ${index + 1}`}
+              alt={`Imagen descriptiva ${index + 1}`}
               width={1080}
               height={1080}
               loading="lazy"
-              class="rounded-sm w-full h-auto object-cover aspect-square"
+              class="rounded-t-sm w-full h-auto object-cover aspect-square"
             />
           </div>
-          <div class="images-scrolling__content">
+          <div class="p-4 images-scrolling__content">
             <span class="images-scrolling__counter font-bold text-dark block mb-2 text-sm">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <div class="prose prose-sm max-w-none text-dark font-afacad">
-              <h2
-                class="h1 font-dmSerifText text-dark !mb-3 !text-3xl"
-                set:html={item.title}
-              />
+            <div class="prose prose-sm max-w-none text-dark font-afacad item-content-mobile">
               <div class="text-extra" set:html={item.content} />
             </div>
           </div>
@@ -55,22 +52,18 @@ const { items, id }: Props = Astro.props;
     <div class="desktop-sticky-wrapper">
       <div class="flex gap-12 px-8 py-12 md:py-20">
         <!-- Left Column: Text Content (Scrolls naturally with page) -->
-        <div class="text-column flex-1 space-y-24">
+        <div class="text-column flex-1 space-y-12">
           {
             items.map((item: Item, index: number) => (
               <div
-                class="text-item intersect-once opacity-100 lg:opacity-0 transition-all duration-700 ease-out transform translate-y-0 lg:translate-y-6 intersect:opacity-100 intersect:translate-y-0 py-10 min-h-[100vh] flex flex-col justify-center"
+                class="text-item intersect-once opacity-100 lg:opacity-0 transition-all duration-700 ease-out transform translate-y-0 lg:translate-y-6 intersect:opacity-100 intersect:translate-y-0 flex flex-col justify-center"
                 data-index={index}
               >
                 <div class="images-scrolling__content">
                   <span class="images-scrolling__counter font-bold text-dark block mb-2 text-lg">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <div class="prose lg:prose-lg xl:prose-xl max-w-none text-dark font-afacad">
-                    <h2
-                      class="h1 font-dmSerifText text-dark !mb-4 !text-5xl"
-                      set:html={item.title}
-                    />
+                  <div class="prose lg:prose-lg xl:prose-xl max-w-none text-dark font-afacad item-content-desktop">
                     <div class="text-extra" set:html={item.content} />
                   </div>
                 </div>
@@ -87,7 +80,7 @@ const { items, id }: Props = Astro.props;
                 items.map((item: Item, index: number) => (
                   <img
                     src={item.imageSrc}
-                    alt={item.title || `Image ${index + 1}`}
+                    alt={`Imagen descriptiva ${index + 1}`}
                     width={1080}
                     height={1350}
                     loading="lazy"
@@ -103,6 +96,103 @@ const { items, id }: Props = Astro.props;
     </div>
   </div>
 </div>
+
+<style>
+  /* Style for the first paragraph (new title) in mobile */
+  .item-content-mobile > .text-extra > p:first-child {
+    @apply font-dmSerifText text-dark !mb-3 !text-2xl font-semibold;
+  }
+
+  /* Style for the first paragraph (new title) in desktop */
+  .item-content-desktop > .text-extra > p:first-child {
+    @apply font-dmSerifText text-dark !mb-4 !text-4xl font-semibold;
+  }
+
+  /* Ensure subsequent paragraphs have normal styling if prose defaults are too strong */
+  .item-content-mobile > .text-extra > p:not(:first-child),
+  .item-content-desktop > .text-extra > p:not(:first-child) {
+    /* You can add specific styles here if needed, or rely on prose defaults */
+    /* For example, to ensure a specific font size or margin for body paragraphs */
+    /* @apply !text-base; */
+  }
+
+  /* Reduce bottom margin of the last paragraph in mobile content */
+  .item-content-mobile > .text-extra > p:last-child {
+    @apply !mb-2;
+  }
+
+  /* Reduce bottom margin of the last paragraph in desktop content */
+  .item-content-desktop > .text-extra > p:last-child {
+    @apply !mb-2;
+  }
+
+  /* Ensure the desktop container structure supports sticky positioning */
+  .desktop-sticky-wrapper {
+    /* Container for the flex layout */
+    position: relative;
+  }
+
+  /* Ensure text items have proper spacing for sticky behavior */
+  .text-item {
+    opacity: 1;
+    min-height: 70vh; /* Reduced from 100vh to 70vh for tighter spacing */
+  }
+
+  /* Ensure the flex columns work properly */
+  .text-column {
+    flex: 1;
+  }
+
+  .image-column {
+    flex: 1;
+    position: relative;
+  }
+
+  @media (min-width: 1024px) {
+    .text-item.intersect-once {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+
+    .text-item.intersect-once.opacity-100 {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Ensure smooth transitions for image switching */
+    .image-display {
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    /* Ensure the sticky element works properly */
+    .image-column .sticky {
+      position: sticky;
+      top: 6rem; /* 24 * 0.25rem */
+      height: 70vh;
+      z-index: 10;
+    }
+  }
+
+  /* Ensure images fill their container properly */
+  .image-display {
+    object-fit: cover;
+    border-radius: 0.375rem; /* rounded-md */
+  }
+
+  /* Ensure the mobile scroll container allows touch scrolling smoothly */
+  .lg\:hidden.overflow-x-auto {
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on iOS */
+  }
+
+  /* Hide scrollbar for mobile horizontal scroll */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+</style>
 
 <script>
   // --- Start of new code for observer management ---
@@ -328,29 +418,6 @@ const { items, id }: Props = Astro.props;
             entryAnimationObserver = null;
           }
         }
-      } else {
-        // Mobile: just handle entry animations with viewport-based observer
-        const mobileTextItems = componentRoot.querySelectorAll(
-          ".text-item"
-        ) as NodeListOf<HTMLElement>;
-        if (mobileTextItems.length === 0) return;
-
-        const mobileEntryObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                const targetElement = entry.target as HTMLElement;
-                targetElement.classList.add("opacity-100", "translate-y-0");
-              }
-            });
-          },
-          {
-            threshold: 0.1,
-            rootMargin: "0px 0px -10% 0px",
-          }
-        );
-        currentObserverSet.mobileEntryObs = mobileEntryObserver;
-        textItems.forEach((item) => mobileEntryObserver.observe(item));
       }
     });
   }
@@ -372,58 +439,3 @@ const { items, id }: Props = Astro.props;
     (window as any).resizeTimeout = setTimeout(initImageWithTextScroll, 150);
   });
 </script>
-
-<style>
-  /* Ensure the desktop container structure supports sticky positioning */
-  .desktop-sticky-wrapper {
-    /* Container for the flex layout */
-    position: relative;
-  }
-
-  /* Ensure text items have proper spacing for sticky behavior */
-  .text-item {
-    opacity: 1;
-    min-height: 100vh; /* Full viewport height for each section */
-  }
-
-  /* Ensure the flex columns work properly */
-  .text-column {
-    flex: 1;
-  }
-
-  .image-column {
-    flex: 1;
-    position: relative;
-  }
-
-  @media (min-width: 1024px) {
-    .text-item.intersect-once {
-      opacity: 0;
-      transform: translateY(1.5rem);
-    }
-
-    .text-item.intersect-once.opacity-100 {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Ensure smooth transitions for image switching */
-    .image-display {
-      transition: opacity 0.2s ease-in-out;
-    }
-
-    /* Ensure the sticky element works properly */
-    .image-column .sticky {
-      position: sticky;
-      top: 6rem; /* 24 * 0.25rem */
-      height: 70vh;
-      z-index: 10;
-    }
-  }
-
-  /* Ensure images fill their container properly */
-  .image-display {
-    object-fit: cover;
-    border-radius: 0.375rem; /* rounded-md */
-  }
-</style>
