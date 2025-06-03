@@ -147,7 +147,6 @@ const certificationFAQs = [
   <EventHero
     type={course.hero_tipo}
     title={course.nombre_del_curso}
-    subtitle={course.hero_slogan}
     description={course.hero_descripcion}
     date={!isCourseUnavailable ? course.hero_fecha || "" : undefined}
     image={course.hero_img_main || "/images/img-placeholder.jpg"}
@@ -160,8 +159,8 @@ const certificationFAQs = [
   />
   <main class="py-6">
     {
-      course.section1_quote1 && (
-        <Quote quote={course.section1_quote1} class="pt-2 md:pt-2" />
+      course.hero_slogan && (
+        <Quote quote={course.hero_slogan} class="pt-2 md:pt-2" />
       )
     }
 

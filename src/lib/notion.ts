@@ -48,7 +48,7 @@ const getRichTextAsHtml = (richTextArray: any[]): string => {
         content = `<s>${content}</s>`;
       }
       if (item.annotations.underline) {
-        content = `<h3>${content}</h3>`;
+        content = `<u>${content}</u>`;
       }
       if (item.annotations.code) {
         content = `<code>${content}</code>`;
@@ -77,6 +77,30 @@ const getUrl = (property: any): string | null => {
 const getDate = (property: any): string | null => {
   if (!property || !property.date) return null;
   return property.date.start;
+};
+
+const formatSpanishDate = (dateString: string | null): string | null => {
+  if (!dateString) return null;
+  try {
+    const date = new Date(dateString + 'T00:00:00'); // Ensure parsing as local date
+    if (isNaN(date.getTime())) {
+      console.warn(`Invalid date string received: ${dateString}`);
+      return dateString; // Return original if invalid
+    }
+
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+    const dayName = days[date.getUTCDay()];
+    const day = date.getUTCDate();
+    const monthName = months[date.getUTCMonth()];
+    const year = date.getUTCFullYear();
+
+    return `${dayName}, ${day} de ${monthName} de ${year}`;
+  } catch (error) {
+    console.error(`Error formatting date string ${dateString}:`, error);
+    return dateString; // Return original on error
+  }
 };
 
 const getSelectName = (property: any): string | undefined => {
@@ -110,9 +134,6 @@ export interface CourseData {
   // Section 1
   section1_texto1: string;
   section1_img1: string | null;
-  section1_quote1: string;
-  section1_quote1_autor_nombre?: string;
-  section1_quote1_autor_titulo?: string;
   // Section 2
   section2_texto2: string;
   section2_img2: string | null;
@@ -215,6 +236,8 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         continue;
       }
       
+      const heroFechaRaw = getDate(props.fecha); // Get the raw date
+
       const heroImgMainNotionUrl = getUrl(props['img-main']);
       const section1Img1NotionUrl = getUrl(props.img1);
       const section2Img2NotionUrl = getUrl(props.img2);
@@ -226,7 +249,7 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         isAvailable: getSelectName(props.isAvailable), // Assuming isAvailable is a select in Notion
         orden_homepage: getNumber(props['orden-homepage']),
         orden_proximos: getNumber(props['orden-proximos']),
-        hero_fecha: getDate(props.fecha),
+        hero_fecha: formatSpanishDate(heroFechaRaw), // Use the new formatting function
         hero_tipo: getPlainText(props.tipo?.rich_text),
         hero_slogan: getPlainText(props.subtitulo?.rich_text),
         hero_descripcion: getRichTextAsHtml(props.descripcion?.rich_text),
@@ -239,9 +262,6 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         section1_img1: section1Img1NotionUrl 
           ? await downloadImageAndGetLocalPath(section1Img1NotionUrl, slugValue, 'section1_img1') 
           : null,
-        section1_quote1: getPlainText(props.quote1?.rich_text),
-        section1_quote1_autor_nombre: getPlainText(props.quote1_autor_nombre?.rich_text),
-        section1_quote1_autor_titulo: getPlainText(props.quote1_autor_titulo?.rich_text),
         section2_texto2: getRichTextAsHtml(props.texto2?.rich_text),
         section2_img2: section2Img2NotionUrl 
           ? await downloadImageAndGetLocalPath(section2Img2NotionUrl, slugValue, 'section2_img2') 
@@ -254,7 +274,7 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         cta_cta: getPlainText(props.cta?.rich_text),
         cta_button: getPlainText(props.button?.rich_text),
         cta_btn_link: getUrl(props['btn-link']),
-        cta_date: getDate(props.cta_date),
+        cta_date: formatSpanishDate(getDate(props.cta_date)), // Also format cta_date if it exists
       };
       courses.push({
         notionPageId: (page as any).id,

@@ -12,6 +12,9 @@
   li {
     @apply mb-2; /* Reduced bottom margin for list items */
   }
+  strong {
+    display: inline;
+  }
 }
 
 body {
