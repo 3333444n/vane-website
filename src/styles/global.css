@@ -6,6 +6,12 @@
   body {
     @apply text-dark;
   }
+  p {
+    @apply mb-2; /* Reduced bottom margin for paragraphs */
+  }
+  li {
+    @apply mb-2; /* Reduced bottom margin for list items */
+  }
 }
 
 body {

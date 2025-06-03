@@ -4,6 +4,7 @@ interface Props {
   content: string | HTMLElement[]; // Allows for HTML content
   reverseOrder?: boolean;
   useLightBackground?: boolean;
+  enableStickyImage?: boolean;
 }
 
 const {
@@ -11,6 +12,7 @@ const {
   content,
   reverseOrder = false,
   useLightBackground = false,
+  enableStickyImage = true,
 } = Astro.props;
 ---
 
@@ -21,8 +23,9 @@ const {
     "md:flex-row",
     reverseOrder && "md:flex-row-reverse",
     "items-center",
+    enableStickyImage && "md:items-start",
     "py-12",
-    "px-4 md:px-20",
+    "px-6 md:px-24",
     useLightBackground ? "bg-light" : "bg-light2",
   ]}
 >
@@ -32,6 +35,8 @@ const {
       "md:w-1/2",
       "mb-8",
       "md:mb-0",
+      enableStickyImage && "md:sticky",
+      enableStickyImage && "md:top-24",
       "intersect:motion-preset-blur-up",
       "motion-delay-200",
     ]}
@@ -46,7 +51,7 @@ const {
     class:list={[
       "w-full",
       "md:w-1/2",
-      reverseOrder ? "md:pr-8" : "md:pl-8",
+      reverseOrder ? "md:pr-12" : "md:pl-12",
       "intersect:motion-preset-blur-up",
       "motion-delay-400",
     ]}
