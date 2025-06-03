@@ -48,7 +48,7 @@ const getRichTextAsHtml = (richTextArray: any[]): string => {
         content = `<s>${content}</s>`;
       }
       if (item.annotations.underline) {
-        content = `<u>${content}</u>`;
+        content = `<h3>${content}</h3>`;
       }
       if (item.annotations.code) {
         content = `<code>${content}</code>`;
