@@ -9,9 +9,10 @@ interface Props {
     linkUrl: string;
   };
   size: "small" | "large" | "featured";
+  delay?: number;
 }
 
-const { event, size } = Astro.props;
+const { event, size, delay = 0 } = Astro.props;
 const { title, date, imageUrl, linkUrl } = event;
 
 // Format the date
@@ -45,7 +46,8 @@ switch (size) {
 
 <a
   href={linkUrl}
-  class={`block rounded-lg overflow-hidden shadow-md ${sizeClasses}`}
+  class={`block rounded-lg overflow-hidden shadow-md ${sizeClasses} intersect-once intersect:motion-preset-fade`}
+  style={`--motion-delay: ${delay}ms;`}
 >
   <div
     class="relative bg-cover bg-center h-full"

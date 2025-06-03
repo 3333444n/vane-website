@@ -259,13 +259,13 @@ const pageTitle = "Lectoras Certificadas";
   }
 
   // Helper to generate Lectora card HTML (matching Lectora.astro)
-  function renderLectoraCard(lectora) {
+  function renderLectoraCard(lectora, delay) {
     const primaryCertification =
       lectora.certificaciones && lectora.certificaciones.length > 0
         ? lectora.certificaciones[0]
         : "Certificada";
     return `
-      <div class="lectora-card-container w-40 h-40 sm:w-48 sm:h-48 xl:w-56 xl:h-56 flex flex-col justify-between items-center text-center" data-id="${lectora.id}">
+      <div class="lectora-card-container w-40 h-40 sm:w-48 sm:h-48 xl:w-56 xl:h-56 flex flex-col justify-between items-center text-center intersect-once intersect:motion-preset-fade" data-id="${lectora.id}" style="--motion-delay: ${delay}ms;">
         <!-- Front of Card -->
         <div class="card-face front w-full h-full bg-brand-90 p-3 sm:p-4 xl:p-5 rounded-xl shadow-lg flex flex-col justify-between">
           <div>
@@ -343,7 +343,9 @@ const pageTitle = "Lectoras Certificadas";
         '<p class="text-center col-span-full text-gray-500 py-8">No hay más lectoras en esta página.</p>';
       return;
     }
-    lectorasGrid.innerHTML = pageLectoras.map(renderLectoraCard).join("");
+    lectorasGrid.innerHTML = pageLectoras
+      .map((lectora, index) => renderLectoraCard(lectora, index * 20))
+      .join("");
     attachLectoraCardListeners(); // Attach flip listeners after rendering
     renderPagination();
   }
