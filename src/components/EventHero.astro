@@ -2,7 +2,7 @@
 export interface Props {
   type: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   description: string;
   date?: string;
   image: string; // URL or path
@@ -33,25 +33,24 @@ const {
   <div
     class="w-full motion-preset-fade motion-delay-200 md:w-1/2 text-center md:text-left mb-6 md:mb-0 flex flex-col"
   >
-    <p class="text-sm mb-2">{type}</p>
     <h2 class="text-6xl md:text-7xl font-bold mb-2 font-dmSerifText italic">
       {title}
     </h2>
-    <h3 class="text-xl italic mb-6">{subtitle}</h3>
-    <p class="text-base mb-8" set:html={description} />
+    <h3 class="text-xl italic mb-8">{type}</h3>
+    <p class="text-base mb-12" set:html={description} />
     {
       buttonText && buttonLink && (
         <a
           href={buttonLink}
-          class="button-style inline-block py-2 px-8 my-10 text-center"
+          class="button-style inline-block py-2 px-8 mt-4 text-center"
         >
           {buttonText}
         </a>
       )
     }
-    {date && <p class="text-sm font-semibold">{date}</p>}
+    {date && <p class="text-sm font-semibold text-center mt-2">{date}</p>}
   </div>
-  <div class="w-full md:w-1/2 flex motion-preset-fade motion-delay-300 pb-20">
+  <div class="w-full md:w-1/2 flex motion-preset-fade motion-delay-300">
     <img
       src={image}
       alt={title}
