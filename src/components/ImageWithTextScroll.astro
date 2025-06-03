@@ -1,0 +1,365 @@
+---
+// import { type ImageMetadata } from 'astro'; // Commented out as ImageMetadata is not strictly used with current <img> tags
+// For now, assuming imageSrc are direct URL paths
+
+export interface Item {
+  imageSrc: string; // Path to image or external URL. For Astro's <Image>, these would typically be imported assets.
+  content: string; // HTML content for the text section
+  title: string; // Title for the text section
+}
+
+export interface Props {
+  items: Item[];
+  id?: string; // Optional ID for the root element of the component
+}
+
+const { items, id }: Props = Astro.props;
+---
+
+<div id={id || undefined} class="relative vr-image-text-scroll">
+  <!-- Mobile Layout: Stacked (hidden on large screens and up) -->
+  <div class="lg:hidden">
+    {
+      items.map((item: Item, index: number) => (
+        <div class="mb-12 p-4">
+          <div class="w-full mb-4">
+            <img
+              src={item.imageSrc}
+              alt={item.title || `Image ${index + 1}`}
+              width={1080}
+              height={1080}
+              loading="lazy"
+              class="rounded-sm w-full h-auto object-cover aspect-square"
+            />
+          </div>
+          <div class="images-scrolling__content">
+            <span class="images-scrolling__counter font-bold text-dark block mb-2 text-sm">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <div class="prose prose-sm max-w-none text-dark font-afacad">
+              <h2
+                class="h1 font-dmSerifText text-dark !mb-3 !text-3xl"
+                set:html={item.title}
+              />
+              <div class="text-extra" set:html={item.content} />
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <!-- Desktop Layout: Two Columns (hidden on small screens) -->
+  <div class="hidden lg:block">
+    <!-- Container that defines the scrolling area -->
+    <div class="desktop-scroll-container relative" style="height: 100vh;">
+      <div class="absolute inset-0 grid grid-cols-2 gap-12 items-start">
+        <!-- Left Column: Text Content (Scrollable) -->
+        <div class="text-column h-full overflow-y-auto pl-8 pr-4 py-20">
+          <div class="space-y-24">
+            {
+              items.map((item: Item, index: number) => (
+                <div
+                  class="text-item intersect-once opacity-100 lg:opacity-0 transition-all duration-700 ease-out transform translate-y-0 lg:translate-y-6 intersect:opacity-100 intersect:translate-y-0 py-10 min-h-[80vh] flex flex-col justify-center"
+                  data-index={index}
+                >
+                  <div class="images-scrolling__content">
+                    <span class="images-scrolling__counter font-bold text-dark block mb-2 text-lg">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div class="prose lg:prose-lg xl:prose-xl max-w-none text-dark font-afacad">
+                      <h2
+                        class="h1 font-dmSerifText text-dark !mb-4 !text-5xl"
+                        set:html={item.title}
+                      />
+                      <div class="text-extra" set:html={item.content} />
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Right Column: Image (Fixed position within container) -->
+        <div class="image-column h-full flex items-center justify-center pr-8">
+          <div
+            class="relative w-full h-auto max-w-xl max-h-[70vh] aspect-[4/5]"
+          >
+            {
+              items.map((item: Item, index: number) => (
+                <img
+                  src={item.imageSrc}
+                  alt={item.title || `Image ${index + 1}`}
+                  width={1080}
+                  height={1350}
+                  loading="lazy"
+                  class={`image-display absolute inset-0 w-full h-full object-cover rounded-md shadow-lg transition-opacity duration-500 ease-in-out ${index === 0 ? "opacity-100" : "opacity-0"}`}
+                  data-index={index}
+                />
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initImageWithTextScroll() {
+    const componentRoots = document.querySelectorAll(".vr-image-text-scroll");
+
+    componentRoots.forEach((componentRoot) => {
+      const desktopContainer = componentRoot.querySelector(
+        ".desktop-scroll-container"
+      ) as HTMLElement;
+      const textItems = componentRoot.querySelectorAll(
+        ".text-item"
+      ) as NodeListOf<HTMLElement>;
+      const imageDisplays = componentRoot.querySelectorAll(
+        ".image-display"
+      ) as NodeListOf<HTMLImageElement>;
+      const textColumn = componentRoot.querySelector(
+        ".text-column"
+      ) as HTMLElement | null;
+
+      if (!textItems.length || !imageDisplays.length) {
+        return; // Not enough elements to proceed
+      }
+
+      let currentImageIndex = 0;
+      let isComponentActive = false;
+      let imageSwitchObserver: IntersectionObserver | null = null;
+      let entryAnimationObserver: IntersectionObserver | null = null;
+
+      // Desktop-only logic
+      if (window.innerWidth >= 1024 && desktopContainer && textColumn) {
+        // Container-level observer to detect when the component is in view
+        const containerObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const isIntersecting = entry.isIntersecting;
+              const intersectionRatio = entry.intersectionRatio;
+
+              // Component is active when it's reasonably in view (at least 30%)
+              const shouldBeActive = isIntersecting && intersectionRatio >= 0.3;
+
+              if (shouldBeActive && !isComponentActive) {
+                // Component just became active
+                isComponentActive = true;
+                console.log("Component activated"); // Debug log
+                startImageSwitching();
+                startEntryAnimations();
+              } else if (!shouldBeActive && isComponentActive) {
+                // Component is no longer active
+                isComponentActive = false;
+                console.log("Component deactivated"); // Debug log
+                stopImageSwitching();
+                stopEntryAnimations();
+              }
+            });
+          },
+          {
+            threshold: [0, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0],
+            rootMargin: "0px 0px 0px 0px",
+          }
+        );
+
+        containerObserver.observe(desktopContainer);
+
+        // Also start immediately if component is already in view
+        setTimeout(() => {
+          const rect = desktopContainer.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          const componentTop = rect.top;
+          const componentBottom = rect.bottom;
+
+          // Check if component is substantially visible
+          const isVisible =
+            componentTop < viewportHeight * 0.7 &&
+            componentBottom > viewportHeight * 0.3;
+
+          if (isVisible && !isComponentActive) {
+            isComponentActive = true;
+            console.log("Component force-activated on load"); // Debug log
+            startImageSwitching();
+            startEntryAnimations();
+          }
+        }, 100);
+
+        function startImageSwitching() {
+          if (imageSwitchObserver) return; // Already started
+
+          imageSwitchObserver = new IntersectionObserver(
+            (entries) => {
+              if (!isComponentActive) return;
+
+              let mostVisibleEntry: IntersectionObserverEntry | null = null;
+              let maxIntersectionRatio = 0;
+
+              // Find the most visible text item
+              entries.forEach((entry) => {
+                if (
+                  entry.isIntersecting &&
+                  entry.intersectionRatio > maxIntersectionRatio
+                ) {
+                  maxIntersectionRatio = entry.intersectionRatio;
+                  mostVisibleEntry = entry;
+                }
+              });
+
+              if (mostVisibleEntry) {
+                const targetElement = mostVisibleEntry.target as HTMLElement;
+                const index = parseInt(
+                  targetElement.getAttribute("data-index") || "0",
+                  10
+                );
+
+                if (index !== currentImageIndex && imageDisplays[index]) {
+                  // Hide current image
+                  if (imageDisplays[currentImageIndex]) {
+                    imageDisplays[currentImageIndex].classList.remove(
+                      "opacity-100"
+                    );
+                    imageDisplays[currentImageIndex].classList.add("opacity-0");
+                  }
+                  // Show new image
+                  imageDisplays[index].classList.remove("opacity-0");
+                  imageDisplays[index].classList.add("opacity-100");
+                  currentImageIndex = index;
+                  console.log("Switched to image", index); // Debug log
+                }
+              }
+            },
+            {
+              root: textColumn,
+              rootMargin: "-20% 0px -20% 0px",
+              threshold: [0, 0.1, 0.3, 0.5, 0.7, 1.0],
+            }
+          );
+
+          textItems.forEach((item) => imageSwitchObserver!.observe(item));
+        }
+
+        function stopImageSwitching() {
+          if (imageSwitchObserver) {
+            imageSwitchObserver.disconnect();
+            imageSwitchObserver = null;
+          }
+        }
+
+        function startEntryAnimations() {
+          if (entryAnimationObserver) return; // Already started
+
+          entryAnimationObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  entry.target.classList.remove(
+                    "lg:opacity-0",
+                    "lg:translate-y-6"
+                  );
+                  entry.target.classList.add("opacity-100", "translate-y-0");
+                  console.log("Text item animated in"); // Debug log
+                }
+              });
+            },
+            {
+              root: textColumn,
+              rootMargin: "0px 0px -10% 0px",
+              threshold: 0.1,
+            }
+          );
+
+          textItems.forEach((item) => entryAnimationObserver!.observe(item));
+        }
+
+        function stopEntryAnimations() {
+          if (entryAnimationObserver) {
+            entryAnimationObserver.disconnect();
+            entryAnimationObserver = null;
+          }
+        }
+      } else {
+        // Mobile: just handle entry animations with viewport-based observer
+        const mobileEntryObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("opacity-100", "translate-y-0");
+              }
+            });
+          },
+          {
+            threshold: 0.1,
+            rootMargin: "0px 0px -10% 0px",
+          }
+        );
+
+        textItems.forEach((item) => mobileEntryObserver.observe(item));
+      }
+    });
+  }
+
+  // Initialize on page load
+  document.addEventListener("astro:page-load", initImageWithTextScroll);
+
+  // Also initialize immediately in case the event already fired
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initImageWithTextScroll);
+  } else {
+    initImageWithTextScroll();
+  }
+
+  // Re-initialize on window resize to handle viewport changes
+  window.addEventListener("resize", () => {
+    // Debounce resize events
+    clearTimeout((window as any).resizeTimeout);
+    (window as any).resizeTimeout = setTimeout(initImageWithTextScroll, 150);
+  });
+</script>
+
+<style>
+  /* Hide scrollbar for the text column on desktop */
+  .text-column::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+  .text-column {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Ensure the desktop container takes full viewport height and is positioned correctly */
+  .desktop-scroll-container {
+    height: 100vh;
+    position: relative;
+  }
+
+  /* Ensure text is visible by default, hidden only on large screens initially */
+  .text-item {
+    opacity: 1;
+  }
+
+  @media (min-width: 1024px) {
+    .text-item.intersect-once {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+
+    .text-item.intersect-once.opacity-100 {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Make sure the image column stays in a consistent position */
+    .image-column {
+      position: relative;
+    }
+
+    /* Ensure smooth transitions */
+    .image-display {
+      transition: opacity 0.5s ease-in-out;
+    }
+  }
+</style>

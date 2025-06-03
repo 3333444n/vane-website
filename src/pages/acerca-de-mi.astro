@@ -3,6 +3,59 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import ImageTextSection from "../components/ImageTextSection.astro";
 import Quote from "../components/Quote.astro";
 import TestimonialSection from "../components/TestimonialSection.astro";
+import ImageWithTextScroll from "../components/ImageWithTextScroll.astro";
+import type { Item as ScrollItem } from "../components/ImageWithTextScroll.astro";
+
+const scrollItemsData: ScrollItem[] = [
+  {
+    title: "Mi Sendero Espiritual",
+    imageSrc: "/images/img-placeholder.jpg",
+    content:
+      "<p>Soy Vane, mujer medicina y he recorrido el camino del alma, la sanación y la consciencia.</p><p>Acompaño a otras mujeres a reconectar con su poder, reconocer la energía de lo que realmente son y elegir una vida más expansiva y amorosa.</p>",
+  },
+  {
+    title: "El Poder de Elegirte",
+    imageSrc: "/images/img-placeholder.jpg",
+    content:
+      "<p>Creo en la magia que ocurre cuando te eliges.</p><p>La transformación real comienza cuando decidimos habitarnos con amor, sin juicio y con total presencia.</p>",
+  },
+  {
+    title: "Uniendo lo Ancestral y lo Moderno",
+    imageSrc: "/images/img-placeholder.jpg",
+    content:
+      "<p>Honro lo ancestral y lo combino con herramientas contemporáneas de conciencia.</p><p>Trabajo con oráculos, registros akáshicos, barras de Access, velas, cristales y rituales que despiertan la sabiduría interna.</p>",
+  },
+  {
+    title: "La Inspiración de los Nuevos Comienzos",
+    imageSrc: "/images/img-placeholder.jpg",
+    content:
+      "<p>Me inspiran los comienzos.</p><p>Amo crear programas, espacios y experiencias que activen la energía del renacer, del recordar, del volver a ti.</p>",
+  },
+  {
+    title: "Sosteniendo con Dulzura y Fuerza",
+    imageSrc: "/images/img-placeholder.jpg",
+    content:
+      "<p>Sostengo espacios sagrados con dulzura y fuerza.</p><p>Ya sea en un taller, una sesión o un grupo, me mueve acompañar procesos con presencia, amor y expansión.</p>",
+  },
+  {
+    title: "Vivir como Acto de Presencia",
+    imageSrc: "/images/img-placeholder.jpg",
+    content:
+      "<p>Vivo mi vida como un acto de presencia.</p><p>Cada día es una oportunidad para agradecer, aprender, liberar y seguir eligiendo desde la conciencia.</p>",
+  },
+  {
+    title: "La Maternidad como Medicina",
+    imageSrc: "/images/img-placeholder.jpg",
+    content:
+      "<p>La maternidad también es parte de mi medicina.</p><p>Ser mamá me ha enseñado a mirar más profundo, a rendirme con amor y a confiar en el tiempo divino.</p>",
+  },
+  {
+    title: "La Belleza de lo Simple",
+    imageSrc: "/images/img-placeholder.jpg",
+    content:
+      "<p>Creo en la belleza de lo simple y en el poder de lo invisible.</p><p>Una palabra, una vela encendida, una pregunta, un silencio… todo puede ser un portal de transformación si estamos presentes.</p>",
+  },
+];
 ---
 
 <BaseLayout title="Acerca de Mí" description="Conoce más sobre mí.">
@@ -21,6 +74,7 @@ import TestimonialSection from "../components/TestimonialSection.astro";
     quote="Cuando sanas tú, sanamos todos. Tu luz interior tiene el poder de iluminar el mundo."
     useLightBackground={true}
   />
+  <ImageWithTextScroll items={scrollItemsData} id="mi-historia-scroll" />
   <TestimonialSection
     testimonials={[
       {
