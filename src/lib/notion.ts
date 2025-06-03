@@ -39,7 +39,7 @@ const getRichTextAsHtml = (richTextArray: any[]): string => {
 
     if (item.annotations) {
       if (item.annotations.bold) {
-        content = `<h2>${content}</h2>`;
+        content = `<strong>${content}</strong>`;
       }
       if (item.annotations.italic) {
         content = `<em>${content}</em>`;
@@ -48,7 +48,7 @@ const getRichTextAsHtml = (richTextArray: any[]): string => {
         content = `<s>${content}</s>`;
       }
       if (item.annotations.underline) {
-        content = `<u>${content}</u>`;
+        content = `<h3>${content}</h3>`;
       }
       if (item.annotations.code) {
         content = `<code>${content}</code>`;
@@ -278,9 +278,25 @@ export async function fetchAndSaveCoursesAsJson() {
     await fsPromises.mkdir(outputDirJson, { recursive: true }); // Ensure JSON output directory exists
     await fsPromises.mkdir(IMAGES_OUTPUT_DIR, { recursive: true }); // Ensure images output directory exists
     console.log(`Ensured directories exist: ${outputDirJson} and ${IMAGES_OUTPUT_DIR}`);
+
+    // Clean up existing JSON files in the target directory
+    const existingFiles = await fsPromises.readdir(outputDirJson);
+    for (const file of existingFiles) {
+      if (file.endsWith('.json')) {
+        const filePathToDelete = path.join(outputDirJson, file);
+        try {
+          await fsPromises.unlink(filePathToDelete);
+          console.log(`Deleted old course file: ${filePathToDelete}`);
+        } catch (err) {
+          console.error(`Failed to delete old course file ${filePathToDelete}:`, err);
+          // Consider if you need to halt the process on error or just log
+        }
+      }
+    }
+
   } catch (error) {
-    console.error(`Failed to create directories:`, error);
-    return;
+    console.error(`Failed to create directories or clean up old files:`, error);
+    return; // Stop if directory setup or cleanup fails
   }
 
   for (const course of courses) {
