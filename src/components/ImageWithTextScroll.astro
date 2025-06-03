@@ -49,56 +49,54 @@ const { items, id }: Props = Astro.props;
     }
   </div>
 
-  <!-- Desktop Layout: Two Columns (hidden on small screens) -->
+  <!-- Desktop Layout: Two Columns with Sticky Image (hidden on small screens) -->
   <div class="hidden lg:block">
-    <!-- Container that defines the scrolling area -->
-    <div class="desktop-scroll-container relative" style="height: 100vh;">
-      <div class="absolute inset-0 grid grid-cols-2 gap-12 items-start">
-        <!-- Left Column: Text Content (Scrollable) -->
-        <div class="text-column h-full overflow-y-auto pl-8 pr-4 py-20">
-          <div class="space-y-24">
-            {
-              items.map((item: Item, index: number) => (
-                <div
-                  class="text-item intersect-once opacity-100 lg:opacity-0 transition-all duration-700 ease-out transform translate-y-0 lg:translate-y-6 intersect:opacity-100 intersect:translate-y-0 py-10 min-h-[80vh] flex flex-col justify-center"
-                  data-index={index}
-                >
-                  <div class="images-scrolling__content">
-                    <span class="images-scrolling__counter font-bold text-dark block mb-2 text-lg">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <div class="prose lg:prose-lg xl:prose-xl max-w-none text-dark font-afacad">
-                      <h2
-                        class="h1 font-dmSerifText text-dark !mb-4 !text-5xl"
-                        set:html={item.title}
-                      />
-                      <div class="text-extra" set:html={item.content} />
-                    </div>
+    <!-- Main container for the sticky scroll effect -->
+    <div class="desktop-sticky-wrapper">
+      <div class="flex gap-12 px-8 py-12 md:py-20">
+        <!-- Left Column: Text Content (Scrolls naturally with page) -->
+        <div class="text-column flex-1 space-y-24">
+          {
+            items.map((item: Item, index: number) => (
+              <div
+                class="text-item intersect-once opacity-100 lg:opacity-0 transition-all duration-700 ease-out transform translate-y-0 lg:translate-y-6 intersect:opacity-100 intersect:translate-y-0 py-10 min-h-[100vh] flex flex-col justify-center"
+                data-index={index}
+              >
+                <div class="images-scrolling__content">
+                  <span class="images-scrolling__counter font-bold text-dark block mb-2 text-lg">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div class="prose lg:prose-lg xl:prose-xl max-w-none text-dark font-afacad">
+                    <h2
+                      class="h1 font-dmSerifText text-dark !mb-4 !text-5xl"
+                      set:html={item.title}
+                    />
+                    <div class="text-extra" set:html={item.content} />
                   </div>
                 </div>
-              ))
-            }
-          </div>
+              </div>
+            ))
+          }
         </div>
 
-        <!-- Right Column: Image (Fixed position within container) -->
-        <div class="image-column h-full flex items-center justify-center pr-8">
-          <div
-            class="relative w-full h-auto max-w-xl max-h-[70vh] aspect-[4/5]"
-          >
-            {
-              items.map((item: Item, index: number) => (
-                <img
-                  src={item.imageSrc}
-                  alt={item.title || `Image ${index + 1}`}
-                  width={1080}
-                  height={1350}
-                  loading="lazy"
-                  class={`image-display absolute inset-0 w-full h-full object-cover rounded-md shadow-lg transition-opacity duration-500 ease-in-out ${index === 0 ? "opacity-100" : "opacity-0"}`}
-                  data-index={index}
-                />
-              ))
-            }
+        <!-- Right Column: Sticky Image Container -->
+        <div class="image-column flex-1 relative">
+          <div class="sticky top-24 w-full max-w-xl mx-auto h-[70vh]">
+            <div class="relative w-full h-full">
+              {
+                items.map((item: Item, index: number) => (
+                  <img
+                    src={item.imageSrc}
+                    alt={item.title || `Image ${index + 1}`}
+                    width={1080}
+                    height={1350}
+                    loading="lazy"
+                    class={`image-display absolute inset-0 w-full h-full object-cover rounded-md shadow-lg transition-opacity duration-500 ease-in-out ${index === 0 ? "opacity-100" : "opacity-0"}`}
+                    data-index={index}
+                  />
+                ))
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -107,22 +105,49 @@ const { items, id }: Props = Astro.props;
 </div>
 
 <script>
+  // --- Start of new code for observer management ---
+  let activeImageScrollObservers: Array<{
+    componentRoot: HTMLElement;
+    containerObs?: IntersectionObserver;
+    imageSwitchObs?: IntersectionObserver;
+    entryAnimObs?: IntersectionObserver;
+    mobileEntryObs?: IntersectionObserver;
+  }> = [];
+
+  function cleanupAllImageScrollObservers() {
+    activeImageScrollObservers.forEach((obsSet) => {
+      if (obsSet.containerObs) obsSet.containerObs.disconnect();
+      if (obsSet.imageSwitchObs) obsSet.imageSwitchObs.disconnect();
+      if (obsSet.entryAnimObs) obsSet.entryAnimObs.disconnect();
+      if (obsSet.mobileEntryObs) obsSet.mobileEntryObs.disconnect();
+    });
+    activeImageScrollObservers = [];
+  }
+  // --- End of new code for observer management ---
+
   function initImageWithTextScroll() {
+    cleanupAllImageScrollObservers(); // Clean up all previous observers
+
     const componentRoots = document.querySelectorAll(".vr-image-text-scroll");
 
-    componentRoots.forEach((componentRoot) => {
-      const desktopContainer = componentRoot.querySelector(
-        ".desktop-scroll-container"
-      ) as HTMLElement;
+    componentRoots.forEach((componentRootNode) => {
+      const componentRoot = componentRootNode as HTMLElement;
+      const currentObserverSet: (typeof activeImageScrollObservers)[0] = {
+        componentRoot,
+      };
+      activeImageScrollObservers.push(currentObserverSet);
+
+      // Query for the new desktop wrapper if it exists
+      const desktopStickyWrapper = componentRoot.querySelector(
+        ".desktop-sticky-wrapper"
+      ) as HTMLElement | null;
+
       const textItems = componentRoot.querySelectorAll(
         ".text-item"
       ) as NodeListOf<HTMLElement>;
       const imageDisplays = componentRoot.querySelectorAll(
         ".image-display"
       ) as NodeListOf<HTMLImageElement>;
-      const textColumn = componentRoot.querySelector(
-        ".text-column"
-      ) as HTMLElement | null;
 
       if (!textItems.length || !imageDisplays.length) {
         return; // Not enough elements to proceed
@@ -134,72 +159,90 @@ const { items, id }: Props = Astro.props;
       let entryAnimationObserver: IntersectionObserver | null = null;
 
       // Desktop-only logic
-      if (window.innerWidth >= 1024 && desktopContainer && textColumn) {
-        // Container-level observer to detect when the component is in view
+      if (
+        window.innerWidth >= 1024 &&
+        desktopStickyWrapper &&
+        textItems.length > 0
+      ) {
+        // Container-level observer to detect when the component is in view (for performance)
         const containerObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               const isIntersecting = entry.isIntersecting;
               const intersectionRatio = entry.intersectionRatio;
-
-              // Component is active when it's reasonably in view (at least 30%)
-              const shouldBeActive = isIntersecting && intersectionRatio >= 0.3;
+              const shouldBeActive =
+                isIntersecting && intersectionRatio >= 0.05; // Activate if 5% visible (more sensitive)
 
               if (shouldBeActive && !isComponentActive) {
-                // Component just became active
                 isComponentActive = true;
-                console.log("Component activated"); // Debug log
+                console.log("Component activated (Sticky Mode)");
                 startImageSwitching();
                 startEntryAnimations();
               } else if (!shouldBeActive && isComponentActive) {
-                // Component is no longer active
                 isComponentActive = false;
-                console.log("Component deactivated"); // Debug log
+                console.log("Component deactivated (Sticky Mode)");
                 stopImageSwitching();
                 stopEntryAnimations();
+                // Reset images to first one
+                if (imageDisplays.length > 0) {
+                  imageDisplays.forEach((img, idx) => {
+                    img.classList.toggle("opacity-100", idx === 0);
+                    img.classList.toggle("opacity-0", idx !== 0);
+                  });
+                  currentImageIndex = 0;
+                }
               }
             });
           },
           {
-            threshold: [0, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0],
-            rootMargin: "0px 0px 0px 0px",
+            threshold: [0, 0.05, 0.1, 0.25, 0.5, 0.75, 1.0], // More granular thresholds
+            rootMargin: "50px 0px 50px 0px", // More generous margins to detect earlier
           }
         );
+        currentObserverSet.containerObs = containerObserver;
+        containerObserver.observe(desktopStickyWrapper);
 
-        containerObserver.observe(desktopContainer);
+        // Improved initial check for visibility
+        const checkInitialVisibility = () => {
+          if (!isComponentActive && desktopStickyWrapper) {
+            const rect = desktopStickyWrapper.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
 
-        // Also start immediately if component is already in view
-        setTimeout(() => {
-          const rect = desktopContainer.getBoundingClientRect();
-          const viewportHeight = window.innerHeight;
-          const componentTop = rect.top;
-          const componentBottom = rect.bottom;
+            // Check if any part of the component is visible
+            if (rect.bottom > 0 && rect.top < viewportHeight) {
+              const visibleRatio =
+                Math.max(
+                  0,
+                  Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
+                ) / rect.height;
 
-          // Check if component is substantially visible
-          const isVisible =
-            componentTop < viewportHeight * 0.7 &&
-            componentBottom > viewportHeight * 0.3;
-
-          if (isVisible && !isComponentActive) {
-            isComponentActive = true;
-            console.log("Component force-activated on load"); // Debug log
-            startImageSwitching();
-            startEntryAnimations();
+              if (visibleRatio > 0.05) {
+                // More sensitive threshold
+                isComponentActive = true;
+                console.log("Component force-activated on load (Sticky Mode)");
+                startImageSwitching();
+                startEntryAnimations();
+              }
+            }
           }
-        }, 100);
+        };
+
+        // Check immediately and after a short delay
+        checkInitialVisibility();
+        setTimeout(checkInitialVisibility, 100);
+        setTimeout(checkInitialVisibility, 500); // Additional check after page settles
 
         function startImageSwitching() {
-          if (imageSwitchObserver) return; // Already started
+          if (imageSwitchObserver || !isComponentActive) return;
 
           imageSwitchObserver = new IntersectionObserver(
-            (entries) => {
+            (entries: IntersectionObserverEntry[]) => {
               if (!isComponentActive) return;
 
               let mostVisibleEntry: IntersectionObserverEntry | null = null;
-              let maxIntersectionRatio = 0;
+              let maxIntersectionRatio = -1;
 
-              // Find the most visible text item
-              entries.forEach((entry) => {
+              entries.forEach((entry: IntersectionObserverEntry) => {
                 if (
                   entry.isIntersecting &&
                   entry.intersectionRatio > maxIntersectionRatio
@@ -209,7 +252,7 @@ const { items, id }: Props = Astro.props;
                 }
               });
 
-              if (mostVisibleEntry) {
+              if (mostVisibleEntry !== null) {
                 const targetElement = mostVisibleEntry.target as HTMLElement;
                 const index = parseInt(
                   targetElement.getAttribute("data-index") || "0",
@@ -217,28 +260,26 @@ const { items, id }: Props = Astro.props;
                 );
 
                 if (index !== currentImageIndex && imageDisplays[index]) {
-                  // Hide current image
                   if (imageDisplays[currentImageIndex]) {
                     imageDisplays[currentImageIndex].classList.remove(
                       "opacity-100"
                     );
                     imageDisplays[currentImageIndex].classList.add("opacity-0");
                   }
-                  // Show new image
                   imageDisplays[index].classList.remove("opacity-0");
                   imageDisplays[index].classList.add("opacity-100");
                   currentImageIndex = index;
-                  console.log("Switched to image", index); // Debug log
+                  console.log("Switched to image (Sticky Mode)", index);
                 }
               }
             },
             {
-              root: textColumn,
-              rootMargin: "-20% 0px -20% 0px",
-              threshold: [0, 0.1, 0.3, 0.5, 0.7, 1.0],
+              root: null, // Observe against viewport
+              rootMargin: "-20% 0px -20% 0px", // Target middle 60% of viewport for better triggering
+              threshold: [0.1, 0.3, 0.5, 0.7, 1.0], // Multiple thresholds for better detection
             }
           );
-
+          currentObserverSet.imageSwitchObs = imageSwitchObserver;
           textItems.forEach((item) => imageSwitchObserver!.observe(item));
         }
 
@@ -250,29 +291,33 @@ const { items, id }: Props = Astro.props;
         }
 
         function startEntryAnimations() {
-          if (entryAnimationObserver) return; // Already started
+          if (entryAnimationObserver || !isComponentActive) return;
 
           entryAnimationObserver = new IntersectionObserver(
             (entries) => {
               entries.forEach((entry) => {
                 if (entry.isIntersecting) {
-                  entry.target.classList.remove(
+                  const targetElement = entry.target as HTMLElement;
+                  targetElement.classList.remove(
                     "lg:opacity-0",
                     "lg:translate-y-6"
                   );
-                  entry.target.classList.add("opacity-100", "translate-y-0");
-                  console.log("Text item animated in"); // Debug log
+                  targetElement.classList.add("opacity-100", "translate-y-0");
                 }
               });
             },
             {
-              root: textColumn,
-              rootMargin: "0px 0px -10% 0px",
-              threshold: 0.1,
+              root: null,
+              rootMargin: "0px 0px -20% 0px", // Trigger when item is 20% from bottom of viewport
+              threshold: 0.2,
             }
           );
-
-          textItems.forEach((item) => entryAnimationObserver!.observe(item));
+          currentObserverSet.entryAnimObs = entryAnimationObserver;
+          textItems.forEach((item) => {
+            if (item.classList.contains("lg:opacity-0")) {
+              entryAnimationObserver!.observe(item);
+            }
+          });
         }
 
         function stopEntryAnimations() {
@@ -283,11 +328,17 @@ const { items, id }: Props = Astro.props;
         }
       } else {
         // Mobile: just handle entry animations with viewport-based observer
+        const mobileTextItems = componentRoot.querySelectorAll(
+          ".text-item"
+        ) as NodeListOf<HTMLElement>;
+        if (mobileTextItems.length === 0) return;
+
         const mobileEntryObserver = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                entry.target.classList.add("opacity-100", "translate-y-0");
+                const targetElement = entry.target as HTMLElement;
+                targetElement.classList.add("opacity-100", "translate-y-0");
               }
             });
           },
@@ -296,7 +347,7 @@ const { items, id }: Props = Astro.props;
             rootMargin: "0px 0px -10% 0px",
           }
         );
-
+        currentObserverSet.mobileEntryObs = mobileEntryObserver;
         textItems.forEach((item) => mobileEntryObserver.observe(item));
       }
     });
@@ -321,24 +372,26 @@ const { items, id }: Props = Astro.props;
 </script>
 
 <style>
-  /* Hide scrollbar for the text column on desktop */
-  .text-column::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
-  }
-  .text-column {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-
-  /* Ensure the desktop container takes full viewport height and is positioned correctly */
-  .desktop-scroll-container {
-    height: 100vh;
+  /* Ensure the desktop container structure supports sticky positioning */
+  .desktop-sticky-wrapper {
+    /* Container for the flex layout */
     position: relative;
   }
 
-  /* Ensure text is visible by default, hidden only on large screens initially */
+  /* Ensure text items have proper spacing for sticky behavior */
   .text-item {
     opacity: 1;
+    min-height: 100vh; /* Full viewport height for each section */
+  }
+
+  /* Ensure the flex columns work properly */
+  .text-column {
+    flex: 1;
+  }
+
+  .image-column {
+    flex: 1;
+    position: relative;
   }
 
   @media (min-width: 1024px) {
@@ -352,14 +405,23 @@ const { items, id }: Props = Astro.props;
       transform: translateY(0);
     }
 
-    /* Make sure the image column stays in a consistent position */
-    .image-column {
-      position: relative;
+    /* Ensure smooth transitions for image switching */
+    .image-display {
+      transition: opacity 0.2s ease-in-out;
     }
 
-    /* Ensure smooth transitions */
-    .image-display {
-      transition: opacity 0.5s ease-in-out;
+    /* Ensure the sticky element works properly */
+    .image-column .sticky {
+      position: sticky;
+      top: 6rem; /* 24 * 0.25rem */
+      height: 70vh;
+      z-index: 10;
     }
+  }
+
+  /* Ensure images fill their container properly */
+  .image-display {
+    object-fit: cover;
+    border-radius: 0.375rem; /* rounded-md */
   }
 </style>
