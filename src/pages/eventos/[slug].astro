@@ -7,6 +7,8 @@ import TestimonialSection from "../../components/TestimonialSection.astro";
 import EventHero from "../../components/EventHero.astro";
 import LastCTA from "../../components/LastCTA.astro";
 import TextFAQSection from "../../components/TextFAQSection.astro";
+import IconCardSection from "../../components/IconCardSection.astro";
+import type { CardData as IconCardData } from "../../components/IconCardSection.astro";
 
 export async function getStaticPaths() {
   const courses = await getCollection("courses");
@@ -136,6 +138,25 @@ const certificationFAQs = [
       "¡Absolutamente! Al ser en línea, puedes unirte desde cualquier parte del mundo. Solo considera la zona horaria para las clases en vivo.",
   },
 ];
+
+// Data for the IconCardSection
+const courseFeaturesCards: IconCardData[] = [
+  {
+    imageUrl: "/images/book-icon.png", // Ensure this path is correct
+    htmlContent:
+      "<h3>Manual Incluido</h3><p>Un completo manual en PDF con toda la teoría, prácticas y ejercicios del curso.</p>",
+  },
+  {
+    imageUrl: "/images/laptop-icon.png", // Ensure this path is correct
+    htmlContent:
+      "<h3>Completamente en Línea</h3><p>Accede desde cualquier lugar y aprende a tu propio ritmo con clases grabadas.</p>",
+  },
+  {
+    imageUrl: "/images/certificate-icon.png", // Ensure this path is correct
+    htmlContent:
+      "<h3>Certificado Incluido</h3><p>Obtendrás un certificado digital al completar satisfactoriamente todos los módulos.</p>",
+  },
+];
 ---
 
 <BaseLayout
@@ -200,6 +221,12 @@ const certificationFAQs = [
         />
       )
     }
+
+    <IconCardSection
+      sectionTitle="¿Qué incluye este curso?"
+      cardsData={courseFeaturesCards}
+      useSectionLightBackground={true}
+    />
 
     <TestimonialSection testimonials={eventTestimonials} />
     {/* Remains static for now */}

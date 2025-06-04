@@ -5,6 +5,8 @@ import Quote from "../components/Quote.astro";
 import TestimonialSection from "../components/TestimonialSection.astro";
 import ImageWithTextScroll from "../components/ImageWithTextScroll.astro";
 import type { Item as ScrollItem } from "../components/ImageWithTextScroll.astro";
+import IconCardSection from "../components/IconCardSection.astro";
+import type { CardData } from "../components/IconCardSection.astro";
 
 const scrollItemsData: ScrollItem[] = [
   {
@@ -13,39 +15,91 @@ const scrollItemsData: ScrollItem[] = [
       "<h4>Soy Vane, mujer medicina y he recorrido el camino del alma, la sanación y la consciencia.</h4><p>Este sendero ha sido una profunda inmersión en el autoconocimiento, un despertar constante a la sabiduría ancestral que reside en nuestro interior y una conexión sagrada con las energías sutiles que nos guían. Aprendí a escuchar la voz de mi espíritu y a confiar en la guía divina que se manifiesta en cada paso, revelando la belleza y el poder de la transformación personal.</p><p>Mi misión es acompañar a otras mujeres valientes a reconectar con su poder innato, a recordar y reconocer la energía vibrante de lo que realmente son en esencia, y a elegir conscientemente una vida más expansiva, plena y llena de amor. Juntas, exploramos los paisajes del alma para liberar cargas, sanar heridas y florecer en nuestra máxima expresión.</p>",
   },
   {
-    imageSrc: "/images/img-placeholder.jpg",
+    imageSrc: "/images/acerca-de-mi/yoga.jpeg",
     content:
       "<h4>Creo en la magia que ocurre cuando te eliges y te priorizas en tu andar por la vida.</h4><p>La transformación más auténtica y real comienza en el instante en que decidimos habitarnos con una profunda compasión y amor incondicional, despojándonos de juicios y abrazando cada faceta de nuestro ser con total presencia. Es un acto de valentía que nos abre las puertas a un universo de posibilidades internas.</p><p>Este elegirse no es un acto egoísta, sino un reconocimiento sagrado de nuestra propia divinidad y la chispa creadora que portamos. Al nutrir nuestro mundo interior, irradiamos una energía que impacta positivamente todo lo que nos rodea, permitiéndonos manifestar relaciones más sanas y una realidad alineada con nuestros anhelos más profundos.</p>",
   },
   {
-    imageSrc: "/images/holistica-82.jpg",
+    imageSrc: "/images/acerca-de-mi/universo.jpg",
     content:
       "<h4>Honro profundamente la sabiduría ancestral y la fusiono con potentes herramientas contemporáneas de expansión de la consciencia.</h4><p>Esta integración nos permite tejer un puente entre el conocimiento legado por nuestros antepasados –sus rituales, su conexión con la tierra y los ciclos naturales– y las innovadoras perspectivas que nos ofrece el presente para el despertar espiritual. Es un diálogo enriquecedor que potencia nuestro crecimiento.</p><p>En mi práctica, integro oráculos, la lectura de registros akáshicos, la sanación energética con barras de Access, el poder de las velas consagradas, la vibración de los cristales y la creación de rituales personalizados que tienen como fin despertar y activar la sabiduría interna que cada ser lleva consigo, esperando ser descubierta y manifestada.</p>",
   },
   {
-    imageSrc: "/images/img-placeholder.jpg",
+    imageSrc: "/images/acerca-de-mi/sunrise.jpeg",
     content:
       "<h4>Me inspiran profundamente los nuevos comienzos y la energía renovadora que traen consigo.</h4><p>Cada amanecer, cada ciclo lunar, cada decisión de cambiar y crecer es una invitación a renacer. Veo en los inicios una oportunidad sagrada para sembrar intenciones claras, liberar lo que ya no nos sirve y abrirnos con confianza a las bendiciones que el universo tiene reservadas para nosotros.</p><p>Amo con el corazón crear programas, diseñar espacios de contención y facilitar experiencias transformadoras que activen la vibrante energía del renacer, del recordar nuestra esencia más pura, y del gozoso volver a ti, a tu centro, a tu verdad. Son portales de luz para redescubrir tu potencial ilimitado.</p>",
   },
   {
-    imageSrc: "/images/holistica-63.jpg",
+    imageSrc: "/images/acerca-de-mi/palo-santo.jpg",
     content:
       "<h4>Sostengo espacios sagrados con una energía que combina la dulzura maternal y la fuerza serena del espíritu.</h4><p>Entiendo la importancia de crear un ambiente de confianza y calidez donde cada persona se sienta segura para explorar su vulnerabilidad, sabiendo que será acogida sin juicio y con profundo respeto. La dulzura es el bálsamo que permite abrir el corazón.</p><p>Ya sea en un taller vivencial, una sesión individual de acompañamiento o un círculo de mujeres, mi mayor motivación es acompañar procesos evolutivos con una presencia plena, un amor expansivo y una visión clara de la grandeza que reside en cada alma. Busco ser un faro que ilumine tu camino de regreso a casa.</p>",
   },
   {
-    imageSrc: "/images/img-placeholder.jpg",
+    imageSrc: "/images/acerca-de-mi/pottery.jpeg",
     content:
       "<h4>Vivo mi vida como un constante acto de presencia, saboreando cada instante como un regalo divino.</h4><p>He aprendido que el mayor tesoro se encuentra en el aquí y el ahora, en la capacidad de observar, sentir y experimentar plenamente cada respiración, cada encuentro, cada desafío. La presencia nos ancla y nos permite fluir con la vida sin resistencias.</p><p>Cada día es una nueva y valiosa oportunidad para cultivar la gratitud por lo que es, para aprender de cada experiencia, para liberar aquello que nos pesa y nos limita, y para seguir eligiendo conscientemente desde un espacio de amor y sabiduría interior. Es un compromiso diario con mi evolución y bienestar.</p>",
   },
   {
-    imageSrc: "/images/holistica-20.jpg",
+    imageSrc: "/images/acerca-de-mi/mom.jpeg",
     content:
       "<h4>La maternidad ha sido y es una parte esencial de mi medicina personal y mi camino de crecimiento.</h4><p>Ser mamá me ha sumergido en las profundidades del amor incondicional, la paciencia infinita y la resiliencia del corazón. Es una escuela constante que me ha enseñado a mirar más allá de lo evidente, a escuchar con el alma y a conectar con una ternura que sana y expande.</p><p>Esta experiencia sagrada me ha enseñado a rendirme con amor ante los misterios de la vida, a confiar plenamente en el tiempo divino y sus ritmos perfectos, y a abrazar la belleza de la imperfección. Cada día junto a mis hijos es un recordatorio del milagro de la existencia y la fuerza del vínculo familiar.</p>",
   },
   {
-    imageSrc: "/images/img-placeholder.jpg",
+    imageSrc: "/images/acerca-de-mi/flowers.jpeg",
     content:
       "<h4>Creo firmemente en la inmensa belleza que reside en lo simple y en el poder transformador de lo invisible.</h4><p>A menudo, las magias más grandes se esconden en los detalles cotidianos: una sonrisa sincera, el aroma de una flor, el silencio contemplativo. Es en la simplicidad donde el alma encuentra espacio para respirar y reconectar con su esencia más pura.</p><p>Una palabra de aliento ofrecida en el momento justo, la llama danzante de una vela encendida con intención, una pregunta poderosa que abre nuevas perspectivas, o un silencio compartido que comunica más que mil palabras… todo ello puede ser un portal hacia una profunda transformación si estamos verdaderamente presentes y receptivos a su magia sutil.</p>",
+  },
+];
+
+const iconCardsData: CardData[] = [
+  {
+    imageUrl: "/images/certificaciones/stars-icon.png",
+    htmlContent: "<h3>Registros Akáshicos Máster Teacher</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/meditation-icon.png",
+    htmlContent: "<h3>Facilitadora Access Consciousness®</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/yinyang-icon.png",
+    htmlContent: "<h3>Feng Shui para tu vida</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/rose.png",
+    htmlContent: "<h3>Sanación con rosas</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/flower-icon.png",
+    htmlContent: "<h3>Diplomado en Flores de Bach</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/brain-icon.png",
+    htmlContent: "<h3>Diplomado en Psicoterapia por métodos naturales</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/magnet.png",
+    htmlContent: "<h3>Diplomado en Técnica Biomagnética</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/angel.png",
+    htmlContent: "<h3>Angeóloga</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/dna.png",
+    htmlContent: "<h3>ThetaHealing® Master Certification</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/blossom.png",
+    htmlContent: "<h3>Inner Power Method™ Certification</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/magnified.png",
+    htmlContent: "<h3>Magnified Healing® Teacher</h3>",
+  },
+  {
+    imageUrl: "/images/certificaciones/heart.png",
+    htmlContent:
+      "<h3>Heal Your Life® Teacher Certification (filosofía de Louise L. Hay)</h3>",
   },
 ];
 ---
@@ -69,6 +123,11 @@ const scrollItemsData: ScrollItem[] = [
     useLightBackground={true}
   />
   <ImageWithTextScroll items={scrollItemsData} id="mi-historia-scroll" />
+  <IconCardSection
+    cardsData={iconCardsData}
+    sectionTitle="Mis Certificaciones y Formación"
+    useSectionLightBackground={false}
+  />
   <TestimonialSection
     testimonials={[
       {

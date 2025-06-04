@@ -1,0 +1,266 @@
+---
+import IconCard from "./IconCard.astro";
+
+export interface CardData {
+  imageUrl: string;
+  htmlContent: string | HTMLElement[];
+  useCardLightBackground?: boolean;
+}
+
+export interface Props {
+  cardsData: CardData[];
+  sectionTitle?: string;
+  useSectionLightBackground?: boolean;
+}
+
+const {
+  cardsData = [],
+  sectionTitle,
+  useSectionLightBackground = true,
+} = Astro.props;
+---
+
+<!-- Import Swiper CSS if not already available -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+<section
+  class:list={[
+    "icon-card-section py-12 md:py-16",
+    useSectionLightBackground ? "bg-light" : "bg-light2",
+  ]}
+>
+  <div class="container mx-auto px-4">
+    {
+      sectionTitle && (
+        <h2 class="text-3xl md:text-4xl font-semibold text-center mb-10 md:mb-12">
+          {sectionTitle}
+        </h2>
+      )
+    }
+    {
+      cardsData && cardsData.length > 0 && (
+        <>
+          <!-- Desktop Grid Layout (lg and up) -->
+          <div class="hidden lg:grid lg:grid-cols-3 lg:gap-8 lg:max-w-6xl lg:mx-auto">
+            {cardsData.map((card) => (
+              <div class="flex">
+                <IconCard
+                  imageUrl={card.imageUrl}
+                  htmlContent={card.htmlContent}
+                  useLightBackground={card.useCardLightBackground}
+                />
+              </div>
+            ))}
+          </div>
+
+          <!-- Mobile/Tablet Swiper Layout (below lg) -->
+          <div class="lg:hidden swiper-container-icon-card relative">
+            <div class="swiper-wrapper">
+              {cardsData.map((card) => (
+                <div class="swiper-slide">
+                  <IconCard
+                    imageUrl={card.imageUrl}
+                    htmlContent={card.htmlContent}
+                    useLightBackground={card.useCardLightBackground}
+                  />
+                </div>
+              ))}
+            </div>
+            <div class="swiper-pagination-icon-card swiper-pagination-bullets !bottom-[-30px] md:!bottom-[-40px] pt-4" />
+          </div>
+        </>
+      )
+    }
+  </div>
+</section>
+
+<script define:vars={{ cardsDataLength: cardsData.length }}>
+  console.log("IconCardSection SCRIPT TAG PROCESSED - Starting");
+
+  let iconCardSwiperInitialized = false;
+  const SWIPER_SCRIPT_ID = "swiper-cdn-script"; // ID used by HeroSection
+
+  function initializeIconCardSwiper() {
+    if (iconCardSwiperInitialized) {
+      console.log("IconCard Swiper already initialized. Skipping.");
+      return;
+    }
+
+    if (cardsDataLength === 0) {
+      console.log("No cards to display, skipping Swiper initialization.");
+      return;
+    }
+
+    if (window.innerWidth >= 1024) {
+      console.log("Desktop detected, skipping Swiper initialization for IconCard");
+      return;
+    }
+
+    console.log("Attempting to initialize IconCard Swiper for mobile/tablet...");
+    console.log("Number of cards:", cardsDataLength);
+
+    if (typeof window.Swiper !== "undefined") {
+      console.log("Swiper library found. Initializing IconCard Swiper...");
+
+      const iconCardSwiper = new window.Swiper(".swiper-container-icon-card", {
+        slidesPerView: 1,
+        spaceBetween: 16,
+        centeredSlides: true,
+        loop: false,
+        grabCursor: true,
+        pagination: {
+          el: ".swiper-pagination-icon-card",
+          clickable: true,
+        },
+        autoplay: {
+          delay: 7000,
+          disableOnInteraction: true,
+          pauseOnMouseEnter: true,
+        },
+        breakpoints: {
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 1,
+            spaceBetween: 24,
+          },
+        },
+        on: {
+          init: function () {
+            console.log("IconCard Swiper initialized successfully!");
+            iconCardSwiperInitialized = true;
+          },
+          slideChange: function () {
+            console.log("IconCard Swiper slide changed");
+          },
+        },
+      });
+    } else {
+      console.error(
+        "Swiper library NOT FOUND when trying to initialize IconCard Swiper."
+      );
+    }
+  }
+
+  function loadSwiperAndInitialize() {
+    if (typeof window.Swiper !== "undefined") {
+      console.log(
+        "Swiper already available on window. Initializing IconCard Swiper."
+      );
+      initializeIconCardSwiper();
+      return;
+    }
+
+    let swiperScript = document.getElementById(SWIPER_SCRIPT_ID);
+
+    if (swiperScript) {
+      console.log(
+        "Swiper CDN script tag found (likely from HeroSection). Adding load listener for IconCard Swiper."
+      );
+      if (swiperScript.hasAttribute('data-swiper-loaded')) { // Check if already loaded (custom attribute)
+        console.log("Swiper script (from HeroSection) already marked as loaded. Initializing.");
+        initializeIconCardSwiper();
+      } else {
+        swiperScript.addEventListener("load", () => {
+          console.log("Swiper CDN (from HeroSection) loaded via event listener, initializing IconCard Swiper...");
+          swiperScript.setAttribute('data-swiper-loaded', 'true'); // Mark as loaded
+          initializeIconCardSwiper();
+        });
+        swiperScript.addEventListener("error", () => {
+          console.error("Swiper CDN (from HeroSection) FAILED to load for IconCard.");
+        });
+      }
+    } else {
+      console.log(
+        "No existing Swiper script tag found. IconCardSection will load Swiper."
+      );
+      swiperScript = document.createElement("script");
+      swiperScript.id = SWIPER_SCRIPT_ID; // Use the same ID to avoid potential conflicts if HeroSection loads later
+      swiperScript.src = "https://unpkg.com/swiper/swiper-bundle.min.js";
+      swiperScript.async = true;
+      swiperScript.onload = () => {
+        console.log("Swiper JS loaded by IconCardSection. Initializing IconCard Swiper...");
+        swiperScript.setAttribute('data-swiper-loaded', 'true'); // Mark as loaded
+        initializeIconCardSwiper();
+      };
+      swiperScript.onerror = () => {
+        console.error("IconCardSection FAILED to load Swiper JS.");
+      };
+      document.head.appendChild(swiperScript);
+    }
+  }
+
+  function handleResize() {
+    if (window.innerWidth >= 1024) {
+      if (iconCardSwiperInitialized) {
+        console.log("Switched to desktop, IconCard Swiper not needed/will be managed by visibility.");
+        // Swiper instance might not need to be destroyed if its container is hidden.
+        // If issues arise, consider destroying and re-initializing.
+         iconCardSwiperInitialized = false; // Allow re-init if resized back
+      }
+    } else if (!iconCardSwiperInitialized) {
+      console.log("Switched to mobile/tablet, ensuring IconCard Swiper is initialized.");
+      loadSwiperAndInitialize();
+    }
+  }
+
+  try {
+    loadSwiperAndInitialize();
+    window.addEventListener('resize', handleResize);
+
+    document.addEventListener("astro:page-load", () => {
+      console.log(
+        "astro:page-load -> IconCardSection: Attempting to re-initialize Swiper logic."
+      );
+      iconCardSwiperInitialized = false;
+      loadSwiperAndInitialize();
+    });
+  } catch (e) {
+    console.error("IconCardSection SCRIPT TAG - ERROR in script block:", e);
+  }
+</script>
+
+<style is:global>
+  .icon-card-section .swiper-container-icon-card {
+    width: 100%;
+    overflow: hidden;
+    padding-bottom: 50px;
+  }
+
+  .icon-card-section .swiper-pagination-icon-card {
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .icon-card-section .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    height: auto;
+  }
+
+  .icon-card-section .swiper-pagination-icon-card .swiper-pagination-bullet {
+    background-color: #a8a29e;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+    width: 9px;
+    height: 9px;
+  }
+
+  .icon-card-section
+    .swiper-pagination-icon-card
+    .swiper-pagination-bullet-active {
+    background-color: #c06c84;
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  /* Desktop Grid Styles */
+  .icon-card-section .lg\\:grid-cols-3 > div {
+    display: flex;
+    align-items: stretch;
+  }
+</style>
