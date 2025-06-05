@@ -106,27 +106,35 @@ const iconCardsData: CardData[] = [
 
 <BaseLayout title="Acerca de Mí" description="Conoce más sobre mí.">
   <ImageTextSection
-    imageUrl="/images/holistica-63.jpg"
-    content={`<h2>Mi Viaje</h2>Hace catorce años, mi alma me susurró el inicio de un sendero transformador. Emprendí un viaje espiritual profundo en búsqueda de sanación y un reencuentro con mi ser más auténtico. Durante este camino, tuve el honor de aprender de grandes maestros de vida, quienes con su sabiduría y amor, me enseñaron a cultivar la fe en mí misma y a abrazar la infinita magia que reside en cada nuevo comienzo. Fue un proceso de introspección donde aprendí a reconocer mi propia luz a través de mis sombras, despertando mi intuición y la magia interna que todos poseemos para co-crear nuestra versión más elevada y plena.`}
-    useLightBackground={true}
-    enableStickyImage={false}
-  />
-  <ImageTextSection
     imageUrl="/images/holistica-82.jpg"
-    content={`<h2>Mi Enfoque</h2>Mi misión de vida se centra en inspirarte a conectar con tu verdadera esencia y a despertar ese lado mágico que nos une al amor incondicional, la abundancia, el bienestar integral y los sagrados ciclos del Universo. Creo firmemente en una sanación que fluye en armonía, guiada por la dulzura y la luz de los ángeles, quienes son mis compañeros constantes en este sendero. Mi enfoque se basa en la convicción de que el amor es la fuerza sanadora más poderosa y la respuesta fundamental a todas nuestras búsquedas internas.`}
+    content={`<h2>Mi Viaje</h2>Hace catorce años, mi alma me susurró el inicio de un sendero transformador. Emprendí un viaje espiritual profundo en búsqueda de sanación y un reencuentro con mi ser más auténtico. Durante este camino, tuve el honor de aprender de grandes maestros de vida, quienes con su sabiduría y amor, me enseñaron a cultivar la fe en mí misma y a abrazar la infinita magia que reside en cada nuevo comienzo. Fue un proceso de introspección donde aprendí a reconocer mi propia luz a través de mis sombras, despertando mi intuición y la magia interna que todos poseemos para co-crear nuestra versión más elevada y plena.`}
     useLightBackground={false}
     reverseOrder={true}
     enableStickyImage={false}
   />
-  <Quote
-    quote="Cuando sanas tú, sanamos todos. Tu luz interior tiene el poder de iluminar el mundo."
-    useLightBackground={true}
+  <ImageTextSection
+    imageUrl="/images/holistica-63.jpg"
+    content={`<h2>Mi Enfoque</h2>Mi misión de vida se centra en inspirarte a conectar con tu verdadera esencia y a despertar ese lado mágico que nos une al amor incondicional, la abundancia, el bienestar integral y los sagrados ciclos del Universo. Creo firmemente en una sanación que fluye en armonía, guiada por la dulzura y la luz de los ángeles, quienes son mis compañeros constantes en este sendero. Mi enfoque se basa en la convicción de que el amor es la fuerza sanadora más poderosa y la respuesta fundamental a todas nuestras búsquedas internas.`}
+    useLightBackground={false}
+    enableStickyImage={false}
   />
+  <div class="mt-18 pt-12">
+    <h1 class="text-center text-4xl font-bold">8 Cosas Sobre de Mí</h1>
+  </div>
   <ImageWithTextScroll items={scrollItemsData} id="mi-historia-scroll" />
   <IconCardSection
     cardsData={iconCardsData}
     sectionTitle="Mis Certificaciones y Formación"
     useSectionLightBackground={false}
+  />
+  <div class="pb-12 bg-light2 text-center">
+    <a href="/certificaciones" class="text-center font-bold"
+      >Ver todas mis certificaciones</a
+    >
+  </div>
+  <Quote
+    quote="Cuando sanas tú, sanamos todos. Tu luz interior tiene el poder de iluminar el mundo."
+    useLightBackground={true}
   />
   <TestimonialSection
     testimonials={[
