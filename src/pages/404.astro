@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Quote from "../components/Quote.astro";
+
+const pageTitle = "Página no encontrada";
+const pageDescription =
+  "La página que buscas no se encuentra disponible. Te guiamos de vuelta a casa.";
+---
+
+<BaseLayout
+  title={`${pageTitle} | Vanessa Ramirez`}
+  description={pageDescription}
+>
+  <div
+    class="min-h-screen flex flex-col items-center justify-center bg-light px-4 py-16"
+  >
+    <!-- 404 Content -->
+    <div class="mx-auto text-center">
+      <!-- Large 404 Number -->
+      <div class="mb-8 text-8xl md:text-9xl">
+        <h1
+          class="text-8xl md:text-9xl font-bold text-primary opacity-25 font-dmSerifText"
+        >
+          404
+        </h1>
+      </div>
+
+      <!-- Main Message -->
+      <div class="mb-8">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-primary mb-4 font-dmSerifText"
+        >
+          Esta página no existe
+        </h2>
+        <p class="text-primary mb-8 leading-relaxed font-afacad">
+          Parece que te has perdido en el camino. No te preocupes, todos
+          necesitamos una pausa para reorientarnos y encontrar nuestro verdadero
+          sendero.
+        </p>
+      </div>
+
+      <!-- Navigation Options -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        <a
+          href="/"
+          class="button-style inline-flex items-center justify-center !px-4 h-16 bg-primary text-white rounded-full hover:bg-primary-dark transition-colors duration-300 font-afacad shadow-lg no-underline"
+        >
+          <span>Ir al Inicio</span>
+        </a>
+        <a
+          href="/eventos"
+          class="button-style inline-flex items-center justify-center !px-4 h-16 bg-primary text-white rounded-full hover:bg-primary-dark transition-colors duration-300 font-afacad shadow-lg no-underline"
+        >
+          <span>Ver Eventos</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
