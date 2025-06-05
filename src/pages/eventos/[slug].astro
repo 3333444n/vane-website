@@ -171,12 +171,8 @@ const courseFeaturesCards: IconCardData[] = [
     description={course.hero_descripcion}
     date={!isCourseUnavailable ? course.hero_fecha || "" : undefined}
     image={course.hero_img_main || "/images/img-placeholder.jpg"}
-    buttonText={!isCourseUnavailable
-      ? course.hero_buttonText || "Inscríbete Ahora"
-      : undefined}
-    buttonLink={!isCourseUnavailable
-      ? course.hero_buttonLink || "#"
-      : undefined}
+    buttonText={!isCourseUnavailable ? course.cta_button : undefined}
+    buttonLink={!isCourseUnavailable ? course.cta_btn_link || "#" : undefined}
   />
   <main class="py-6">
     {

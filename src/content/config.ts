@@ -14,8 +14,6 @@ const coursesCollection = defineCollection({
     hero_slogan: z.string(),
     hero_descripcion: z.string(),
     hero_img_main: z.string().nullable(),
-    hero_buttonText: z.string().optional(),
-    hero_buttonLink: z.string().nullable().optional(),
     section1_texto1: z.string(),
     section1_img1: z.string().nullable(),
     section2_texto2: z.string(),

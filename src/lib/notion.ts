@@ -129,8 +129,6 @@ export interface CourseData {
   hero_slogan: string;
   hero_descripcion: string;
   hero_img_main: string | null;
-  hero_buttonText?: string;
-  hero_buttonLink?: string | null;
   // Section 1
   section1_texto1: string;
   section1_img1: string | null;
@@ -256,8 +254,6 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         hero_img_main: heroImgMainNotionUrl 
           ? await downloadImageAndGetLocalPath(heroImgMainNotionUrl, slugValue, 'hero_img_main') 
           : null,
-        hero_buttonText: getPlainText(props.hero_buttonText?.rich_text),
-        hero_buttonLink: getUrl(props.hero_buttonLink),
         section1_texto1: getRichTextAsHtml(props.texto1?.rich_text),
         section1_img1: section1Img1NotionUrl 
           ? await downloadImageAndGetLocalPath(section1Img1NotionUrl, slugValue, 'section1_img1') 
@@ -273,7 +269,7 @@ async function getRawCoursesFromNotion(): Promise<FetchedCourse[]> {
         section3FAQ_acerca_del_curso: getRichTextAsHtml(props['acerca-del-curso']?.rich_text),
         cta_cta: getPlainText(props.cta?.rich_text),
         cta_button: getPlainText(props.button?.rich_text),
-        cta_btn_link: getUrl(props['btn-link']),
+        cta_btn_link: getPlainText(props['btn-link']?.rich_text) || null,
         cta_date: formatSpanishDate(getDate(props.cta_date)), // Also format cta_date if it exists
       };
       courses.push({
