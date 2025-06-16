@@ -154,7 +154,7 @@ interface FetchedCourse extends CourseData {
   slug: string; 
 }
 
-const IMAGES_OUTPUT_DIR = path.join(process.cwd(), 'public', 'images', 'courses');
+const IMAGES_OUTPUT_DIR = path.join(process.cwd(), 'src', 'assets', 'images', 'courses');
 const IMAGES_WEB_PATH = '/images/courses'; // Web-accessible path
 
 async function downloadImageAndGetLocalPath(
@@ -175,13 +175,13 @@ async function downloadImageAndGetLocalPath(
     const extension = path.extname(url.pathname) || '.jpg'; // Default to .jpg if no extension
     const filename = `${safeSlug}-${safeFieldName}${extension}`;
     const localFilePath = path.join(IMAGES_OUTPUT_DIR, filename);
-    const webFilePath = `${IMAGES_WEB_PATH}/${filename}`;
+    const imagePathForJson = `../../assets/images/courses/${filename}`;
 
     // Check if file already exists to avoid re-downloading
     try {
       await fsPromises.access(localFilePath);
       console.log(`Image already exists, skipping download: ${localFilePath}`);
-      return webFilePath;
+      return imagePathForJson;
     } catch {
       // File doesn't exist, proceed with download
     }
@@ -201,7 +201,7 @@ async function downloadImageAndGetLocalPath(
     response.pipe(writer);
 
     return new Promise((resolve, reject) => {
-      writer.on('finish', () => resolve(webFilePath));
+      writer.on('finish', () => resolve(imagePathForJson));
       writer.on('error', (err: Error) => {
         console.error(`Failed to write image ${localFilePath}:`, err);
         reject(null); // Or original URL
@@ -303,9 +303,13 @@ export async function fetchAndSaveCoursesAsJson() {
         try {
           await fsPromises.unlink(filePathToDelete);
           console.log(`Deleted old course file: ${filePathToDelete}`);
-        } catch (err) {
-          console.error(`Failed to delete old course file ${filePathToDelete}:`, err);
-          // Consider if you need to halt the process on error or just log
+        } catch (err: any) {
+          // If the file doesn't exist, that's fine, we wanted it gone anyway.
+          // We only need to worry about other errors.
+          if (err.code !== 'ENOENT') {
+            console.error(`Failed to delete old course file ${filePathToDelete}:`, err);
+            // Consider if you need to halt the process on error or just log
+          }
         }
       }
     }
@@ -333,4 +337,4 @@ export async function fetchAndSaveCoursesAsJson() {
 }
 
 // Optional: To allow this script to be run directly
-fetchAndSaveCoursesAsJson().catch(console.error);
+// fetchAndSaveCoursesAsJson().catch(console.error);
