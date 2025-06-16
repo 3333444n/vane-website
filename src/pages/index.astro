@@ -17,6 +17,9 @@ const heroCourses = allCourses
       (a.data.orden_homepage ?? Infinity) - (b.data.orden_homepage ?? Infinity)
   );
 
+const lcpImage =
+  heroCourses.length > 0 ? heroCourses[0].data.hero_img_main : null;
+
 const heroSlidesDataFromNotion = heroCourses.map((course) => ({
   imageUrl: course.data.hero_img_main ?? "/images/img-placeholder.jpg", // Fallback image
   secondaryText: course.data.hero_tipo,
@@ -118,6 +121,18 @@ const heroSlidesData = [
   title="Vanessa Ramirez | Lectura de Registros Akáshicos"
   description="Conocimiento, inspiración y guía para tu camino"
 >
+  {
+    lcpImage && (
+      <link
+        slot="head-injection"
+        rel="preload"
+        as="image"
+        href={lcpImage.src}
+        imagesrcset={`${lcpImage.src}?w=960 1x, ${lcpImage.src}?w=1600 2x`}
+        fetchpriority="high"
+      />
+    )
+  }
   <main class="intersect:motion-preset-fade motion-delay-200">
     <HeroSection
       slides={heroSlidesDataFromNotion.length > 0
