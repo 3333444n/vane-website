@@ -1,6 +1,9 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 export interface Props {
-  imageUrl: string;
+  imageUrl: ImageMetadata | string;
   htmlContent: string | HTMLElement[];
   useLightBackground?: boolean;
 }
@@ -19,11 +22,23 @@ const {
   ]}
 >
   <div class="mb-4 rounded-full bg-transparent inline-block">
-    <img
-      src={imageUrl}
-      alt="Icon"
-      class="w-28 h-28 md:w-36 md:h-36 object-contain"
-    />
+    {
+      typeof imageUrl === "string" ? (
+        <img
+          src={imageUrl}
+          alt="Icon"
+          class="w-28 h-28 md:w-36 md:h-36 object-contain"
+        />
+      ) : (
+        <Image
+          src={imageUrl}
+          alt="Icon"
+          width={144}
+          height={144}
+          class="w-28 h-28 md:w-36 md:h-36 object-contain"
+        />
+      )
+    }
   </div>
   <div
     class="prose prose-sm w-full text-stone-700 text-center"

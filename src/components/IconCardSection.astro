@@ -1,8 +1,9 @@
 ---
 import IconCard from "./IconCard.astro";
+import type { ImageMetadata } from "astro";
 
 export interface CardData {
-  imageUrl: string;
+  imageUrl: ImageMetadata | string;
   htmlContent: string | HTMLElement[];
   useCardLightBackground?: boolean;
 }

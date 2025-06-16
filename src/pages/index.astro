@@ -6,6 +6,7 @@ import Quote from "../components/Quote.astro";
 import TestimonialSection from "../components/TestimonialSection.astro";
 import HeroSection from "../components/HeroSection.astro";
 import { getCollection } from "astro:content";
+import aboutMeImage from "../assets/images/holistica-82.jpg";
 
 // Fetch and process courses for the HeroSection
 const allCourses = await getCollection("courses");
@@ -22,12 +23,12 @@ const heroSlidesDataFromNotion = heroCourses.map((course) => ({
   mainText: course.data.nombre_del_curso,
   tertiaryText: course.data.hero_slogan,
   dateText: course.data.hero_fecha ?? undefined, // Ensure undefined if null
-  buttonText: course.data.hero_buttonText || "Más Información", // Use || for fallback with empty string
+  buttonText: course.data.cta_button || "Más Información", // Use || for fallback with empty string
   buttonLink: course.id ? `/eventos/${course.id}` : "/eventos/event-template", // Use course.id as the slug
 }));
 
 const placeholderData = {
-  imageUrl: "/images/holistica-82.jpg",
+  imageUrl: aboutMeImage,
   content: `
     <h2>Acerca de mí</h2>
     <p>Namasté</p>

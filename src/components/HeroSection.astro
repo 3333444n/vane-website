@@ -1,9 +1,10 @@
 ---
 import HeroImage from "./HeroImage.astro"; // Import HeroImage
+import type { ImageMetadata } from "astro";
 
 // Define the interface for a single slide (data coming from index.astro)
 export interface SlideData {
-  imageUrl: string;
+  imageUrl: ImageMetadata | string;
   secondaryText?: string;
   mainText: string;
   tertiaryText?: string;

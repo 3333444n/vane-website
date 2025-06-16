@@ -9,6 +9,10 @@ import LastCTA from "../../components/LastCTA.astro";
 import TextFAQSection from "../../components/TextFAQSection.astro";
 import IconCardSection from "../../components/IconCardSection.astro";
 import type { CardData as IconCardData } from "../../components/IconCardSection.astro";
+import aboutMeImage from "../../assets/images/holistica-82.jpg";
+import bookIcon from "../../assets/images/book-icon.png";
+import laptopIcon from "../../assets/images/laptop-icon.png";
+import certificateIcon from "../../assets/images/certificate-icon.png";
 
 export async function getStaticPaths() {
   const courses = await getCollection("courses");
@@ -142,17 +146,17 @@ const certificationFAQs = [
 // Data for the IconCardSection
 const courseFeaturesCards: IconCardData[] = [
   {
-    imageUrl: "/images/book-icon.png", // Ensure this path is correct
+    imageUrl: bookIcon, // Ensure this path is correct
     htmlContent:
       "<h3>Manual Incluido</h3><p>Un completo manual en PDF con toda la teoría, prácticas y ejercicios del curso.</p>",
   },
   {
-    imageUrl: "/images/laptop-icon.png", // Ensure this path is correct
+    imageUrl: laptopIcon, // Ensure this path is correct
     htmlContent:
       "<h3>Completamente en Línea</h3><p>Accede desde cualquier lugar y aprende a tu propio ritmo con clases grabadas.</p>",
   },
   {
-    imageUrl: "/images/certificate-icon.png", // Ensure this path is correct
+    imageUrl: certificateIcon, // Ensure this path is correct
     htmlContent:
       "<h3>Certificado Incluido</h3><p>Obtendrás un certificado digital al completar satisfactoriamente todos los módulos.</p>",
   },
@@ -238,7 +242,7 @@ const courseFeaturesCards: IconCardData[] = [
     {/* Remains static for now */}
 
     <ImageTextSection
-      imageUrl="/images/holistica-82.jpg"
+      imageUrl={aboutMeImage}
       content={`
     <h2>Acerca de mí</h2>
     <p>Namasté</p>

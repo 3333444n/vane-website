@@ -1,6 +1,9 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 interface Props {
-  imageUrl: string;
+  imageUrl: ImageMetadata | string;
   content: string | HTMLElement[]; // Allows for HTML content
   reverseOrder?: boolean;
   useLightBackground?: boolean;
@@ -45,11 +48,23 @@ const {
       "motion-delay-200",
     ]}
   >
-    <img
-      src={imageUrl}
-      alt="Image for section"
-      class="rounded-lg shadow-lg w-full h-auto md:h-[75vh] object-cover max-h-[720px]"
-    />
+    {
+      typeof imageUrl === "string" ? (
+        <img
+          src={imageUrl}
+          alt="Image for section"
+          class="rounded-lg shadow-lg w-full h-auto md:h-[75vh] object-cover max-h-[720px]"
+        />
+      ) : (
+        <Image
+          src={imageUrl}
+          alt="Image for section"
+          class="rounded-lg shadow-lg w-full h-auto md:h-[75vh] object-cover max-h-[720px]"
+          width={1280}
+          height={720}
+        />
+      )
+    }
   </div>
   <div
     class:list={[

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ImageTextSection from "../components/ImageTextSection.astro";
+import certImage from "../assets/images/holistica-20.jpg";
 
 const pageTitle = "Certificaciones";
 
@@ -52,7 +53,7 @@ const certificationsContent = `
 
 <BaseLayout title={pageTitle}>
   <ImageTextSection
-    imageUrl="/images/holistica-20.jpg"
+    imageUrl={certImage}
     content={certificationsContent}
     enableStickyImage
   />

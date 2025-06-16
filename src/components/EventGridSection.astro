@@ -1,10 +1,11 @@
 ---
 import EventCard from "./EventCard.astro";
+import type { ImageMetadata } from "astro";
 
 interface Event {
   date: string;
   title: string;
-  imageUrl: string;
+  imageUrl: ImageMetadata | string;
   linkUrl: string;
   size?: "small" | "large" | "featured"; // Individual event can override default
 }

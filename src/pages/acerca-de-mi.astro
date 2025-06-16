@@ -8,44 +8,67 @@ import type { Item as ScrollItem } from "../components/ImageWithTextScroll.astro
 import IconCardSection from "../components/IconCardSection.astro";
 import type { CardData } from "../components/IconCardSection.astro";
 
+import holistica82 from "../assets/images/holistica-82.jpg";
+import holistica63 from "../assets/images/holistica-63.jpg";
+import yogaImg from "../assets/images/acerca-de-mi/yoga.jpeg";
+import universoImg from "../assets/images/acerca-de-mi/universo.jpg";
+import sunriseImg from "../assets/images/acerca-de-mi/sunrise.jpeg";
+import paloSantoImg from "../assets/images/acerca-de-mi/palo-santo.jpg";
+import potteryImg from "../assets/images/acerca-de-mi/pottery.jpeg";
+import momImg from "../assets/images/acerca-de-mi/mom.jpeg";
+import flowersImg from "../assets/images/acerca-de-mi/flowers.jpeg";
+
+import starsIcon from "../assets/images/certificaciones/stars-icon.png";
+import meditationIcon from "../assets/images/certificaciones/meditation-icon.png";
+import yinyangIcon from "../assets/images/certificaciones/yinyang-icon.png";
+import roseIcon from "../assets/images/certificaciones/rose.png";
+import flowerIcon from "../assets/images/certificaciones/flower-icon.png";
+import brainIcon from "../assets/images/certificaciones/brain-icon.png";
+import magnetIcon from "../assets/images/certificaciones/magnet.png";
+import angelIcon from "../assets/images/certificaciones/angel.png";
+import dnaIcon from "../assets/images/certificaciones/dna.png";
+import blossomIcon from "../assets/images/certificaciones/blossom.png";
+import magnifiedIcon from "../assets/images/certificaciones/magnified.png";
+import heartIcon from "../assets/images/certificaciones/heart.png";
+
 const scrollItemsData: ScrollItem[] = [
   {
-    imageSrc: "/images/holistica-63.jpg",
+    imageSrc: holistica63,
     content:
       "<h4>Soy Vane, mujer medicina y he recorrido el camino del alma, la sanación y la consciencia.</h4><p>Este sendero ha sido una profunda inmersión en el autoconocimiento, un despertar constante a la sabiduría ancestral que reside en nuestro interior y una conexión sagrada con las energías sutiles que nos guían. Aprendí a escuchar la voz de mi espíritu y a confiar en la guía divina que se manifiesta en cada paso, revelando la belleza y el poder de la transformación personal.</p><p>Mi misión es acompañar a otras mujeres valientes a reconectar con su poder innato, a recordar y reconocer la energía vibrante de lo que realmente son en esencia, y a elegir conscientemente una vida más expansiva, plena y llena de amor. Juntas, exploramos los paisajes del alma para liberar cargas, sanar heridas y florecer en nuestra máxima expresión.</p>",
   },
   {
-    imageSrc: "/images/acerca-de-mi/yoga.jpeg",
+    imageSrc: yogaImg,
     content:
       "<h4>Creo en la magia que ocurre cuando te eliges y te priorizas en tu andar por la vida.</h4><p>La transformación más auténtica y real comienza en el instante en que decidimos habitarnos con una profunda compasión y amor incondicional, despojándonos de juicios y abrazando cada faceta de nuestro ser con total presencia. Es un acto de valentía que nos abre las puertas a un universo de posibilidades internas.</p><p>Este elegirse no es un acto egoísta, sino un reconocimiento sagrado de nuestra propia divinidad y la chispa creadora que portamos. Al nutrir nuestro mundo interior, irradiamos una energía que impacta positivamente todo lo que nos rodea, permitiéndonos manifestar relaciones más sanas y una realidad alineada con nuestros anhelos más profundos.</p>",
   },
   {
-    imageSrc: "/images/acerca-de-mi/universo.jpg",
+    imageSrc: universoImg,
     content:
       "<h4>Honro profundamente la sabiduría ancestral y la fusiono con potentes herramientas contemporáneas de expansión de la consciencia.</h4><p>Esta integración nos permite tejer un puente entre el conocimiento legado por nuestros antepasados –sus rituales, su conexión con la tierra y los ciclos naturales– y las innovadoras perspectivas que nos ofrece el presente para el despertar espiritual. Es un diálogo enriquecedor que potencia nuestro crecimiento.</p><p>En mi práctica, integro oráculos, la lectura de registros akáshicos, la sanación energética con barras de Access, el poder de las velas consagradas, la vibración de los cristales y la creación de rituales personalizados que tienen como fin despertar y activar la sabiduría interna que cada ser lleva consigo, esperando ser descubierta y manifestada.</p>",
   },
   {
-    imageSrc: "/images/acerca-de-mi/sunrise.jpeg",
+    imageSrc: sunriseImg,
     content:
       "<h4>Me inspiran profundamente los nuevos comienzos y la energía renovadora que traen consigo.</h4><p>Cada amanecer, cada ciclo lunar, cada decisión de cambiar y crecer es una invitación a renacer. Veo en los inicios una oportunidad sagrada para sembrar intenciones claras, liberar lo que ya no nos sirve y abrirnos con confianza a las bendiciones que el universo tiene reservadas para nosotros.</p><p>Amo con el corazón crear programas, diseñar espacios de contención y facilitar experiencias transformadoras que activen la vibrante energía del renacer, del recordar nuestra esencia más pura, y del gozoso volver a ti, a tu centro, a tu verdad. Son portales de luz para redescubrir tu potencial ilimitado.</p>",
   },
   {
-    imageSrc: "/images/acerca-de-mi/palo-santo.jpg",
+    imageSrc: paloSantoImg,
     content:
       "<h4>Sostengo espacios sagrados con una energía que combina la dulzura maternal y la fuerza serena del espíritu.</h4><p>Entiendo la importancia de crear un ambiente de confianza y calidez donde cada persona se sienta segura para explorar su vulnerabilidad, sabiendo que será acogida sin juicio y con profundo respeto. La dulzura es el bálsamo que permite abrir el corazón.</p><p>Ya sea en un taller vivencial, una sesión individual de acompañamiento o un círculo de mujeres, mi mayor motivación es acompañar procesos evolutivos con una presencia plena, un amor expansivo y una visión clara de la grandeza que reside en cada alma. Busco ser un faro que ilumine tu camino de regreso a casa.</p>",
   },
   {
-    imageSrc: "/images/acerca-de-mi/pottery.jpeg",
+    imageSrc: potteryImg,
     content:
       "<h4>Vivo mi vida como un constante acto de presencia, saboreando cada instante como un regalo divino.</h4><p>He aprendido que el mayor tesoro se encuentra en el aquí y el ahora, en la capacidad de observar, sentir y experimentar plenamente cada respiración, cada encuentro, cada desafío. La presencia nos ancla y nos permite fluir con la vida sin resistencias.</p><p>Cada día es una nueva y valiosa oportunidad para cultivar la gratitud por lo que es, para aprender de cada experiencia, para liberar aquello que nos pesa y nos limita, y para seguir eligiendo conscientemente desde un espacio de amor y sabiduría interior. Es un compromiso diario con mi evolución y bienestar.</p>",
   },
   {
-    imageSrc: "/images/acerca-de-mi/mom.jpeg",
+    imageSrc: momImg,
     content:
       "<h4>La maternidad ha sido y es una parte esencial de mi medicina personal y mi camino de crecimiento.</h4><p>Ser mamá me ha sumergido en las profundidades del amor incondicional, la paciencia infinita y la resiliencia del corazón. Es una escuela constante que me ha enseñado a mirar más allá de lo evidente, a escuchar con el alma y a conectar con una ternura que sana y expande.</p><p>Esta experiencia sagrada me ha enseñado a rendirme con amor ante los misterios de la vida, a confiar plenamente en el tiempo divino y sus ritmos perfectos, y a abrazar la belleza de la imperfección. Cada día junto a mis hijos es un recordatorio del milagro de la existencia y la fuerza del vínculo familiar.</p>",
   },
   {
-    imageSrc: "/images/acerca-de-mi/flowers.jpeg",
+    imageSrc: flowersImg,
     content:
       "<h4>Creo firmemente en la inmensa belleza que reside en lo simple y en el poder transformador de lo invisible.</h4><p>A menudo, las magias más grandes se esconden en los detalles cotidianos: una sonrisa sincera, el aroma de una flor, el silencio contemplativo. Es en la simplicidad donde el alma encuentra espacio para respirar y reconectar con su esencia más pura.</p><p>Una palabra de aliento ofrecida en el momento justo, la llama danzante de una vela encendida con intención, una pregunta poderosa que abre nuevas perspectivas, o un silencio compartido que comunica más que mil palabras… todo ello puede ser un portal hacia una profunda transformación si estamos verdaderamente presentes y receptivos a su magia sutil.</p>",
   },
@@ -53,51 +76,51 @@ const scrollItemsData: ScrollItem[] = [
 
 const iconCardsData: CardData[] = [
   {
-    imageUrl: "/images/certificaciones/stars-icon.png",
+    imageUrl: starsIcon,
     htmlContent: "<h3>Registros Akáshicos Máster Teacher</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/meditation-icon.png",
+    imageUrl: meditationIcon,
     htmlContent: "<h3>Facilitadora Access Consciousness®</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/yinyang-icon.png",
+    imageUrl: yinyangIcon,
     htmlContent: "<h3>Feng Shui para tu vida</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/rose.png",
+    imageUrl: roseIcon,
     htmlContent: "<h3>Sanación con rosas</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/flower-icon.png",
+    imageUrl: flowerIcon,
     htmlContent: "<h3>Diplomado en Flores de Bach</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/brain-icon.png",
+    imageUrl: brainIcon,
     htmlContent: "<h3>Diplomado en Psicoterapia por métodos naturales</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/magnet.png",
+    imageUrl: magnetIcon,
     htmlContent: "<h3>Diplomado en Técnica Biomagnética</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/angel.png",
+    imageUrl: angelIcon,
     htmlContent: "<h3>Angeóloga</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/dna.png",
+    imageUrl: dnaIcon,
     htmlContent: "<h3>ThetaHealing® Master Certification</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/blossom.png",
+    imageUrl: blossomIcon,
     htmlContent: "<h3>Inner Power Method™ Certification</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/magnified.png",
+    imageUrl: magnifiedIcon,
     htmlContent: "<h3>Magnified Healing® Teacher</h3>",
   },
   {
-    imageUrl: "/images/certificaciones/heart.png",
+    imageUrl: heartIcon,
     htmlContent:
       "<h3>Heal Your Life® Teacher Certification (filosofía de Louise L. Hay)</h3>",
   },
@@ -106,14 +129,14 @@ const iconCardsData: CardData[] = [
 
 <BaseLayout title="Acerca de Mí" description="Conoce más sobre mí.">
   <ImageTextSection
-    imageUrl="/images/holistica-82.jpg"
+    imageUrl={holistica82}
     content={`<h2>Mi Viaje</h2>Hace catorce años, mi alma me susurró el inicio de un sendero transformador. Emprendí un viaje espiritual profundo en búsqueda de sanación y un reencuentro con mi ser más auténtico. Durante este camino, tuve el honor de aprender de grandes maestros de vida, quienes con su sabiduría y amor, me enseñaron a cultivar la fe en mí misma y a abrazar la infinita magia que reside en cada nuevo comienzo. Fue un proceso de introspección donde aprendí a reconocer mi propia luz a través de mis sombras, despertando mi intuición y la magia interna que todos poseemos para co-crear nuestra versión más elevada y plena.`}
     useLightBackground={false}
     reverseOrder={true}
     enableStickyImage={false}
   />
   <ImageTextSection
-    imageUrl="/images/holistica-63.jpg"
+    imageUrl={holistica63}
     content={`<h2>Mi Enfoque</h2>Mi misión de vida se centra en inspirarte a conectar con tu verdadera esencia y a despertar ese lado mágico que nos une al amor incondicional, la abundancia, el bienestar integral y los sagrados ciclos del Universo. Creo firmemente en una sanación que fluye en armonía, guiada por la dulzura y la luz de los ángeles, quienes son mis compañeros constantes en este sendero. Mi enfoque se basa en la convicción de que el amor es la fuerza sanadora más poderosa y la respuesta fundamental a todas nuestras búsquedas internas.`}
     useLightBackground={false}
     enableStickyImage={false}
