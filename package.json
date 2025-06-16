@@ -23,7 +23,6 @@
     "tailwindcss-intersect": "^2.2.0",
     "tailwindcss-motion": "^1.1.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.4",
-    "vite-plugin-imagemin": "^0.6.1"
+    "tsx": "^4.19.4"
   }
 }

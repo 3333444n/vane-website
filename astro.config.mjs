@@ -2,7 +2,6 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import vercel from '@astrojs/vercel';
-import imagemin from 'vite-plugin-imagemin';
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,16 +17,6 @@ export default defineConfig({
     responsiveImages: true,
   },
   vite: {
-    plugins: [
-      imagemin({
-        mozjpeg: {
-          quality: 75,
-        },
-        pngquant: {
-          quality: [0.65, 0.8],
-        },
-      }),
-    ],
     css: {
       devSourcemap: true,
     },
