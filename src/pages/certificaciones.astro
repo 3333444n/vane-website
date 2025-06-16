@@ -1,16 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ImageTextSection from "../components/ImageTextSection.astro";
 
 const pageTitle = "Certificaciones";
----
 
-<BaseLayout title={pageTitle}>
-  <div class="container mx-auto px-4 py-8">
+const certificationsContent = `
     <h1 class="text-3xl font-bold mb-6 text-center">
       Mis Certificaciones y Formaciones
     </h1>
     <ul
-      class="list-disc list-inside space-y-2 text-lg intersect-once intersect:motion-preset-fade motion-delay-200"
+      class="list-disc list-inside space-y-2 text-lg"
     >
       <li>Registros Akáshicos Máster Teacher</li>
       <li>Facilitadora Access Consciousness®</li>
@@ -48,5 +47,13 @@ const pageTitle = "Certificaciones";
         Heal Your Life® Teacher Certification (filosofía de Louise L. Hay)
       </li>
     </ul>
-  </div>
+`;
+---
+
+<BaseLayout title={pageTitle}>
+  <ImageTextSection
+    imageUrl="/images/holistica-20.jpg"
+    content={certificationsContent}
+    enableStickyImage
+  />
 </BaseLayout>

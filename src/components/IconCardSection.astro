@@ -11,12 +11,16 @@ export interface Props {
   cardsData: CardData[];
   sectionTitle?: string;
   useSectionLightBackground?: boolean;
+  buttonText?: string;
+  buttonLink?: string;
 }
 
 const {
   cardsData = [],
   sectionTitle,
   useSectionLightBackground = true,
+  buttonText,
+  buttonLink,
 } = Astro.props;
 ---
 
@@ -69,6 +73,18 @@ const {
             <div class="swiper-pagination-icon-card swiper-pagination-bullets !bottom-[-30px] md:!bottom-[-40px] pt-4" />
           </div>
         </>
+      )
+    }
+    {
+      buttonText && buttonLink && (
+        <div class="text-center mt-12">
+          <a
+            href={buttonLink}
+            class="button-style inline-block py-2 px-8 text-center"
+          >
+            {buttonText}
+          </a>
+        </div>
       )
     }
   </div>

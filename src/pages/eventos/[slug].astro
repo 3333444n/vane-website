@@ -199,6 +199,12 @@ const courseFeaturesCards: IconCardData[] = [
           content={course.section2_texto2}
           reverseOrder={false}
           useLightBackground={false}
+          buttonText={!isCourseUnavailable ? course.cta_button : undefined}
+          buttonLink={
+            !isCourseUnavailable
+              ? (course.cta_btn_link ?? undefined)
+              : undefined
+          }
         />
       )
     }
@@ -222,6 +228,10 @@ const courseFeaturesCards: IconCardData[] = [
       sectionTitle="¿Qué incluye este curso?"
       cardsData={courseFeaturesCards}
       useSectionLightBackground={true}
+      buttonText={!isCourseUnavailable ? course.cta_button : undefined}
+      buttonLink={!isCourseUnavailable
+        ? (course.cta_btn_link ?? undefined)
+        : undefined}
     />
 
     <TestimonialSection testimonials={eventTestimonials} />
