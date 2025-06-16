@@ -1,6 +1,14 @@
 ---
-import HeroImage from "./HeroImage.astro"; // Import HeroImage
 import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
+import { register } from "swiper/element/bundle";
+
+import "swiper/css";
+import "swiper/css/lazy";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+register();
 
 // Define the interface for a single slide (data coming from index.astro)
 export interface SlideData {
@@ -29,45 +37,87 @@ const {
 } = Astro.props as Props;
 ---
 
-<!-- Import Swiper CSS -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-
 <section
   class:list={[
     "relative min-h-[80vh] h-[80vh] w-full flex flex-col justify-center items-center p-4 md:p-16",
     useStoneBackground ? "bg-light" : "bg-light2",
   ]}
 >
-  <!-- Swiper container -->
-  <div
+  <swiper-container
     class="swiper-container relative w-full h-full max-h-full shadow-lg rounded-lg overflow-hidden flex justify-center items-center"
+    navigation="true"
+    pagination="true"
+    loop="true"
+    lazy="true"
+    autoplay-delay="5000"
+    autoplay-disable-on-interaction="false"
   >
-    <div class="swiper-wrapper h-full">
-      {
-        slides &&
-          slides.map((slide) => (
-            <div class="swiper-slide h-full flex flex-col justify-center items-center text-center">
-              <HeroImage
-                image={slide.imageUrl}
-                type={slide.secondaryText ?? ""}
-                title={slide.mainText}
-                subtitle={slide.tertiaryText ?? ""}
-                date={slide.dateText ?? ""}
-                buttonText={slide.buttonText ?? ""}
-                buttonLink={slide.buttonLink ?? ""}
-                buttonColor="bg-[#C06C84] hover:bg-[#b15f76]"
-              />
-            </div>
-          ))
-      }
-    </div>
-    <!-- Add Pagination -->
-    <div class="swiper-pagination"></div>
+    {
+      await Promise.all(
+        slides.map(async (slide, index) => {
+          const imageSrc =
+            typeof slide.imageUrl === "string"
+              ? slide.imageUrl
+              : (
+                  await getImage({
+                    src: slide.imageUrl,
+                    width: 1600,
+                    height: 900,
+                  })
+                ).src;
 
-    <!-- Add Navigation -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
+          return (
+            <swiper-slide>
+              <div class="relative w-full h-full min-h-[60vh]">
+                <img
+                  src={index === 0 ? imageSrc : undefined}
+                  data-src={index > 0 ? imageSrc : undefined}
+                  alt={slide.mainText}
+                  width="1600"
+                  height="900"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  class="swiper-lazy absolute inset-0 w-full h-full object-cover"
+                />
+                <div class="swiper-lazy-preloader swiper-lazy-preloader-white" />
+                <div class="absolute inset-0 bg-black/50" aria-hidden="true" />
+                <div class="relative z-10 flex flex-col items-center justify-center text-center text-white h-full px-4 py-8">
+                  {slide.secondaryText && (
+                    <p class="text-sm sm:text-base mb-2">
+                      {slide.secondaryText}
+                    </p>
+                  )}
+                  {slide.mainText && (
+                    <h1 class="text-4xl sm:text-5xl font-bold font-dmSerifText italic mb-4">
+                      {slide.mainText}
+                    </h1>
+                  )}
+                  {slide.tertiaryText && (
+                    <p class="text-lg sm:text-xl italic mb-3">
+                      {slide.tertiaryText}
+                    </p>
+                  )}
+                  {slide.dateText && (
+                    <p class="text-md sm:text-lg mb-8">{slide.dateText}</p>
+                  )}
+                  {slide.buttonText && slide.buttonLink && (
+                    <a
+                      href={slide.buttonLink}
+                      class="btn-primary bg-[#C06C84] hover:bg-[#b15f76]"
+                    >
+                      {slide.buttonText}
+                    </a>
+                  )}
+                </div>
+              </div>
+            </swiper-slide>
+          );
+        })
+      )
+    }
+    <div class="swiper-button-prev" slot="button-prev"></div>
+    <div class="swiper-button-next" slot="button-next"></div>
+    <div class="swiper-pagination" slot="pagination"></div>
+  </swiper-container>
 
   {
     auxiliaryLinkText && auxiliaryLink && (
@@ -82,103 +132,6 @@ const {
     )
   }
 </section>
-
-<!-- Swiper JS -->
-<script
-  id="swiper-cdn-script"
-  src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
-<script>
-  console.log("HeroSection SCRIPT TAG PROCESSED - Log 1");
-
-  declare global {
-    interface Window {
-      Swiper: any;
-    }
-  }
-
-  let swiperInitialized = false;
-
-  function initializeSwiper() {
-    if (swiperInitialized) {
-      console.log("Swiper already initialized. Skipping.");
-      return;
-    }
-    console.log("Attempting to initialize Swiper...");
-    if (typeof window.Swiper !== "undefined") {
-      console.log("Swiper library found. Initializing...");
-      const swiper = new window.Swiper(".swiper-container", {
-        loop: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-        autoplay: {
-          delay: 5000,
-          disableOnInteraction: false,
-        },
-        on: {
-          init: function () {
-            console.log("Swiper event: init fired successfully!");
-            swiperInitialized = true;
-          },
-          slideChange: function () {
-            console.log("Swiper event: slideChange fired");
-          },
-        },
-      });
-    } else {
-      console.error("Swiper library NOT FOUND when trying to initialize.");
-    }
-  }
-
-  try {
-    console.log("HeroSection SCRIPT TAG - Before getElementById - Log 2");
-    const swiperScriptTag = document.getElementById("swiper-cdn-script");
-    console.log("HeroSection SCRIPT TAG - After getElementById - Log 3");
-
-    if (typeof window.Swiper !== "undefined") {
-      console.log(
-        "Swiper already available on window. Initializing directly. - Log 4A"
-      );
-      initializeSwiper();
-    } else if (swiperScriptTag) {
-      console.log(
-        "HeroSection SCRIPT TAG - swiperScriptTag found, Swiper not yet on window. Adding load listener. - Log 4B"
-      );
-      swiperScriptTag.addEventListener("load", () => {
-        console.log("Swiper CDN SCRIPT has LOADED via event listener. - Log 5");
-        initializeSwiper();
-      });
-      swiperScriptTag.addEventListener("error", () => {
-        console.error("Swiper CDN SCRIPT FAILED to load. - Log 6");
-      });
-    } else {
-      console.error(
-        "HeroSection SCRIPT TAG - swiperScriptTag NOT found AND Swiper not on window. - Log 4C"
-      );
-    }
-
-    console.log(
-      "HeroSection SCRIPT TAG - Before astro:page-load listener - Log 7"
-    );
-    document.addEventListener("astro:page-load", () => {
-      console.log(
-        "astro:page-load event fired. Attempting Swiper init (may be redundant). - Log 8"
-      );
-      initializeSwiper();
-    });
-    console.log(
-      "HeroSection SCRIPT TAG - After astro:page-load listener - Log 9"
-    );
-  } catch (e) {
-    console.error("HeroSection SCRIPT TAG - ERROR in script block:", e);
-  }
-</script>
 
 <style is:global>
   /* 
